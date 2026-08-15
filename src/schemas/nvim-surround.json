@@ -1,0 +1,92 @@
+{
+  "id": "nvim-surround",
+  "pluginName": "nvim-surround",
+  "pluginRepo": "https://github.com/kylechui/nvim-surround",
+  "version": "1.0.0",
+  "description": "Add, change, and delete surrounding delimiter pairs — brackets, quotes, HTML tags, function calls, and more. Works out-of-the-box with zero configuration. Default keymaps: ys (add), ds (delete), cs (change), S (visual).",
+  "author": "kylechui",
+  "stars": 3800,
+  "category": "editor",
+  "tags": ["surround", "text-editing", "pairs", "brackets", "quotes", "motions", "operator", "delete", "change"],
+  "tagline": "Add/change/delete surrounding pairs: brackets, quotes, HTML tags, and function calls",
+  "setup": {
+    "requirePath": "nvim-surround",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "highlight.duration",
+      "label": "Highlight Duration (ms)",
+      "description": "How long (in milliseconds) to highlight the selection before performing a surround action. Set to 0 to keep the highlight visible until the action completes — this gives the best visual feedback. Set to a positive value (e.g. 500) for a timed flash effect.",
+      "type": "number",
+      "group": "General",
+      "default": 0,
+      "validation": {
+        "min": 0,
+        "max": 2000,
+        "step": 50,
+        "integer": true
+      }
+    },
+    {
+      "key": "move_cursor",
+      "label": "Cursor Movement After Surround",
+      "description": "Where to move the cursor after performing a surround action. 'Beginning' moves to the start of the surrounding pair (default). 'Sticky' keeps the cursor on the same character, tracking it as text shifts. To disable cursor movement entirely (Lua false), use the Custom Indent / Advanced lua escape hatch or set indent_lines directly in the surrounds lua field.",
+      "type": "select",
+      "group": "General",
+      "default": "begin",
+      "options": [
+        { "value": "begin", "label": "Beginning of action (default)" },
+        { "value": "sticky", "label": "Sticky (track current character)" }
+      ]
+    },
+    {
+      "key": "indent_lines",
+      "label": "Indent Lines Behavior",
+      "description": "Controls re-indentation after surround actions that place delimiters on new lines (e.g. yS, ySS, <C-g>S). Leave empty to use the plugin's built-in indenter (re-indents using = if a formatter is active). Set to false to disable re-indentation entirely. Set to a Lua function(start, stop) for custom re-indentation logic.",
+      "type": "lua",
+      "group": "General",
+      "expectedReturnType": "void"
+    },
+    {
+      "key": "surrounds",
+      "label": "Custom Surrounds",
+      "description": "Define or override surround pairs for specific characters. Each entry maps a character to a table with 'add', 'find', 'delete', and optionally 'change' keys. Set a character to false to disable its default behavior. The 'add' key returns { left_delimiters, right_delimiters }. The 'find' key locates the existing pair in the buffer. See :h nvim-surround.setup.surrounds for full details.",
+      "type": "lua",
+      "group": "Surrounds",
+      "default": "{\n  -- Example: add markdown bold surrounding\n  -- [\"*\"] = {\n  --   add = { \"**\", \"**\" },\n  --   find = \"%*%*.-%*%*\",\n  --   delete = \"^(%*%*)().-(%*%*)()$\",\n  -- },\n  -- Example: disable the 'i' (interactive) surround\n  -- [\"i\"] = false,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "aliases",
+      "label": "Aliases",
+      "description": "Map alias characters to one or more surround characters. A single-character alias can be used anywhere in place of its target. A table alias (list of characters) matches the nearest such pair when deleting or changing. Plugin defaults: a=>, b=), B=}, r=], q={\"'\"`}, s=(all common pairs). Leave empty to use plugin defaults. Provide a table here only to override or extend them.",
+      "type": "lua",
+      "group": "Aliases",
+      "expectedReturnType": "table"
+    }
+  ],
+  "functions": [
+    {
+      "name": "buffer_setup",
+      "label": "Apply Buffer-Local Surround Config",
+      "description": "Apply surround configuration for the current buffer only, overriding global settings. Useful in autocmds for filetype-specific surrounds.",
+      "whatItDoes": "Configures nvim-surround for the current buffer. Call this from a FileType autocmd to set up language-specific surrounding pairs (e.g., Markdown bold, LaTeX math).",
+      "isPopular": false,
+      "aliases": ["filetype surround", "buffer surround", "local surround config"],
+      "params": [
+        {
+          "name": "opts",
+          "type": "table",
+          "description": "Buffer-local options table. Same format as the global setup() options — only real setup() keys (surrounds, aliases, highlight, move_cursor, indent_lines)."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('nvim-surround').buffer_setup($params.opts)"
+    }
+  ],
+  "functionTemplates": [],
+  "events": [],
+  "exCommands": []
+}

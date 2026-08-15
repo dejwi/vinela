@@ -1,0 +1,34 @@
+{
+  "id": "sonokai",
+  "pluginName": "sonokai",
+  "pluginRepo": "https://github.com/sainnhe/sonokai",
+  "version": "1.0.0",
+  "description": "High-contrast theme configured through vim.g.sonokai_* globals (no setup() API).",
+  "author": "sainnhe",
+  "stars": 5000,
+  "category": "ui",
+  "tagline": "Vibrant high-contrast palette with six styles",
+  "tags": ["colorscheme", "theme", "dark", "default", "atlantis", "andromeda", "maia", "espresso", "#2c2e34", "#fc5d7c", "#76cce0"],
+  "options": [
+    { "key": "style", "label": "Variant / Flavor", "type": "select", "default": "default", "options": [{ "value": "default", "label": "Default" }, { "value": "atlantis", "label": "Atlantis" }, { "value": "andromeda", "label": "Andromeda" }, { "value": "shusia", "label": "Shusia" }, { "value": "maia", "label": "Maia" }, { "value": "espresso", "label": "Espresso" }] },
+    {
+      "key": "extra_setup",
+      "label": "Global Configuration Lua",
+      "description": "Sonokai uses vim.g.sonokai_* globals. Edit this block to customize before applying the colorscheme.",
+      "type": "lua",
+      "default": "vim.g.sonokai_style = 'default'\nvim.g.sonokai_better_performance = 0\nvim.g.sonokai_enable_italic = 0\nvim.g.sonokai_disable_italic_comment = 0\nvim.g.sonokai_cursor = 'auto'\nvim.g.sonokai_transparent_background = 0\nvim.g.sonokai_dim_inactive_windows = 0\nvim.g.sonokai_disable_terminal_colors = 0",
+      "expectedReturnType": "void"
+    }
+  ],
+  "functions": [
+    {
+      "name": "apply",
+      "description": "Apply Sonokai colorscheme.",
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('colorscheme sonokai')"
+    }
+  ],
+  "exCommands": [],
+  "events": []
+}

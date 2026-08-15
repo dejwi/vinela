@@ -1,0 +1,1054 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dejwi/vinela/main/schema/plugin-schema.schema.json",
+  "id": "markview-nvim",
+  "pluginName": "markview.nvim",
+  "pluginRepo": "https://github.com/OXY2DEV/markview.nvim",
+  "version": "1.0.0",
+  "description": "A configurable in-buffer previewer for Markdown, HTML, LaTeX, Typst, YAML, and Asciidoc in Neovim.",
+  "author": "OXY2DEV",
+  "category": "syntax",
+  "tags": [
+    "markdown",
+    "preview",
+    "treesitter",
+    "typst",
+    "latex",
+    "asciidoc"
+  ],
+  "tagline": "Render rich markup previews directly inside Neovim buffers.",
+  "pack": {
+    "version": {
+      "mode": "ref",
+      "value": "main"
+    }
+  },
+  "setup": {
+    "requirePath": "markview",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "preview.enable",
+      "label": "Enable Preview",
+      "description": "Enable preview when Markview attaches to a buffer.",
+      "group": "Preview",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.enable_hybrid_mode",
+      "label": "Enable Hybrid Mode",
+      "description": "Enable hybrid mode when Markview attaches to a buffer.",
+      "group": "Preview",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.map_gx",
+      "label": "Map gx",
+      "description": "Map buffer-local normal-mode gx to :Markview open for Markview's tree-sitter-aware link opener.",
+      "group": "Preview",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.icon_provider",
+      "label": "Icon Provider",
+      "description": "Choose the icon provider used for code block labels, or disable icons.",
+      "group": "Preview",
+      "type": "select",
+      "options": [
+        { "value": "internal", "label": "Internal" },
+        { "value": "devicons", "label": "nvim-web-devicons" },
+        { "value": "mini", "label": "mini.icons" },
+        { "value": "none", "label": "Disabled" }
+      ],
+      "default": "internal",
+      "defaultEmission": "explicit-only",
+      "emit": {
+        "valueRule": {
+          "kind": "value-map",
+          "values": {
+            "internal": { "kind": "json", "value": "internal" },
+            "devicons": { "kind": "json", "value": "devicons" },
+            "mini": { "kind": "json", "value": "mini" },
+            "none": { "kind": "json", "value": "" }
+          },
+          "onUnknown": "warn-and-omit"
+        }
+      }
+    },
+    {
+      "key": "preview.debounce",
+      "label": "Refresh Debounce",
+      "description": "Delay in milliseconds between preview refreshes.",
+      "group": "Preview",
+      "type": "number",
+      "default": 150,
+      "validation": { "min": 0, "step": 1, "integer": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.filetypes",
+      "label": "Attached Filetypes",
+      "description": "Filetypes where Markview should try to attach.",
+      "group": "Preview",
+      "type": "array",
+      "items": { "itemType": "string" },
+      "default": ["markdown", "quarto", "rmd", "typst", "asciidoc"],
+      "validation": { "uniqueItems": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.ignore_buftypes",
+      "label": "Ignored Buftypes",
+      "description": "Buffer types Markview should not attach to.",
+      "group": "Preview",
+      "type": "array",
+      "items": { "itemType": "string" },
+      "default": ["nofile"],
+      "validation": { "uniqueItems": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.modes",
+      "label": "Preview Modes",
+      "description": "Vim modes in which rendered previews are shown.",
+      "group": "Preview",
+      "type": "array",
+      "items": { "itemType": "string" },
+      "default": ["n", "no", "c"],
+      "validation": { "uniqueItems": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.hybrid_modes",
+      "label": "Hybrid Modes",
+      "description": "Vim modes in which hybrid mode is active. A mode must also be present in preview.modes.",
+      "group": "Preview",
+      "type": "array",
+      "items": { "itemType": "string" },
+      "default": [],
+      "validation": { "uniqueItems": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.linewise_hybrid_mode",
+      "label": "Linewise Hybrid Mode",
+      "description": "Clear lines around the cursor in hybrid mode instead of clearing syntax nodes.",
+      "group": "Preview",
+      "type": "boolean",
+      "default": false,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.max_buf_lines",
+      "label": "Maximum Full Render Lines",
+      "description": "Maximum buffer line count before Markview switches to partial rendering.",
+      "group": "Preview",
+      "type": "number",
+      "default": 1000,
+      "validation": { "min": 0, "step": 1, "integer": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.draw_range",
+      "label": "Partial Draw Range",
+      "description": "Lua list containing the number of lines to draw above and below each cursor.",
+      "group": "Preview Advanced",
+      "type": "lua",
+      "default": "{ 1 * vim.o.lines, 1 * vim.o.lines }",
+      "inputPlaceholder": "{ vim.o.lines, vim.o.lines }",
+      "expectedReturnType": "table",
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.edit_range",
+      "label": "Hybrid Edit Range",
+      "description": "Number of lines above and below each cursor considered edited in hybrid mode.",
+      "group": "Preview Advanced",
+      "type": "array",
+      "items": { "itemType": "number" },
+      "default": [0, 0],
+      "validation": { "minItems": 2, "maxItems": 2 },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.splitview_winopts",
+      "label": "Splitview Window Options",
+      "description": "Lua table passed to nvim_open_win() when opening Markview's splitview.",
+      "group": "Preview Advanced",
+      "type": "lua",
+      "default": "{ split = \"right\" }",
+      "inputPlaceholder": "{ split = \"right\" }",
+      "expectedReturnType": "table",
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "preview.raw_previews",
+      "label": "Raw Hybrid Previews",
+      "description": "Lua table of per-language inclusion and exclusion rules shown as raw text in hybrid mode.",
+      "group": "Preview Advanced",
+      "type": "lua",
+      "default": "{}",
+      "inputPlaceholder": "{ markdown = { \"!block_quotes\", \"!tables\" } }",
+      "expectedReturnType": "table",
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "asciidoc.enable",
+      "label": "Enable Asciidoc",
+      "description": "Enable Asciidoc rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "asciidoc_inline.enable",
+      "label": "Enable Inline Asciidoc",
+      "description": "Enable inline Asciidoc rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "comment.enable",
+      "label": "Enable Comments",
+      "description": "Enable comment rendering when fancy comment attachment is active.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "html.enable",
+      "label": "Enable HTML",
+      "description": "Enable HTML rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "latex.enable",
+      "label": "Enable LaTeX",
+      "description": "Enable LaTeX rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.enable",
+      "label": "Enable Markdown",
+      "description": "Enable Markdown block rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.enable",
+      "label": "Enable Inline Markdown",
+      "description": "Enable inline Markdown rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "typst.enable",
+      "label": "Enable Typst",
+      "description": "Enable Typst rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "yaml.enable",
+      "label": "Enable YAML",
+      "description": "Enable YAML rendering.",
+      "group": "Languages",
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.block_quotes.enable",
+      "label": "Render Block Quotes",
+      "description": "Render Markdown block quotes and callouts.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.block_quotes.wrap",
+      "label": "Wrap Block Quotes",
+      "description": "Support wrapped text inside Markdown block quotes.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.block_quotes.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.code_blocks.enable",
+      "label": "Render Code Blocks",
+      "description": "Render fenced Markdown code blocks.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.headings.enable",
+      "label": "Render Headings",
+      "description": "Render Markdown headings.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.headings.shift_width",
+      "label": "Heading Shift Width",
+      "description": "Additional indentation width used for Markdown heading content.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.headings.enable", "equals": true },
+      "type": "number",
+      "default": 1,
+      "validation": { "min": 0, "step": 1, "integer": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.headings.org_indent",
+      "label": "Org-style Heading Indent",
+      "description": "Indent Markdown sections according to heading depth.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.headings.enable", "equals": true },
+      "type": "boolean",
+      "default": false,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.headings.org_indent_wrap",
+      "label": "Wrap Org-style Indent",
+      "description": "Apply org-style heading indentation to wrapped lines.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.headings.org_indent", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.headings.org_shift_char",
+      "label": "Org Indent Character",
+      "description": "Character used for org-style heading indentation.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.headings.org_indent", "equals": true },
+      "type": "string",
+      "default": " ",
+      "validation": { "minLength": 1, "maxLength": 1 },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.headings.org_shift_width",
+      "label": "Org Indent Width",
+      "description": "Number of indent characters added per heading level.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.headings.org_indent", "equals": true },
+      "type": "number",
+      "default": 1,
+      "validation": { "min": 0, "step": 1, "integer": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.horizontal_rules.enable",
+      "label": "Render Horizontal Rules",
+      "description": "Render Markdown horizontal rules.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.list_items.enable",
+      "label": "Render List Items",
+      "description": "Render Markdown list item markers.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.list_items.wrap",
+      "label": "Wrap List Items",
+      "description": "Support wrapped text inside Markdown list items.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.list_items.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.list_items.shift_width",
+      "label": "List Shift Width",
+      "description": "Additional indentation width used for Markdown list item content.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.list_items.enable", "equals": true },
+      "type": "number",
+      "default": 4,
+      "validation": { "min": 0, "step": 1, "integer": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.metadata_minus.enable",
+      "label": "Render YAML Frontmatter",
+      "description": "Render Markdown metadata blocks delimited by dashes.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.metadata_plus.enable",
+      "label": "Render Plus Frontmatter",
+      "description": "Render Markdown metadata blocks delimited by plus signs.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.reference_definitions.enable",
+      "label": "Render Reference Definitions",
+      "description": "Render Markdown link reference definitions.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.tables.enable",
+      "label": "Render Tables",
+      "description": "Render Markdown tables.",
+      "group": "Markdown",
+      "enabledWhen": { "key": "markdown.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.tables.strict",
+      "label": "Strict Tables",
+      "description": "Require stricter Markdown table structure.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.tables.enable", "equals": true },
+      "type": "boolean",
+      "default": false,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.tables.block_decorator",
+      "label": "Table Block Decorator",
+      "description": "Draw the outer block decoration around Markdown tables.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.tables.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown.tables.use_virt_lines",
+      "label": "Use Virtual Table Lines",
+      "description": "Use virtual lines while rendering Markdown table decoration.",
+      "group": "Markdown Layout",
+      "enabledWhen": { "key": "markdown.tables.enable", "equals": true },
+      "type": "boolean",
+      "default": false,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.block_references.enable",
+      "label": "Render Block References",
+      "description": "Render inline Markdown block references.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.checkboxes.enable",
+      "label": "Render Checkboxes",
+      "description": "Render Markdown checkbox states.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.emails.enable",
+      "label": "Render Email Links",
+      "description": "Render Markdown email autolinks.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.embed_files.enable",
+      "label": "Render Embedded Files",
+      "description": "Render embedded file links.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.entities.enable",
+      "label": "Render Entities",
+      "description": "Render HTML entities in inline Markdown.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.emoji_shorthands.enable",
+      "label": "Render Emoji Shorthands",
+      "description": "Render emoji shorthand syntax.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.escapes.enable",
+      "label": "Render Escapes",
+      "description": "Render escaped inline Markdown characters.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.footnotes.enable",
+      "label": "Render Footnotes",
+      "description": "Render Markdown footnotes.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.highlights.enable",
+      "label": "Render Highlights",
+      "description": "Render inline Markdown highlights.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.hyperlinks.enable",
+      "label": "Render Hyperlinks",
+      "description": "Render Markdown hyperlinks.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.images.enable",
+      "label": "Render Images",
+      "description": "Render Markdown image links.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.inline_codes.enable",
+      "label": "Render Inline Code",
+      "description": "Render Markdown inline code spans.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.internal_links.enable",
+      "label": "Render Internal Links",
+      "description": "Render Obsidian-style internal links.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.uri_autolinks.enable",
+      "label": "Render URI Autolinks",
+      "description": "Render URI autolinks.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "markdown_inline.tags.enable",
+      "label": "Render Tags",
+      "description": "Render Obsidian-style tags.",
+      "group": "Inline Markdown",
+      "enabledWhen": { "key": "markdown_inline.enable", "equals": true },
+      "type": "boolean",
+      "default": true,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "experimental.fancy_comments",
+      "label": "Fancy Comments",
+      "description": "Try to attach to every buffer with an available tree-sitter parser so comments can be rendered.",
+      "group": "Experimental",
+      "type": "boolean",
+      "default": false,
+      "defaultEmission": "explicit-only",
+      "notices": [
+        {
+          "severity": "warning",
+          "surfaces": ["configuration", "generation"],
+          "when": { "kind": "equals", "value": true },
+          "message": "Fancy comments change buffer attachment selection.",
+          "details": "The default preview condition checks all buffers for a tree-sitter parser when this option is enabled, taking precedence over preview.filetypes and preview.ignore_buftypes."
+        }
+      ]
+    },
+    {
+      "key": "experimental.prefer_nvim",
+      "label": "Open Text Files in Neovim",
+      "description": "Open detected text files inside Neovim instead of using vim.ui.open().",
+      "group": "Experimental",
+      "type": "boolean",
+      "default": false,
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "experimental.file_open_command",
+      "label": "File Open Command",
+      "description": "Neovim command used to open text files when experimental.prefer_nvim is enabled.",
+      "group": "Experimental",
+      "enabledWhen": { "key": "experimental.prefer_nvim", "equals": true },
+      "type": "string",
+      "default": "tabnew",
+      "validation": { "minLength": 1 },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "experimental.list_empty_line_tolerance",
+      "label": "List Empty-line Tolerance",
+      "description": "Number of repeated empty lines needed to terminate a list item.",
+      "group": "Experimental",
+      "type": "number",
+      "default": 3,
+      "validation": { "min": 0, "step": 1, "integer": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "experimental.read_chunk_size",
+      "label": "Link Read Chunk Size",
+      "description": "Bytes read while determining whether a linked file is text.",
+      "group": "Experimental",
+      "enabledWhen": { "key": "experimental.prefer_nvim", "equals": true },
+      "type": "number",
+      "default": 1024,
+      "validation": { "min": 1, "step": 1, "integer": true },
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "experimental.date_formats",
+      "label": "YAML Date Formats",
+      "description": "Lua patterns used to recognize date values in YAML.",
+      "group": "Experimental Advanced",
+      "type": "array",
+      "items": { "itemType": "string" },
+      "default": [
+        "^%d%d%d%d%-%d%d%-%d%d$",
+        "^%d%d%-%d%d%-%d%d%d%d$",
+        "^%d%d%-%d%d%-%d%d$",
+        "^%d%d%d%d%/%d%d%/%d%d$",
+        "^%d%d%/%d%d%/%d%d%d%d$",
+        "^%d%d%d%d%.%d%d%.%d%d$",
+        "^%d%d%.%d%d%.%d%d%d%d$",
+        "^%d%d %a+ %d%d%d%d$",
+        "^%a+ %d%d %d%d%d%d$",
+        "^%d%d%d%d %a+ %d%d$",
+        "^%a+%, %a+ %d%d%, %d%d%d%d$"
+      ],
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "experimental.date_time_formats",
+      "label": "YAML Date-time Formats",
+      "description": "Lua patterns used to recognize date-time values in YAML.",
+      "group": "Experimental Advanced",
+      "type": "array",
+      "items": { "itemType": "string" },
+      "default": [
+        "^%a%a%a %a%a%a %d%d %d%d%:%d%d%:%d%d ... %d%d%d%d$",
+        "^%d%d%d%d%-%d%d%-%d%dT%d%d%:%d%d%:%d%dZ$"
+      ],
+      "defaultEmission": "explicit-only"
+    },
+    {
+      "key": "renderers",
+      "label": "Custom Renderers",
+      "description": "Lua table mapping parsed node types to custom renderer functions.",
+      "group": "Advanced",
+      "type": "lua",
+      "default": "{}",
+      "inputPlaceholder": "{ custom_node = function(buffer, item) end }",
+      "expectedReturnType": "table",
+      "defaultEmission": "explicit-only"
+    }
+  ],
+  "functions": [
+    {
+      "name": "clear",
+      "label": "Clear Preview",
+      "shortDescription": "Clear Markview decorations from a buffer.",
+      "description": "Clear Markview's rendered preview from a buffer.",
+      "params": [
+        {
+          "name": "buffer",
+          "type": "buffer",
+          "optional": true,
+          "description": "Buffer to clear; defaults to the current buffer.",
+          "tier": "basic"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require(\"markview\").clear($params.buffer)",
+      "category": "rendering",
+      "example": "require(\"markview\").clear(0)",
+      "sourceDoc": ":help markview.nvim-dev"
+    },
+    {
+      "name": "render",
+      "label": "Render Preview",
+      "shortDescription": "Render a buffer with optional state and configuration.",
+      "description": "Low-level rendering API. It does not configure conceallevel or concealcursor.",
+      "params": [
+        {
+          "name": "buffer",
+          "type": "buffer",
+          "optional": true,
+          "description": "Buffer to render.",
+          "tier": "basic"
+        },
+        {
+          "name": "state",
+          "type": "table",
+          "optional": true,
+          "description": "Optional buffer state with enable and hybrid_mode fields.",
+          "tier": "advanced"
+        },
+        {
+          "name": "config",
+          "type": "table",
+          "optional": true,
+          "description": "Optional Markview configuration override.",
+          "tier": "advanced"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require(\"markview\").render($params.buffer, $params.state, $params.config)",
+      "category": "rendering",
+      "example": "require(\"markview\").render(0, { enable = true, hybrid_mode = false })",
+      "sourceDoc": ":help markview.nvim-dev"
+    },
+    {
+      "name": "strict_clear",
+      "label": "Clear Strict Preview",
+      "shortDescription": "Allow a strictly rendered buffer to be rendered again.",
+      "description": "Clear a buffer rendered through the strict rendering API and release its render guard.",
+      "params": [
+        {
+          "name": "buffer",
+          "type": "buffer",
+          "optional": true,
+          "description": "Buffer to clear; defaults to the current buffer.",
+          "tier": "basic"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require(\"markview\").strict_render:clear($params.buffer)",
+      "category": "rendering",
+      "example": "require(\"markview\").strict_render:clear(0)",
+      "sourceDoc": ":help markview.nvim-dev"
+    },
+    {
+      "name": "strict_render",
+      "label": "Strict Render",
+      "shortDescription": "Render once until explicitly cleared.",
+      "description": "Recommended high-level API for on-demand rendering in external plugins.",
+      "params": [
+        {
+          "name": "buffer",
+          "type": "buffer",
+          "optional": true,
+          "description": "Buffer to render; defaults to the current buffer.",
+          "tier": "basic"
+        },
+        {
+          "name": "max_lines",
+          "type": "number",
+          "optional": true,
+          "description": "Skip rendering when the buffer has at least this many lines; defaults to preview.max_buf_lines.",
+          "tier": "basic"
+        },
+        {
+          "name": "config",
+          "type": "table",
+          "optional": true,
+          "description": "Optional Markview configuration override.",
+          "tier": "advanced"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require(\"markview\").strict_render:render($params.buffer, $params.max_lines, $params.config)",
+      "category": "rendering",
+      "isPopular": true,
+      "example": "require(\"markview\").strict_render:render(0, 1000)",
+      "sourceDoc": ":help markview.nvim-dev"
+    },
+    {
+      "name": "parse",
+      "label": "Parse Buffer",
+      "shortDescription": "Parse supported markup trees in a buffer.",
+      "description": "Initialize Markview's parsers and return parsed and language-sorted node tables.",
+      "technicalNote": "The Lua function returns two tables; the declared table return represents the primary parsed-node result.",
+      "params": [
+        {
+          "name": "buffer",
+          "type": "buffer",
+          "description": "Buffer to parse.",
+          "tier": "basic"
+        },
+        {
+          "name": "from",
+          "type": "number",
+          "optional": true,
+          "description": "Optional first line of the parse range.",
+          "tier": "advanced"
+        },
+        {
+          "name": "to",
+          "type": "number",
+          "optional": true,
+          "description": "Optional final line of the parse range.",
+          "tier": "advanced"
+        },
+        {
+          "name": "cache",
+          "type": "boolean",
+          "optional": true,
+          "description": "Set false to avoid caching sorted parser output.",
+          "tier": "advanced"
+        }
+      ],
+      "returns": "table",
+      "luaCall": "require(\"markview.parser\").init($params.buffer, $params.from, $params.to, $params.cache)",
+      "category": "parsing",
+      "example": "local parsed, sorted = require(\"markview.parser\").init(0)",
+      "sourceDoc": ":help markview.nvim-dev"
+    }
+  ],
+  "events": [
+    "MarkviewAttach",
+    "MarkviewEnable",
+    "MarkviewDisable",
+    "MarkviewDetach",
+    "MarkviewHybridEnable",
+    "MarkviewHybridDisable",
+    "MarkviewSplitviewOpen",
+    "MarkviewSplitviewClose"
+  ],
+  "exCommands": [
+    {
+      "name": "Markview",
+      "label": "Markview Command",
+      "shortDescription": "Control Markview previews, attachment, hybrid mode, splitview, and tracing.",
+      "description": "Run one of Markview's registered subcommands, optionally targeting a buffer where supported.",
+      "template": ":Markview {subcommand} {buffer}",
+      "example": ":Markview toggle 3",
+      "sourceDoc": ":help markview.nvim",
+      "params": [
+        {
+          "name": "subcommand",
+          "label": "Subcommand",
+          "placeholder": "toggle",
+          "description": "Registered Markview subcommand.",
+          "type": "select",
+          "allowedValues": [
+            "Toggle",
+            "Enable",
+            "Disable",
+            "toggle",
+            "enable",
+            "disable",
+            "Start",
+            "Stop",
+            "attach",
+            "detach",
+            "clear",
+            "render",
+            "Clear",
+            "Render",
+            "hybridEnable",
+            "hybridDisable",
+            "hybridToggle",
+            "HybridEnable",
+            "HybridDisable",
+            "HybridToggle",
+            "linewiseEnable",
+            "linewiseDisable",
+            "linewiseToggle",
+            "splitToggle",
+            "splitOpen",
+            "splitClose",
+            "splitRedraw",
+            "open",
+            "traceExport",
+            "traceShow"
+          ],
+          "allowedValueDescriptions": {
+            "Toggle": "Toggle previews for all attached buffers.",
+            "Enable": "Enable previews for all attached buffers.",
+            "Disable": "Disable previews for all attached buffers.",
+            "toggle": "Toggle preview for a buffer.",
+            "enable": "Enable preview for a buffer.",
+            "disable": "Disable preview for a buffer.",
+            "Start": "Allow automatic attachment to new buffers.",
+            "Stop": "Prevent automatic attachment to new buffers.",
+            "attach": "Attach Markview to a buffer.",
+            "detach": "Detach Markview from a buffer.",
+            "clear": "Clear preview for a buffer.",
+            "render": "Render preview for a buffer.",
+            "Clear": "Clear previews for all attached buffers.",
+            "Render": "Render previews for all enabled attached buffers.",
+            "hybridEnable": "Enable hybrid mode for a buffer.",
+            "hybridDisable": "Disable hybrid mode for a buffer.",
+            "hybridToggle": "Toggle hybrid mode for a buffer.",
+            "HybridEnable": "Enable hybrid mode for all attached buffers.",
+            "HybridDisable": "Disable hybrid mode for all attached buffers.",
+            "HybridToggle": "Toggle hybrid mode for all attached buffers.",
+            "linewiseEnable": "Enable linewise hybrid mode.",
+            "linewiseDisable": "Disable linewise hybrid mode.",
+            "linewiseToggle": "Toggle linewise hybrid mode.",
+            "splitToggle": "Toggle splitview.",
+            "splitOpen": "Open splitview for a buffer.",
+            "splitClose": "Close splitview.",
+            "splitRedraw": "Redraw splitview.",
+            "open": "Open the link under the cursor.",
+            "traceExport": "Export trace logs.",
+            "traceShow": "Show trace logs."
+          },
+          "emit": { "kind": "value" }
+        },
+        {
+          "name": "buffer",
+          "label": "Buffer",
+          "placeholder": "3",
+          "description": "Optional buffer number for buffer-scoped subcommands; those commands default to the current buffer.",
+          "type": "number",
+          "optional": true,
+          "emit": { "kind": "value" }
+        }
+      ],
+      "category": "preview",
+      "isPopular": true
+    }
+  ],
+  "exCommandTemplates": [
+    {
+      "key": "toggle-current-preview",
+      "baseCommandName": "Markview",
+      "label": "Toggle Current Preview",
+      "shortDescription": "Toggle preview in the current buffer.",
+      "defaults": { "subcommand": "toggle" },
+      "example": ":Markview toggle",
+      "isPopular": true
+    },
+    {
+      "key": "toggle-all-previews",
+      "baseCommandName": "Markview",
+      "label": "Toggle All Previews",
+      "shortDescription": "Toggle previews for all attached buffers.",
+      "defaults": { "subcommand": "Toggle" },
+      "example": ":Markview Toggle",
+      "isPopular": true
+    },
+    {
+      "key": "toggle-splitview",
+      "baseCommandName": "Markview",
+      "label": "Toggle Splitview",
+      "shortDescription": "Open or close Markview's synchronized split preview.",
+      "defaults": { "subcommand": "splitToggle" },
+      "example": ":Markview splitToggle",
+      "isPopular": true
+    },
+    {
+      "key": "toggle-current-hybrid-mode",
+      "baseCommandName": "Markview",
+      "label": "Toggle Current Hybrid Mode",
+      "shortDescription": "Toggle hybrid mode in the current buffer.",
+      "defaults": { "subcommand": "hybridToggle" },
+      "example": ":Markview hybridToggle"
+    },
+    {
+      "key": "render-current-preview",
+      "baseCommandName": "Markview",
+      "label": "Render Current Preview",
+      "shortDescription": "Manually redraw the current buffer's preview.",
+      "defaults": { "subcommand": "render" },
+      "example": ":Markview render"
+    },
+    {
+      "key": "open-link-under-cursor",
+      "baseCommandName": "Markview",
+      "label": "Open Link Under Cursor",
+      "shortDescription": "Use Markview's tree-sitter-aware link opener.",
+      "defaults": { "subcommand": "open" },
+      "example": ":Markview open"
+    }
+  ]
+}

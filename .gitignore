@@ -1,0 +1,64 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+bun.lockb
+
+# Build outputs
+dist
+dist-ssr
+*.local
+
+# Tauri
+src-tauri/target
+
+# Test coverage
+coverage
+.nyc_output
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+Thumbs.db
+
+
+# Project specific
+dev-data
+
+# Local agent configurations
+/.cursor/
+!/.opencode/
+/.opencode/*
+
+!/.opencode/skills
+/.opencode/skills/*
+
+!/.opencode/skills/nvim-research/
+!/.opencode/skills/nvim-config-testing/
+
+# Verification reports
+verification-report/
+temp-plan
+opencode-data
+temp

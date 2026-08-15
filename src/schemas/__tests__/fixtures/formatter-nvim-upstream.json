@@ -1,0 +1,27 @@
+{
+  "$schema": "internal: see sibling README.md",
+  "source": "https://github.com/mhartington/formatter.nvim",
+  "ref": "master",
+  "fetchedAt": "2026-05-09T00:00:00Z",
+  "filetypes": {
+    "any": ["remove_trailing_whitespace", "substitute_trailing_whitespace"],
+    "c": ["astyle", "clangformat", "uncrustify"],
+    "cpp": ["astyle", "clangformat", "uncrustify"],
+    "css": ["eslint_d", "prettier", "prettierd", "prettydiff"],
+    "go": ["gofmt", "gofumports", "gofumpt", "goimports", "goimports_reviser", "golines"],
+    "graphql": ["prettier", "prettierd"],
+    "html": ["htmlbeautifier", "prettier", "prettierd", "prettydiff"],
+    "javascript": ["biome", "clangformat", "denofmt", "esformatter", "eslint_d", "jsbeautify", "prettier", "prettierd", "prettiereslint", "prettydiff", "semistandard", "standard"],
+    "javascriptreact": ["biome", "clangformat", "denofmt", "esformatter", "eslint_d", "jsbeautify", "prettier", "prettierd", "prettiereslint", "prettydiff", "semistandard", "standard"],
+    "json": ["biome", "denofmt", "jsbeautify", "prettier", "prettierd", "prettydiff"],
+    "lua": ["luafmt", "luaformat", "luaformatter", "stylua"],
+    "markdown": ["denofmt", "mdformat", "prettier", "prettierd"],
+    "python": ["autoflake", "autopep8", "black", "docformatter", "iruff", "isort", "pydevf", "pyment", "ruff", "yapf"],
+    "rust": ["rustfmt"],
+    "sh": ["shfmt"],
+    "sql": ["pgformat", "sql_formatter", "sqlfluff"],
+    "typescript": ["biome", "clangformat", "denofmt", "eslint_d", "prettier", "prettierd", "prettiereslint", "tsfmt"],
+    "typescriptreact": ["biome", "clangformat", "denofmt", "eslint_d", "prettier", "prettierd", "prettiereslint", "tsfmt"],
+    "yaml": ["prettier", "prettierd", "pyaml", "yamlfmt"]
+  }
+}

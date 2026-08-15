@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "options": {
+    "number": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "relativenumber": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "tabstop": {
+      "valueType": "number",
+      "value": 2
+    },
+    "shiftwidth": {
+      "valueType": "number",
+      "value": 2
+    },
+    "expandtab": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "swapfile": {
+      "valueType": "boolean",
+      "value": false
+    },
+    "smartindent": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "winborder": {
+      "valueType": "string",
+      "value": "rounded"
+    },
+    "signcolumn": {
+      "valueType": "string",
+      "value": "yes"
+    },
+    "undofile": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "termguicolors": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "scrolloff": {
+      "valueType": "number",
+      "value": 8
+    },
+    "ignorecase": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "smartcase": {
+      "valueType": "boolean",
+      "value": true
+    },
+    "mouse": {
+      "valueType": "string",
+      "value": ""
+    },
+    "cmdheight": {
+      "valueType": "number",
+      "value": 0
+    },
+    "laststatus": {
+      "valueType": "number",
+      "value": 2
+    }
+  },
+  "updatedAt": 1785052108750
+}

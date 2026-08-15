@@ -1,0 +1,11 @@
+Vinela
+Copyright (C) 2026 Vinela contributors
+
+Original source: https://github.com/dejwi/vinela
+License: GNU Affero General Public License v3.0 only (AGPL-3.0-only)
+See LICENSE for the complete license terms.
+
+Third-party software and generated or vendored artifacts retain their
+respective licenses and copyright notices; this notice does not relicense
+them. Notices for the bundled Vinela plugin-schema validator are in
+skills/vinela-plugin-schema/THIRD_PARTY_NOTICES.md.

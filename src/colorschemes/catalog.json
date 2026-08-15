@@ -1,0 +1,1742 @@
+[
+  {
+    "id": "kanagawa",
+    "name": "Kanagawa",
+    "repoUrl": "https://github.com/rebelot/kanagawa.nvim",
+    "description": "NeoVim dark colorscheme inspired by the colors of the famous painting by Katsushika Hokusai.",
+    "variant": "dark",
+    "vimColorscheme": "kanagawa-wave",
+    "pluginRepo": "https://github.com/rebelot/kanagawa.nvim",
+    "tags": [
+      "japanese",
+      "art",
+      "muted"
+    ],
+    "colors": {
+      "background": "#1F1F28",
+      "foreground": "#DCD7BA",
+      "lineNumber": "#54546D",
+      "lineHighlight": "#2A2A37",
+      "selection": "#2D4F67",
+      "cursor": "#C8C093",
+      "tokens": {
+        "comment": "#727169",
+        "keyword": "#957FB8",
+        "string": "#98BB6C",
+        "number": "#D27E99",
+        "function": "#7E9CD8",
+        "variable": "#DCD7BA",
+        "type": "#7AA89F",
+        "constant": "#FFA066",
+        "operator": "#C0A36E",
+        "punctuation": "#9CABCA"
+      },
+      "ui": {
+        "statusLine": "#16161D",
+        "statusLineText": "#C8C093",
+        "tabLine": "#16161D",
+        "tabLineText": "#727169",
+        "tabLineSel": "#1F1F28",
+        "tabLineSelText": "#DCD7BA",
+        "border": "#54546D"
+      }
+    }
+  },
+  {
+    "id": "tokyonight-storm",
+    "name": "Tokyo Night Storm",
+    "repoUrl": "https://github.com/folke/tokyonight.nvim",
+    "description": "A clean, dark Neovim theme written in Lua, with support for LSP, treesitter and lots of plugins.",
+    "variant": "dark",
+    "vimColorscheme": "tokyonight-storm",
+    "pluginRepo": "https://github.com/folke/tokyonight.nvim",
+    "tags": [
+      "modern",
+      "clean",
+      "blue"
+    ],
+    "colors": {
+      "background": "#24283B",
+      "foreground": "#c0caf5",
+      "lineNumber": "#565F89",
+      "lineHighlight": "#292E42",
+      "selection": "#28344A",
+      "cursor": "#C0CAF5",
+      "tokens": {
+        "comment": "#565F89",
+        "keyword": "#BB9AF7",
+        "string": "#9ECE6A",
+        "number": "#FF9E64",
+        "function": "#7AA2F7",
+        "variable": "#C0CAF5",
+        "type": "#2AC3DE",
+        "constant": "#FF9E64",
+        "operator": "#89DDFF",
+        "punctuation": "#89DDFF"
+      },
+      "ui": {
+        "statusLine": "#1F2335",
+        "statusLineText": "#A9B1D6",
+        "tabLine": "#1F2335",
+        "tabLineText": "#565F89",
+        "tabLineSel": "#24283B",
+        "tabLineSelText": "#A9B1D6",
+        "border": "#1F2335"
+      }
+    }
+  },
+  {
+    "id": "tokyonight-night",
+    "name": "Tokyo Night",
+    "repoUrl": "https://github.com/folke/tokyonight.nvim",
+    "description": "The darker variant of Tokyo Night, the most popular dark theme for Neovim.",
+    "variant": "dark",
+    "vimColorscheme": "tokyonight-night",
+    "pluginRepo": "https://github.com/folke/tokyonight.nvim",
+    "tags": [
+      "modern",
+      "clean",
+      "blue",
+      "popular"
+    ],
+    "colors": {
+      "background": "#1A1B26",
+      "foreground": "#c0caf5",
+      "lineNumber": "#565F89",
+      "lineHighlight": "#292E42",
+      "selection": "#28344A",
+      "cursor": "#C0CAF5",
+      "tokens": {
+        "comment": "#565F89",
+        "keyword": "#BB9AF7",
+        "string": "#9ECE6A",
+        "number": "#FF9E64",
+        "function": "#7AA2F7",
+        "variable": "#C0CAF5",
+        "type": "#2AC3DE",
+        "constant": "#FF9E64",
+        "operator": "#89DDFF",
+        "punctuation": "#89DDFF"
+      },
+      "ui": {
+        "statusLine": "#16161E",
+        "statusLineText": "#A9B1D6",
+        "tabLine": "#16161E",
+        "tabLineText": "#565F89",
+        "tabLineSel": "#1A1B26",
+        "tabLineSelText": "#A9B1D6",
+        "border": "#16161E"
+      }
+    }
+  },
+  {
+    "id": "tokyonight-moon",
+    "name": "Tokyo Night Moon",
+    "repoUrl": "https://github.com/folke/tokyonight.nvim",
+    "description": "A deeper, more purple-tinted variant of Tokyo Night.",
+    "variant": "dark",
+    "vimColorscheme": "tokyonight-moon",
+    "pluginRepo": "https://github.com/folke/tokyonight.nvim",
+    "tags": [
+      "modern",
+      "purple",
+      "deep"
+    ],
+    "colors": {
+      "background": "#222436",
+      "foreground": "#c8d3f5",
+      "lineNumber": "#565F89",
+      "lineHighlight": "#2F334D",
+      "selection": "#2D3F76",
+      "cursor": "#C0CAF5",
+      "tokens": {
+        "comment": "#565F89",
+        "keyword": "#BB9AF7",
+        "string": "#9ECE6A",
+        "number": "#FF9E64",
+        "function": "#7AA2F7",
+        "variable": "#C0CAF5",
+        "type": "#2AC3DE",
+        "constant": "#FF9E64",
+        "operator": "#89DDFF",
+        "punctuation": "#89DDFF"
+      },
+      "ui": {
+        "statusLine": "#1E2030",
+        "statusLineText": "#A9B1D6",
+        "tabLine": "#1E2030",
+        "tabLineText": "#565F89",
+        "tabLineSel": "#222436",
+        "tabLineSelText": "#A9B1D6",
+        "border": "#1E2030"
+      }
+    }
+  },
+  {
+    "id": "tokyonight-day",
+    "name": "Tokyo Night Day",
+    "repoUrl": "https://github.com/folke/tokyonight.nvim",
+    "description": "A light variant of Tokyo Night for daytime coding.",
+    "variant": "light",
+    "vimColorscheme": "tokyonight-day",
+    "pluginRepo": "https://github.com/folke/tokyonight.nvim",
+    "tags": [
+      "modern",
+      "clean",
+      "light"
+    ],
+    "colors": {
+      "background": "#E1E2E7",
+      "foreground": "#3760BF",
+      "lineNumber": "#A1A6C5",
+      "lineHighlight": "#C4C8DA",
+      "selection": "#B7C1E4",
+      "cursor": "#3760BF",
+      "tokens": {
+        "comment": "#848CB5",
+        "keyword": "#9854F1",
+        "string": "#587539",
+        "number": "#B15C00",
+        "function": "#2E7DE9",
+        "variable": "#3760BF",
+        "type": "#007197",
+        "constant": "#B15C00",
+        "operator": "#006A83",
+        "punctuation": "#006A83"
+      },
+      "ui": {
+        "statusLine": "#D5D6DB",
+        "statusLineText": "#3760BF",
+        "tabLine": "#D5D6DB",
+        "tabLineText": "#848CB5",
+        "tabLineSel": "#E1E2E7",
+        "tabLineSelText": "#3760BF",
+        "border": "#D5D6DB"
+      }
+    }
+  },
+  {
+    "id": "catppuccin-mocha",
+    "name": "Catppuccin Mocha",
+    "repoUrl": "https://github.com/catppuccin/nvim",
+    "description": "Soothing pastel theme for the high-spirited. The main dark variant with warm colors.",
+    "variant": "dark",
+    "vimColorscheme": "catppuccin-mocha",
+    "pluginRepo": "https://github.com/catppuccin/nvim",
+    "tags": [
+      "pastel",
+      "warm",
+      "soft"
+    ],
+    "colors": {
+      "background": "#1E1E2E",
+      "foreground": "#CDD6F4",
+      "lineNumber": "#6C7086",
+      "lineHighlight": "#313244",
+      "selection": "#353749",
+      "cursor": "#F5E0DC",
+      "tokens": {
+        "comment": "#6C7086",
+        "keyword": "#F38BA8",
+        "string": "#A6E3A1",
+        "number": "#FAB387",
+        "function": "#89B4FA",
+        "variable": "#CDD6F4",
+        "type": "#89DCEB",
+        "constant": "#FAB387",
+        "operator": "#89DCEB",
+        "punctuation": "#9399B2"
+      },
+      "ui": {
+        "statusLine": "#181825",
+        "statusLineText": "#CDD6F4",
+        "tabLine": "#181825",
+        "tabLineText": "#6C7086",
+        "tabLineSel": "#1E1E2E",
+        "tabLineSelText": "#CDD6F4",
+        "border": "#313244"
+      }
+    }
+  },
+  {
+    "id": "catppuccin-macchiato",
+    "name": "Catppuccin Macchiato",
+    "repoUrl": "https://github.com/catppuccin/nvim",
+    "description": "Medium-dark variant with slightly muted colors compared to Mocha.",
+    "variant": "dark",
+    "vimColorscheme": "catppuccin-macchiato",
+    "pluginRepo": "https://github.com/catppuccin/nvim",
+    "tags": [
+      "pastel",
+      "soft",
+      "medium"
+    ],
+    "colors": {
+      "background": "#24273A",
+      "foreground": "#CAD3F5",
+      "lineNumber": "#6E738D",
+      "lineHighlight": "#363A4F",
+      "selection": "#494D64",
+      "cursor": "#F4DBD6",
+      "tokens": {
+        "comment": "#6E738D",
+        "keyword": "#F5BDE6",
+        "string": "#A6DA95",
+        "number": "#F5A97F",
+        "function": "#8AADF4",
+        "variable": "#CAD3F5",
+        "type": "#91D7E3",
+        "constant": "#F5A97F",
+        "operator": "#91D7E3",
+        "punctuation": "#939AB7"
+      },
+      "ui": {
+        "statusLine": "#1E2030",
+        "statusLineText": "#CAD3F5",
+        "tabLine": "#1E2030",
+        "tabLineText": "#6E738D",
+        "tabLineSel": "#24273A",
+        "tabLineSelText": "#CAD3F5",
+        "border": "#363A4F"
+      }
+    }
+  },
+  {
+    "id": "catppuccin-frappe",
+    "name": "Catppuccin Frappé",
+    "repoUrl": "https://github.com/catppuccin/nvim",
+    "description": "Medium-light variant of the soothing pastel theme.",
+    "variant": "dark",
+    "vimColorscheme": "catppuccin-frappe",
+    "pluginRepo": "https://github.com/catppuccin/nvim",
+    "tags": [
+      "pastel",
+      "soft",
+      "medium"
+    ],
+    "colors": {
+      "background": "#303446",
+      "foreground": "#C6D0F5",
+      "lineNumber": "#737994",
+      "lineHighlight": "#414559",
+      "selection": "#51576D",
+      "cursor": "#F2D5CF",
+      "tokens": {
+        "comment": "#737994",
+        "keyword": "#EEBBEB",
+        "string": "#A6D189",
+        "number": "#EF9F76",
+        "function": "#8CAAEE",
+        "variable": "#C6D0F5",
+        "type": "#99D1DB",
+        "constant": "#EF9F76",
+        "operator": "#99D1DB",
+        "punctuation": "#949CBB"
+      },
+      "ui": {
+        "statusLine": "#292C3C",
+        "statusLineText": "#C6D0F5",
+        "tabLine": "#292C3C",
+        "tabLineText": "#737994",
+        "tabLineSel": "#303446",
+        "tabLineSelText": "#C6D0F5",
+        "border": "#414559"
+      }
+    }
+  },
+  {
+    "id": "catppuccin-latte",
+    "name": "Catppuccin Latte",
+    "repoUrl": "https://github.com/catppuccin/nvim",
+    "description": "Light variant of the soothing pastel theme for daytime use.",
+    "variant": "light",
+    "vimColorscheme": "catppuccin-latte",
+    "pluginRepo": "https://github.com/catppuccin/nvim",
+    "tags": [
+      "pastel",
+      "soft",
+      "light"
+    ],
+    "colors": {
+      "background": "#EFF1F5",
+      "foreground": "#4C4F69",
+      "lineNumber": "#8C8FA1",
+      "lineHighlight": "#E6E9EF",
+      "selection": "#DC8A78",
+      "cursor": "#DC8A78",
+      "tokens": {
+        "comment": "#8C8FA1",
+        "keyword": "#D20F39",
+        "string": "#40A02B",
+        "number": "#FE640B",
+        "function": "#1E66F5",
+        "variable": "#4C4F69",
+        "type": "#179299",
+        "constant": "#FE640B",
+        "operator": "#179299",
+        "punctuation": "#7C7F93"
+      },
+      "ui": {
+        "statusLine": "#E6E9EF",
+        "statusLineText": "#4C4F69",
+        "tabLine": "#E6E9EF",
+        "tabLineText": "#8C8FA1",
+        "tabLineSel": "#EFF1F5",
+        "tabLineSelText": "#4C4F69",
+        "border": "#CCD0DA"
+      }
+    }
+  },
+  {
+    "id": "gruvbox",
+    "name": "Gruvbox",
+    "repoUrl": "https://github.com/ellisonleao/gruvbox.nvim",
+    "description": "Gruvbox Community Edition for Neovim. A retro groove color scheme with warm colors.",
+    "variant": "dark",
+    "vimColorscheme": "gruvbox",
+    "pluginRepo": "https://github.com/ellisonleao/gruvbox.nvim",
+    "tags": [
+      "retro",
+      "warm",
+      "classic"
+    ],
+    "colors": {
+      "background": "#282828",
+      "foreground": "#EBDBB2",
+      "lineNumber": "#7C6F64",
+      "lineHighlight": "#3C3836",
+      "selection": "#504945",
+      "cursor": "#EBDBB2",
+      "tokens": {
+        "comment": "#928374",
+        "keyword": "#FB4934",
+        "string": "#B8BB26",
+        "number": "#D3869B",
+        "function": "#B8BB26",
+        "variable": "#EBDBB2",
+        "type": "#FABD2F",
+        "constant": "#D3869B",
+        "operator": "#FE8019",
+        "punctuation": "#A89984"
+      },
+      "ui": {
+        "statusLine": "#1D2021",
+        "statusLineText": "#EBDBB2",
+        "tabLine": "#1D2021",
+        "tabLineText": "#928374",
+        "tabLineSel": "#282828",
+        "tabLineSelText": "#EBDBB2",
+        "border": "#504945"
+      }
+    }
+  },
+  {
+    "id": "nord",
+    "name": "Nord",
+    "repoUrl": "https://github.com/shaunsingh/nord.nvim",
+    "description": "An arctic, north-bluish clean and elegant Neovim theme.",
+    "variant": "dark",
+    "vimColorscheme": "nord",
+    "pluginRepo": "https://github.com/shaunsingh/nord.nvim",
+    "tags": [
+      "arctic",
+      "blue",
+      "cold"
+    ],
+    "colors": {
+      "background": "#2E3440",
+      "foreground": "#D8DEE9",
+      "lineNumber": "#4C566A",
+      "lineHighlight": "#3B4252",
+      "selection": "#434C5E",
+      "cursor": "#D8DEE9",
+      "tokens": {
+        "comment": "#616E88",
+        "keyword": "#81A1C1",
+        "string": "#A3BE8C",
+        "number": "#B48EAD",
+        "function": "#88C0D0",
+        "variable": "#D8DEE9",
+        "type": "#8FBCBB",
+        "constant": "#D08770",
+        "operator": "#81A1C1",
+        "punctuation": "#E5E9F0"
+      },
+      "ui": {
+        "statusLine": "#3B4252",
+        "statusLineText": "#D8DEE9",
+        "tabLine": "#3B4252",
+        "tabLineText": "#616E88",
+        "tabLineSel": "#2E3440",
+        "tabLineSelText": "#D8DEE9",
+        "border": "#434C5E"
+      }
+    }
+  },
+  {
+    "id": "dracula",
+    "name": "Dracula",
+    "repoUrl": "https://github.com/Mofiqul/dracula.nvim",
+    "description": "A dark theme for Neovim based on the classic Dracula color palette.",
+    "variant": "dark",
+    "vimColorscheme": "dracula",
+    "pluginRepo": "https://github.com/Mofiqul/dracula.nvim",
+    "tags": [
+      "dark",
+      "vibrant",
+      "classic"
+    ],
+    "colors": {
+      "background": "#282A36",
+      "foreground": "#F8F8F2",
+      "lineNumber": "#6272A4",
+      "lineHighlight": "#44475A",
+      "selection": "#44475A",
+      "cursor": "#F8F8F2",
+      "tokens": {
+        "comment": "#6272A4",
+        "keyword": "#FF79C6",
+        "string": "#F1FA8C",
+        "number": "#BD93F9",
+        "function": "#50FA7B",
+        "variable": "#F8F8F2",
+        "type": "#8BE9FD",
+        "constant": "#BD93F9",
+        "operator": "#FF79C6",
+        "punctuation": "#F8F8F2"
+      },
+      "ui": {
+        "statusLine": "#191A21",
+        "statusLineText": "#F8F8F2",
+        "tabLine": "#191A21",
+        "tabLineText": "#6272A4",
+        "tabLineSel": "#282A36",
+        "tabLineSelText": "#F8F8F2",
+        "border": "#44475A"
+      }
+    }
+  },
+  {
+    "id": "onedark",
+    "name": "One Dark",
+    "repoUrl": "https://github.com/navarasu/onedark.nvim",
+    "description": "A dark Neovim theme inspired by Atom One Dark. Supports both dark and light variants.",
+    "variant": "both",
+    "vimColorscheme": "onedark",
+    "pluginRepo": "https://github.com/navarasu/onedark.nvim",
+    "tags": [
+      "modern",
+      "clean",
+      "atom"
+    ],
+    "colors": {
+      "background": "#282C34",
+      "foreground": "#ABB2BF",
+      "lineNumber": "#495162",
+      "lineHighlight": "#2C313C",
+      "selection": "#3E4451",
+      "cursor": "#528BFF",
+      "tokens": {
+        "comment": "#5C6370",
+        "keyword": "#C678DD",
+        "string": "#98C379",
+        "number": "#D19A66",
+        "function": "#61AFEF",
+        "variable": "#E06C75",
+        "type": "#E5C07B",
+        "constant": "#D19A66",
+        "operator": "#56B6C2",
+        "punctuation": "#ABB2BF"
+      },
+      "ui": {
+        "statusLine": "#21252B",
+        "statusLineText": "#9DA5B4",
+        "tabLine": "#21252B",
+        "tabLineText": "#5C6370",
+        "tabLineSel": "#282C34",
+        "tabLineSelText": "#ABB2BF",
+        "border": "#181A1F"
+      }
+    }
+  },
+  {
+    "id": "nightfox",
+    "name": "Nightfox",
+    "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+    "description": "A highly customizable colorscheme for Neovim with support for multiple styles.",
+    "variant": "dark",
+    "vimColorscheme": "nightfox",
+    "pluginRepo": "https://github.com/EdenEast/nightfox.nvim",
+    "tags": [
+      "customizable",
+      "blue",
+      "family"
+    ],
+    "colors": {
+      "background": "#192330",
+      "foreground": "#CDCECF",
+      "lineNumber": "#5B6C7C",
+      "lineHighlight": "#212E3F",
+      "selection": "#223249",
+      "cursor": "#CDCECF",
+      "tokens": {
+        "comment": "#7A8478",
+        "keyword": "#C792EA",
+        "string": "#C3E88D",
+        "number": "#F78C6C",
+        "function": "#82AAFF",
+        "variable": "#CDCECF",
+        "type": "#FFCB6B",
+        "constant": "#F78C6C",
+        "operator": "#89DDFF",
+        "punctuation": "#CFC9C2"
+      },
+      "ui": {
+        "statusLine": "#131A24",
+        "statusLineText": "#AEAFB0",
+        "tabLine": "#131A24",
+        "tabLineText": "#71839B",
+        "tabLineSel": "#192330",
+        "tabLineSelText": "#CDCECF",
+        "border": "#2B3B51"
+      }
+    }
+  },
+  {
+    "id": "duskfox",
+    "name": "Duskfox",
+    "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+    "description": "A purple-tinted dark theme, part of the Nightfox family.",
+    "variant": "dark",
+    "vimColorscheme": "duskfox",
+    "pluginRepo": "https://github.com/EdenEast/nightfox.nvim",
+    "tags": [
+      "purple",
+      "dark",
+      "family"
+    ],
+    "colors": {
+      "background": "#232136",
+      "foreground": "#E0DEF4",
+      "lineNumber": "#6E6A86",
+      "lineHighlight": "#2D2A45",
+      "selection": "#433C59",
+      "cursor": "#E0DEF4",
+      "tokens": {
+        "comment": "#6E6A86",
+        "keyword": "#C4A7E7",
+        "string": "#A3BE8C",
+        "number": "#EB98C3",
+        "function": "#8CC1FF",
+        "variable": "#E0DEF4",
+        "type": "#F6C177",
+        "constant": "#EB98C3",
+        "operator": "#9CCFD8",
+        "punctuation": "#E0DEF4"
+      },
+      "ui": {
+        "statusLine": "#191724",
+        "statusLineText": "#908CAA",
+        "tabLine": "#191724",
+        "tabLineText": "#6E6A86",
+        "tabLineSel": "#232136",
+        "tabLineSelText": "#E0DEF4",
+        "border": "#393552"
+      }
+    }
+  },
+  {
+    "id": "nordfox",
+    "name": "Nordfox",
+    "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+    "description": "An arctic Nord-inspired theme, part of the Nightfox family.",
+    "variant": "dark",
+    "vimColorscheme": "nordfox",
+    "pluginRepo": "https://github.com/EdenEast/nightfox.nvim",
+    "tags": [
+      "arctic",
+      "blue",
+      "family"
+    ],
+    "colors": {
+      "background": "#2E3440",
+      "foreground": "#CDD9E5",
+      "lineNumber": "#5D6D83",
+      "lineHighlight": "#3D4752",
+      "selection": "#4C566A",
+      "cursor": "#CDD9E5",
+      "tokens": {
+        "comment": "#5D6D83",
+        "keyword": "#B48EAD",
+        "string": "#A3BE8C",
+        "number": "#D08770",
+        "function": "#88C0D0",
+        "variable": "#CDD9E5",
+        "type": "#8FBCBB",
+        "constant": "#D08770",
+        "operator": "#81A1C1",
+        "punctuation": "#D8DEE9"
+      },
+      "ui": {
+        "statusLine": "#232831",
+        "statusLineText": "#B8C0D0",
+        "tabLine": "#232831",
+        "tabLineText": "#5D6D83",
+        "tabLineSel": "#2E3440",
+        "tabLineSelText": "#CDD9E5",
+        "border": "#4F6074"
+      }
+    }
+  },
+  {
+    "id": "rose-pine",
+    "name": "Rosé Pine",
+    "repoUrl": "https://github.com/rose-pine/neovim",
+    "description": "All natural pine, faux fur and a bit of soho vibes for the classy minimalist.",
+    "variant": "dark",
+    "vimColorscheme": "rose-pine",
+    "pluginRepo": "https://github.com/rose-pine/neovim",
+    "tags": [
+      "minimal",
+      "pink",
+      "elegant"
+    ],
+    "colors": {
+      "background": "#191724",
+      "foreground": "#E0DEF4",
+      "lineNumber": "#6E6A86",
+      "lineHighlight": "#26233A",
+      "selection": "#403D52",
+      "cursor": "#524F67",
+      "tokens": {
+        "comment": "#6E6A86",
+        "keyword": "#EBBCBA",
+        "string": "#F6C177",
+        "number": "#EBBCBA",
+        "function": "#9CCFD8",
+        "variable": "#E0DEF4",
+        "type": "#C4A7E7",
+        "constant": "#F6C177",
+        "operator": "#908CAA",
+        "punctuation": "#908CAA"
+      },
+      "ui": {
+        "statusLine": "#1F1D2E",
+        "statusLineText": "#908CAA",
+        "tabLine": "#1F1D2E",
+        "tabLineText": "#6E6A86",
+        "tabLineSel": "#191724",
+        "tabLineSelText": "#E0DEF4",
+        "border": "#26233A"
+      }
+    }
+  },
+  {
+    "id": "rose-pine-moon",
+    "name": "Rosé Pine Moon",
+    "repoUrl": "https://github.com/rose-pine/neovim",
+    "description": "A darker variant of Rosé Pine with deeper backgrounds.",
+    "variant": "dark",
+    "vimColorscheme": "rose-pine-moon",
+    "pluginRepo": "https://github.com/rose-pine/neovim",
+    "tags": [
+      "minimal",
+      "pink",
+      "dark"
+    ],
+    "colors": {
+      "background": "#232136",
+      "foreground": "#E0DEF4",
+      "lineNumber": "#6E6A86",
+      "lineHighlight": "#2A273F",
+      "selection": "#44415A",
+      "cursor": "#56526E",
+      "tokens": {
+        "comment": "#6E6A86",
+        "keyword": "#EBBCBA",
+        "string": "#F6C177",
+        "number": "#EBBCBA",
+        "function": "#9CCFD8",
+        "variable": "#E0DEF4",
+        "type": "#C4A7E7",
+        "constant": "#F6C177",
+        "operator": "#908CAA",
+        "punctuation": "#908CAA"
+      },
+      "ui": {
+        "statusLine": "#2A273F",
+        "statusLineText": "#908CAA",
+        "tabLine": "#2A273F",
+        "tabLineText": "#6E6A86",
+        "tabLineSel": "#232136",
+        "tabLineSelText": "#E0DEF4",
+        "border": "#2A273F"
+      }
+    }
+  },
+  {
+    "id": "rose-pine-dawn",
+    "name": "Rosé Pine Dawn",
+    "repoUrl": "https://github.com/rose-pine/neovim",
+    "description": "A light variant of Rosé Pine for daytime coding.",
+    "variant": "light",
+    "vimColorscheme": "rose-pine-dawn",
+    "pluginRepo": "https://github.com/rose-pine/neovim",
+    "tags": [
+      "minimal",
+      "pink",
+      "light"
+    ],
+    "colors": {
+      "background": "#FAF4ED",
+      "foreground": "#575279",
+      "lineNumber": "#9893A5",
+      "lineHighlight": "#F2E9E1",
+      "selection": "#DFDAD9",
+      "cursor": "#CECACD",
+      "tokens": {
+        "comment": "#9893A5",
+        "keyword": "#B4637A",
+        "string": "#EA9D34",
+        "number": "#B4637A",
+        "function": "#56949F",
+        "variable": "#575279",
+        "type": "#907AA9",
+        "constant": "#EA9D34",
+        "operator": "#797593",
+        "punctuation": "#797593"
+      },
+      "ui": {
+        "statusLine": "#FFFDF5",
+        "statusLineText": "#797593",
+        "tabLine": "#FFFDF5",
+        "tabLineText": "#9893A5",
+        "tabLineSel": "#FAF4ED",
+        "tabLineSelText": "#575279",
+        "border": "#F2E9E1"
+      }
+    }
+  },
+  {
+    "id": "everforest",
+    "name": "Everforest",
+    "repoUrl": "https://github.com/sainnhe/everforest",
+    "description": "A green-based color scheme designed to be warm and soft. Easy on the eyes.",
+    "variant": "dark",
+    "vimColorscheme": "everforest",
+    "pluginRepo": "https://github.com/sainnhe/everforest",
+    "tags": [
+      "green",
+      "nature",
+      "soft"
+    ],
+    "colors": {
+      "background": "#2D353B",
+      "foreground": "#D3C6AA",
+      "lineNumber": "#7A8478",
+      "lineHighlight": "#3D484D",
+      "selection": "#4F585E",
+      "cursor": "#D3C6AA",
+      "tokens": {
+        "comment": "#7A8478",
+        "keyword": "#E67E80",
+        "string": "#A7C080",
+        "number": "#D699B6",
+        "function": "#A7C080",
+        "variable": "#D3C6AA",
+        "type": "#E69875",
+        "constant": "#D699B6",
+        "operator": "#83C092",
+        "punctuation": "#859289"
+      },
+      "ui": {
+        "statusLine": "#232A2E",
+        "statusLineText": "#D3C6AA",
+        "tabLine": "#232A2E",
+        "tabLineText": "#7A8478",
+        "tabLineSel": "#2D353B",
+        "tabLineSelText": "#D3C6AA",
+        "border": "#4F585E"
+      }
+    }
+  },
+  {
+    "id": "sonokai",
+    "name": "Sonokai",
+    "repoUrl": "https://github.com/sainnhe/sonokai",
+    "description": "A high-contrast dark color scheme based on Monokai Pro.",
+    "variant": "dark",
+    "vimColorscheme": "sonokai",
+    "pluginRepo": "https://github.com/sainnhe/sonokai",
+    "tags": [
+      "high-contrast",
+      "monokai",
+      "vibrant"
+    ],
+    "colors": {
+      "background": "#2C2E34",
+      "foreground": "#E2E2E3",
+      "lineNumber": "#595F6E",
+      "lineHighlight": "#3D3E45",
+      "selection": "#4D4E55",
+      "cursor": "#E2E2E3",
+      "tokens": {
+        "comment": "#595F6E",
+        "keyword": "#FC5D7C",
+        "string": "#9ED072",
+        "number": "#AB9DF2",
+        "function": "#76CCE0",
+        "variable": "#E2E2E3",
+        "type": "#F39660",
+        "constant": "#AB9DF2",
+        "operator": "#6DCAE0",
+        "punctuation": "#E2E2E3"
+      },
+      "ui": {
+        "statusLine": "#232429",
+        "statusLineText": "#E2E2E3",
+        "tabLine": "#232429",
+        "tabLineText": "#595F6E",
+        "tabLineSel": "#2C2E34",
+        "tabLineSelText": "#E2E2E3",
+        "border": "#4D4E55"
+      }
+    }
+  },
+  {
+    "id": "material",
+    "name": "Material",
+    "repoUrl": "https://github.com/marko-cerovac/material.nvim",
+    "description": "Material colorscheme for Neovim written in Lua. Supports multiple styles.",
+    "variant": "dark",
+    "vimColorscheme": "material",
+    "pluginRepo": "https://github.com/marko-cerovac/material.nvim",
+    "tags": [
+      "material",
+      "clean",
+      "modern"
+    ],
+    "colors": {
+      "background": "#263238",
+      "foreground": "#EEFFFF",
+      "lineNumber": "#546E7A",
+      "lineHighlight": "#2D3C41",
+      "selection": "#3C4C55",
+      "cursor": "#FFCC00",
+      "tokens": {
+        "comment": "#546E7A",
+        "keyword": "#C792EA",
+        "string": "#C3E88D",
+        "number": "#F78C6C",
+        "function": "#82AAFF",
+        "variable": "#EEFFFF",
+        "type": "#FFCB6B",
+        "constant": "#F78C6C",
+        "operator": "#89DDFF",
+        "punctuation": "#89DDFF"
+      },
+      "ui": {
+        "statusLine": "#1E272C",
+        "statusLineText": "#B0BEC5",
+        "tabLine": "#1E272C",
+        "tabLineText": "#546E7A",
+        "tabLineSel": "#263238",
+        "tabLineSelText": "#EEFFFF",
+        "border": "#37474F"
+      }
+    }
+  },
+  {
+    "id": "nordic",
+    "name": "Nordic",
+    "repoUrl": "https://github.com/AlexvZyl/nordic.nvim",
+    "description": "Nord-inspired Neovim theme with balanced contrast and sensible plugin styling defaults.",
+    "variant": "dark",
+    "vimColorscheme": "nordic",
+    "pluginRepo": "https://github.com/AlexvZyl/nordic.nvim",
+    "tags": [
+      "nord",
+      "arctic",
+      "blue",
+      "nordic"
+    ],
+    "colors": {
+      "background": "#242933",
+      "foreground": "#BBC3D4",
+      "lineNumber": "#4C566A",
+      "lineHighlight": "#1E222A",
+      "selection": "#3B4252",
+      "cursor": "#D8DEE9",
+      "tokens": {
+        "comment": "#60728A",
+        "keyword": "#81A1C1",
+        "string": "#A3BE8C",
+        "number": "#B48EAD",
+        "function": "#88C0D0",
+        "variable": "#BBC3D4",
+        "type": "#8FBCBB",
+        "constant": "#D08770",
+        "operator": "#81A1C1",
+        "punctuation": "#BBC3D4"
+      },
+      "ui": {
+        "statusLine": "#191D24",
+        "statusLineText": "#D8DEE9",
+        "tabLine": "#191D24",
+        "tabLineText": "#4C566A",
+        "tabLineSel": "#242933",
+        "tabLineSelText": "#BBC3D4",
+        "border": "#3B4252"
+      }
+    }
+  },
+  {
+    "id": "vague",
+    "name": "Vague",
+    "repoUrl": "https://github.com/vague-theme/vague.nvim",
+    "description": "Minimal dark theme with a focused, low-distraction color palette.",
+    "variant": "dark",
+    "vimColorscheme": "vague",
+    "pluginRepo": "https://github.com/vague-theme/vague.nvim",
+    "tags": [
+      "minimal",
+      "muted",
+      "vague"
+    ],
+    "colors": {
+      "background": "#141415",
+      "foreground": "#cdcdcd",
+      "lineNumber": "#606079",
+      "lineHighlight": "#1e1e21",
+      "selection": "#252528",
+      "cursor": "#cdcdcd",
+      "tokens": {
+        "comment": "#606079",
+        "keyword": "#7e98e8",
+        "string": "#81b29a",
+        "number": "#d8647e",
+        "function": "#7e98e8",
+        "variable": "#cdcdcd",
+        "type": "#6ab0c3",
+        "constant": "#d8647e",
+        "operator": "#90a0b0",
+        "punctuation": "#cdcdcd"
+      },
+      "ui": {
+        "statusLine": "#0f0f10",
+        "statusLineText": "#cdcdcd",
+        "tabLine": "#0f0f10",
+        "tabLineText": "#606079",
+        "tabLineSel": "#141415",
+        "tabLineSelText": "#cdcdcd",
+        "border": "#252528"
+      }
+    }
+  },
+  {
+    "id": "oxocarbon-dark",
+    "name": "Oxocarbon Dark",
+    "repoUrl": "https://github.com/nyoom-engineering/oxocarbon.nvim",
+    "description": "IBM Carbon-inspired dark colorscheme.",
+    "variant": "dark",
+    "vimColorscheme": "oxocarbon",
+    "activation": {
+      "background": "dark"
+    },
+    "pluginRepo": "https://github.com/nyoom-engineering/oxocarbon.nvim",
+    "tags": [
+      "carbon",
+      "ibm",
+      "oxocarbon",
+      "dark"
+    ],
+    "colors": {
+      "background": "#161616",
+      "foreground": "#f2f4f8",
+      "lineNumber": "#525253",
+      "lineHighlight": "#262626",
+      "selection": "#393939",
+      "cursor": "#f2f4f8",
+      "tokens": {
+        "comment": "#6f6f6f",
+        "keyword": "#78A9FF",
+        "string": "#42BE65",
+        "number": "#EE5396",
+        "function": "#33B1FF",
+        "variable": "#f2f4f8",
+        "type": "#08BDBA",
+        "constant": "#EE5396",
+        "operator": "#78A9FF",
+        "punctuation": "#f2f4f8"
+      },
+      "ui": {
+        "statusLine": "#121212",
+        "statusLineText": "#f2f4f8",
+        "tabLine": "#121212",
+        "tabLineText": "#6f6f6f",
+        "tabLineSel": "#161616",
+        "tabLineSelText": "#f2f4f8",
+        "border": "#393939"
+      }
+    }
+  },
+  {
+    "id": "oxocarbon-light",
+    "name": "Oxocarbon Light",
+    "repoUrl": "https://github.com/nyoom-engineering/oxocarbon.nvim",
+    "description": "IBM Carbon-inspired light colorscheme.",
+    "variant": "light",
+    "vimColorscheme": "oxocarbon",
+    "activation": {
+      "background": "light"
+    },
+    "pluginRepo": "https://github.com/nyoom-engineering/oxocarbon.nvim",
+    "tags": [
+      "carbon",
+      "ibm",
+      "oxocarbon",
+      "light"
+    ],
+    "colors": {
+      "background": "#ffffff",
+      "foreground": "#161616",
+      "lineNumber": "#8d8d8d",
+      "lineHighlight": "#f4f4f4",
+      "selection": "#d0e2ff",
+      "cursor": "#161616",
+      "tokens": {
+        "comment": "#6f6f6f",
+        "keyword": "#0f62fe",
+        "string": "#198038",
+        "number": "#da1e28",
+        "function": "#0043ce",
+        "variable": "#161616",
+        "type": "#007d79",
+        "constant": "#da1e28",
+        "operator": "#0f62fe",
+        "punctuation": "#161616"
+      },
+      "ui": {
+        "statusLine": "#f4f4f4",
+        "statusLineText": "#161616",
+        "tabLine": "#f4f4f4",
+        "tabLineText": "#8d8d8d",
+        "tabLineSel": "#ffffff",
+        "tabLineSelText": "#161616",
+        "border": "#e0e0e0"
+      }
+    }
+  },
+  {
+    "id": "dayfox",
+    "name": "Dayfox",
+    "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+    "description": "A warm light theme, part of the Nightfox family.",
+    "variant": "light",
+    "vimColorscheme": "dayfox",
+    "pluginRepo": "https://github.com/EdenEast/nightfox.nvim",
+    "tags": [
+      "light",
+      "warm",
+      "family",
+      "dayfox"
+    ],
+    "colors": {
+      "background": "#f6f2ee",
+      "foreground": "#3d2b1a",
+      "lineNumber": "#837a72",
+      "lineHighlight": "#d3c7bb",
+      "selection": "#e4dcd4",
+      "cursor": "#3d2b1a",
+      "tokens": {
+        "comment": "#837a72",
+        "keyword": "#2848a9",
+        "string": "#396847",
+        "number": "#AC5402",
+        "function": "#2848a9",
+        "variable": "#3d2b1a",
+        "type": "#287980",
+        "constant": "#AC5402",
+        "operator": "#955f61",
+        "punctuation": "#3d2b1a"
+      },
+      "ui": {
+        "statusLine": "#e4dcd4",
+        "statusLineText": "#3d2b1a",
+        "tabLine": "#e4dcd4",
+        "tabLineText": "#837a72",
+        "tabLineSel": "#f6f2ee",
+        "tabLineSelText": "#3d2b1a",
+        "border": "#aab0ad"
+      }
+    }
+  },
+  {
+    "id": "dawnfox",
+    "name": "Dawnfox",
+    "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+    "description": "A soft light theme with rose-tinted backgrounds, part of the Nightfox family.",
+    "variant": "light",
+    "vimColorscheme": "dawnfox",
+    "pluginRepo": "https://github.com/EdenEast/nightfox.nvim",
+    "tags": [
+      "light",
+      "rose",
+      "family",
+      "dawnfox"
+    ],
+    "colors": {
+      "background": "#faf4ed",
+      "foreground": "#575279",
+      "lineNumber": "#9893a5",
+      "lineHighlight": "#ebdfe4",
+      "selection": "#ebe5df",
+      "cursor": "#575279",
+      "tokens": {
+        "comment": "#9893a5",
+        "keyword": "#907aa9",
+        "string": "#618774",
+        "number": "#ea9d34",
+        "function": "#286983",
+        "variable": "#575279",
+        "type": "#56949f",
+        "constant": "#ea9d34",
+        "operator": "#b4637a",
+        "punctuation": "#575279"
+      },
+      "ui": {
+        "statusLine": "#ebe5df",
+        "statusLineText": "#575279",
+        "tabLine": "#ebe5df",
+        "tabLineText": "#9893a5",
+        "tabLineSel": "#faf4ed",
+        "tabLineSelText": "#575279",
+        "border": "#bdbfc9"
+      }
+    }
+  },
+  {
+    "id": "terafox",
+    "name": "Terafox",
+    "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+    "description": "An earthy dark theme inspired by cozy autumn tones, part of the Nightfox family.",
+    "variant": "dark",
+    "vimColorscheme": "terafox",
+    "pluginRepo": "https://github.com/EdenEast/nightfox.nvim",
+    "tags": [
+      "dark",
+      "earthy",
+      "family",
+      "terafox"
+    ],
+    "colors": {
+      "background": "#152528",
+      "foreground": "#ebebeb",
+      "lineNumber": "#6d7f8b",
+      "lineHighlight": "#1d3337",
+      "selection": "#2f3239",
+      "cursor": "#ebebeb",
+      "tokens": {
+        "comment": "#6d7f8b",
+        "keyword": "#ad5c7c",
+        "string": "#7aa4a1",
+        "number": "#fda47f",
+        "function": "#5a93aa",
+        "variable": "#ebebeb",
+        "type": "#a1cdd8",
+        "constant": "#fda47f",
+        "operator": "#e85c51",
+        "punctuation": "#ebebeb"
+      },
+      "ui": {
+        "statusLine": "#0f1c1e",
+        "statusLineText": "#ebebeb",
+        "tabLine": "#0f1c1e",
+        "tabLineText": "#6d7f8b",
+        "tabLineSel": "#152528",
+        "tabLineSelText": "#ebebeb",
+        "border": "#2f3239"
+      }
+    }
+  },
+  {
+    "id": "carbonfox",
+    "name": "Carbonfox",
+    "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+    "description": "IBM Carbon-inspired dark theme, part of the Nightfox family.",
+    "variant": "dark",
+    "vimColorscheme": "carbonfox",
+    "pluginRepo": "https://github.com/EdenEast/nightfox.nvim",
+    "tags": [
+      "carbon",
+      "ibm",
+      "family",
+      "carbonfox"
+    ],
+    "colors": {
+      "background": "#161616",
+      "foreground": "#f2f4f8",
+      "lineNumber": "#525253",
+      "lineHighlight": "#2a2a2a",
+      "selection": "#525253",
+      "cursor": "#f2f4f8",
+      "tokens": {
+        "comment": "#6f6f6f",
+        "keyword": "#78A9FF",
+        "string": "#25be6a",
+        "number": "#EE5396",
+        "function": "#33B1FF",
+        "variable": "#f2f4f8",
+        "type": "#08BDBA",
+        "constant": "#EE5396",
+        "operator": "#78A9FF",
+        "punctuation": "#f2f4f8"
+      },
+      "ui": {
+        "statusLine": "#121212",
+        "statusLineText": "#f2f4f8",
+        "tabLine": "#121212",
+        "tabLineText": "#525253",
+        "tabLineSel": "#161616",
+        "tabLineSelText": "#f2f4f8",
+        "border": "#393939"
+      }
+    }
+  },
+  {
+    "id": "kanagawa-dragon",
+    "name": "Kanagawa Dragon",
+    "repoUrl": "https://github.com/rebelot/kanagawa.nvim",
+    "description": "Deeper, ink-black variant of Kanagawa with muted greens and warm accents.",
+    "variant": "dark",
+    "vimColorscheme": "kanagawa-dragon",
+    "pluginRepo": "https://github.com/rebelot/kanagawa.nvim",
+    "tags": [
+      "japanese",
+      "art",
+      "dragon",
+      "kanagawa"
+    ],
+    "colors": {
+      "background": "#181616",
+      "foreground": "#c5c9c5",
+      "lineNumber": "#7a8382",
+      "lineHighlight": "#1d1c19",
+      "selection": "#282727",
+      "cursor": "#c5c9c5",
+      "tokens": {
+        "comment": "#9e9b93",
+        "keyword": "#a292a3",
+        "string": "#87a987",
+        "number": "#c4746e",
+        "function": "#658594",
+        "variable": "#c5c9c5",
+        "type": "#8ba4b0",
+        "constant": "#c4b28a",
+        "operator": "#a6a69c",
+        "punctuation": "#c5c9c5"
+      },
+      "ui": {
+        "statusLine": "#12120f",
+        "statusLineText": "#c5c9c5",
+        "tabLine": "#12120f",
+        "tabLineText": "#7a8382",
+        "tabLineSel": "#181616",
+        "tabLineSelText": "#c5c9c5",
+        "border": "#393836"
+      }
+    }
+  },
+  {
+    "id": "kanagawa-lotus",
+    "name": "Kanagawa Lotus",
+    "repoUrl": "https://github.com/rebelot/kanagawa.nvim",
+    "description": "Light Kanagawa variant with soft parchment backgrounds and floral accents.",
+    "variant": "light",
+    "vimColorscheme": "kanagawa-lotus",
+    "pluginRepo": "https://github.com/rebelot/kanagawa.nvim",
+    "tags": [
+      "japanese",
+      "art",
+      "lotus",
+      "kanagawa",
+      "light"
+    ],
+    "colors": {
+      "background": "#f2ecbc",
+      "foreground": "#545464",
+      "lineNumber": "#a09cac",
+      "lineHighlight": "#e4d9c5",
+      "selection": "#d5cea3",
+      "cursor": "#545464",
+      "tokens": {
+        "comment": "#a09cac",
+        "keyword": "#624c83",
+        "string": "#6f894e",
+        "number": "#b35b79",
+        "function": "#465aa4",
+        "variable": "#545464",
+        "type": "#597b75",
+        "constant": "#c84031",
+        "operator": "#624c83",
+        "punctuation": "#545464"
+      },
+      "ui": {
+        "statusLine": "#e7dcc4",
+        "statusLineText": "#545464",
+        "tabLine": "#e7dcc4",
+        "tabLineText": "#a09cac",
+        "tabLineSel": "#f2ecbc",
+        "tabLineSelText": "#545464",
+        "border": "#c9cbd1"
+      }
+    }
+  },
+  {
+    "id": "vscode-dark",
+    "name": "VS Code Dark",
+    "repoUrl": "https://github.com/Mofiqul/vscode.nvim",
+    "description": "VS Code-inspired dark theme for Neovim.",
+    "variant": "dark",
+    "vimColorscheme": "vscode",
+    "activation": {
+      "background": "dark"
+    },
+    "pluginRepo": "https://github.com/Mofiqul/vscode.nvim",
+    "tags": [
+      "vscode",
+      "dark",
+      "modern"
+    ],
+    "colors": {
+      "background": "#1F1F1F",
+      "foreground": "#D4D4D4",
+      "lineNumber": "#5A5A5A",
+      "lineHighlight": "#2D2D2D",
+      "selection": "#264F78",
+      "cursor": "#AEAFAD",
+      "tokens": {
+        "comment": "#6A9955",
+        "keyword": "#569CD6",
+        "string": "#CE9178",
+        "number": "#B5CEA8",
+        "function": "#DCDCAA",
+        "variable": "#9CDCFE",
+        "type": "#4EC9B0",
+        "constant": "#4FC1FF",
+        "operator": "#D4D4D4",
+        "punctuation": "#D4D4D4"
+      },
+      "ui": {
+        "statusLine": "#252526",
+        "statusLineText": "#CCCCCC",
+        "tabLine": "#252526",
+        "tabLineText": "#5A5A5A",
+        "tabLineSel": "#1F1F1F",
+        "tabLineSelText": "#D4D4D4",
+        "border": "#444444"
+      }
+    }
+  },
+  {
+    "id": "vscode-light",
+    "name": "VS Code Light",
+    "repoUrl": "https://github.com/Mofiqul/vscode.nvim",
+    "description": "VS Code-inspired light theme for Neovim.",
+    "variant": "light",
+    "vimColorscheme": "vscode",
+    "activation": {
+      "background": "light"
+    },
+    "pluginRepo": "https://github.com/Mofiqul/vscode.nvim",
+    "tags": [
+      "vscode",
+      "light",
+      "modern"
+    ],
+    "colors": {
+      "background": "#FFFFFF",
+      "foreground": "#000000",
+      "lineNumber": "#237893",
+      "lineHighlight": "#F3F3F3",
+      "selection": "#ADD6FF",
+      "cursor": "#000000",
+      "tokens": {
+        "comment": "#008000",
+        "keyword": "#0000FF",
+        "string": "#A31515",
+        "number": "#098658",
+        "function": "#795E26",
+        "variable": "#001080",
+        "type": "#267F99",
+        "constant": "#0070C1",
+        "operator": "#000000",
+        "punctuation": "#000000"
+      },
+      "ui": {
+        "statusLine": "#F3F3F3",
+        "statusLineText": "#000000",
+        "tabLine": "#F3F3F3",
+        "tabLineText": "#237893",
+        "tabLineSel": "#FFFFFF",
+        "tabLineSelText": "#000000",
+        "border": "#E5E5E5"
+      }
+    }
+  },
+  {
+    "id": "sonokai-atlantis",
+    "name": "Sonokai Atlantis",
+    "repoUrl": "https://github.com/sainnhe/sonokai",
+    "description": "Cool blue-gray Sonokai style with balanced contrast.",
+    "variant": "dark",
+    "vimColorscheme": "sonokai",
+    "activation": {
+      "globals": [
+        {
+          "name": "sonokai_style",
+          "value": "atlantis"
+        }
+      ]
+    },
+    "pluginRepo": "https://github.com/sainnhe/sonokai",
+    "tags": [
+      "sonokai",
+      "atlantis",
+      "high-contrast"
+    ],
+    "colors": {
+      "background": "#2a2f38",
+      "foreground": "#e1e3e4",
+      "lineNumber": "#5a6477",
+      "lineHighlight": "#373c4b",
+      "selection": "#424b5b",
+      "cursor": "#e1e3e4",
+      "tokens": {
+        "comment": "#828a9a",
+        "keyword": "#ff6578",
+        "string": "#9dd274",
+        "number": "#eacb64",
+        "function": "#72cce8",
+        "variable": "#e1e3e4",
+        "type": "#f69c5e",
+        "constant": "#ba9cf3",
+        "operator": "#72cce8",
+        "punctuation": "#e1e3e4"
+      },
+      "ui": {
+        "statusLine": "#24272e",
+        "statusLineText": "#e1e3e4",
+        "tabLine": "#24272e",
+        "tabLineText": "#5a6477",
+        "tabLineSel": "#2a2f38",
+        "tabLineSelText": "#e1e3e4",
+        "border": "#424b5b"
+      }
+    }
+  },
+  {
+    "id": "sonokai-andromeda",
+    "name": "Sonokai Andromeda",
+    "repoUrl": "https://github.com/sainnhe/sonokai",
+    "description": "Purple-tinted Sonokai style with cosmic accents.",
+    "variant": "dark",
+    "vimColorscheme": "sonokai",
+    "activation": {
+      "globals": [
+        {
+          "name": "sonokai_style",
+          "value": "andromeda"
+        }
+      ]
+    },
+    "pluginRepo": "https://github.com/sainnhe/sonokai",
+    "tags": [
+      "sonokai",
+      "andromeda",
+      "high-contrast"
+    ],
+    "colors": {
+      "background": "#2b2d3a",
+      "foreground": "#e1e3e4",
+      "lineNumber": "#5f6378",
+      "lineHighlight": "#363a4e",
+      "selection": "#3f445b",
+      "cursor": "#e1e3e4",
+      "tokens": {
+        "comment": "#7e8294",
+        "keyword": "#fb617e",
+        "string": "#9ed06c",
+        "number": "#edc763",
+        "function": "#6dcae8",
+        "variable": "#e1e3e4",
+        "type": "#f89860",
+        "constant": "#bb97ee",
+        "operator": "#6dcae8",
+        "punctuation": "#e1e3e4"
+      },
+      "ui": {
+        "statusLine": "#252630",
+        "statusLineText": "#e1e3e4",
+        "tabLine": "#252630",
+        "tabLineText": "#5f6378",
+        "tabLineSel": "#2b2d3a",
+        "tabLineSelText": "#e1e3e4",
+        "border": "#3f445b"
+      }
+    }
+  },
+  {
+    "id": "sonokai-maia",
+    "name": "Sonokai Maia",
+    "repoUrl": "https://github.com/sainnhe/sonokai",
+    "description": "Teal-accented Sonokai style with cool undertones.",
+    "variant": "dark",
+    "vimColorscheme": "sonokai",
+    "activation": {
+      "globals": [
+        {
+          "name": "sonokai_style",
+          "value": "maia"
+        }
+      ]
+    },
+    "pluginRepo": "https://github.com/sainnhe/sonokai",
+    "tags": [
+      "sonokai",
+      "maia",
+      "high-contrast"
+    ],
+    "colors": {
+      "background": "#2b3339",
+      "foreground": "#e1e3e4",
+      "lineNumber": "#5b6b73",
+      "lineHighlight": "#354146",
+      "selection": "#3f4d54",
+      "cursor": "#e1e3e4",
+      "tokens": {
+        "comment": "#7b8b93",
+        "keyword": "#ff6578",
+        "string": "#9ed072",
+        "number": "#e7c664",
+        "function": "#76cce0",
+        "variable": "#e1e3e4",
+        "type": "#f39660",
+        "constant": "#b39df3",
+        "operator": "#76cce0",
+        "punctuation": "#e1e3e4"
+      },
+      "ui": {
+        "statusLine": "#232a2f",
+        "statusLineText": "#e1e3e4",
+        "tabLine": "#232a2f",
+        "tabLineText": "#5b6b73",
+        "tabLineSel": "#2b3339",
+        "tabLineSelText": "#e1e3e4",
+        "border": "#3f4d54"
+      }
+    }
+  },
+  {
+    "id": "sonokai-espresso",
+    "name": "Sonokai Espresso",
+    "repoUrl": "https://github.com/sainnhe/sonokai",
+    "description": "Warm brown Sonokai style with coffee-toned backgrounds.",
+    "variant": "dark",
+    "vimColorscheme": "sonokai",
+    "activation": {
+      "globals": [
+        {
+          "name": "sonokai_style",
+          "value": "espresso"
+        }
+      ]
+    },
+    "pluginRepo": "https://github.com/sainnhe/sonokai",
+    "tags": [
+      "sonokai",
+      "espresso",
+      "high-contrast"
+    ],
+    "colors": {
+      "background": "#2d2a2e",
+      "foreground": "#e3e1e4",
+      "lineNumber": "#605d68",
+      "lineHighlight": "#37343a",
+      "selection": "#49464e",
+      "cursor": "#e3e1e4",
+      "tokens": {
+        "comment": "#848089",
+        "keyword": "#f85e84",
+        "string": "#9ecd6f",
+        "number": "#e5c463",
+        "function": "#7accd7",
+        "variable": "#e3e1e4",
+        "type": "#ef9062",
+        "constant": "#ab9df2",
+        "operator": "#7accd7",
+        "punctuation": "#e3e1e4"
+      },
+      "ui": {
+        "statusLine": "#211f21",
+        "statusLineText": "#e3e1e4",
+        "tabLine": "#211f21",
+        "tabLineText": "#605d68",
+        "tabLineSel": "#2d2a2e",
+        "tabLineSelText": "#e3e1e4",
+        "border": "#49464e"
+      }
+    }
+  },
+  {
+    "id": "sonokai-shusia",
+    "name": "Sonokai Shusia",
+    "repoUrl": "https://github.com/sainnhe/sonokai",
+    "description": "Purple Sonokai style with Monokai Pro Shusia accents.",
+    "variant": "dark",
+    "vimColorscheme": "sonokai",
+    "activation": {
+      "globals": [
+        {
+          "name": "sonokai_style",
+          "value": "shusia"
+        }
+      ]
+    },
+    "pluginRepo": "https://github.com/sainnhe/sonokai",
+    "tags": [
+      "sonokai",
+      "shusia",
+      "high-contrast"
+    ],
+    "colors": {
+      "background": "#2d2a2e",
+      "foreground": "#e3e1e4",
+      "lineNumber": "#605d68",
+      "lineHighlight": "#37343a",
+      "selection": "#49464e",
+      "cursor": "#e3e1e4",
+      "tokens": {
+        "comment": "#848089",
+        "keyword": "#f85e84",
+        "string": "#9ecd6f",
+        "number": "#e5c463",
+        "function": "#7accd7",
+        "variable": "#e3e1e4",
+        "type": "#ef9062",
+        "constant": "#ab9df2",
+        "operator": "#7accd7",
+        "punctuation": "#e3e1e4"
+      },
+      "ui": {
+        "statusLine": "#1a181a",
+        "statusLineText": "#e3e1e4",
+        "tabLine": "#1a181a",
+        "tabLineText": "#605d68",
+        "tabLineSel": "#2d2a2e",
+        "tabLineSelText": "#e3e1e4",
+        "border": "#49464e"
+      }
+    }
+  }
+]

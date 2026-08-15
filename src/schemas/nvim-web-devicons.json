@@ -1,0 +1,245 @@
+{
+  "id": "nvim-web-devicons",
+  "pluginName": "nvim-web-devicons",
+  "pluginRepo": "https://github.com/nvim-tree/nvim-web-devicons",
+  "version": "1.0.0",
+  "description": "Provides Nerd Font filetype icons and colors for Neovim plugins. Used as a dependency by nvim-tree, lualine, telescope, bufferline, and many others.",
+  "author": "nvim-tree",
+  "stars": 5400,
+  "category": "ui",
+  "tags": ["icons", "devicons", "nerd-font", "filetype", "ui", "dependency"],
+  "tagline": "Nerd Font filetype icons for Neovim — used by most UI plugins as a dependency",
+  "setup": {
+    "requirePath": "nvim-web-devicons",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "color_icons",
+      "label": "Color Icons",
+      "description": "Use distinct colors per icon. When disabled, all icons are rendered in the default icon color, giving a uniform monochrome appearance.",
+      "type": "boolean",
+      "group": "General",
+      "default": true
+    },
+    {
+      "key": "default",
+      "label": "Show Default Icon",
+      "description": "Return a generic fallback icon when no specific icon is found for a file. When disabled, plugins that request an icon for an unknown file type receive nil.",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    },
+    {
+      "key": "strict",
+      "label": "Strict Lookup",
+      "description": "Use strict icon resolution: check the filename table first, then the extension table separately. Prevents a file with no extension from accidentally matching an extension icon because its name happens to match one.",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    },
+    {
+      "key": "variant",
+      "label": "Color Variant",
+      "description": "Force a specific light or dark icon color variant, instead of automatically following Neovim's background setting. Leave unset (the default) to let the plugin switch variants automatically when you change between light and dark themes.",
+      "type": "select",
+      "group": "General",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "dark", "label": "Dark" }
+      ]
+    },
+    {
+      "key": "blend",
+      "label": "Highlight Blend",
+      "description": "Override the blend value for all icon highlight groups (see :h highlight-blend). Set to 0 to make icons fully opaque — useful if icons look translucent due to the pumblend option. Leave unset (the default) to use Neovim's standard blending.",
+      "type": "number",
+      "group": "General",
+      "validation": {
+        "min": 0,
+        "max": 100,
+        "integer": true
+      }
+    },
+    {
+      "key": "override",
+      "label": "Icon Overrides (General)",
+      "description": "Override or add icons by name. Keys are the icon name (e.g. 'zsh', 'lua'). Each entry must include 'icon' (Nerd Font glyph), 'color' (hex), 'cterm_color' (256-color code string), and 'name' (highlight group suffix). Works without strict mode.",
+      "type": "lua",
+      "group": "Icon Overrides",
+      "default": "{\n  -- zsh = {\n  --   icon = \"\",\n  --   color = \"#428850\",\n  --   cterm_color = \"65\",\n  --   name = \"Zsh\",\n  -- },\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "override_by_filename",
+      "label": "Override by Filename",
+      "description": "Override icons for specific filenames (e.g. '.gitignore', 'Makefile'). Filename matching is case-insensitive. Takes effect when strict mode is enabled.",
+      "type": "lua",
+      "group": "Icon Overrides",
+      "default": "{\n  -- [\".gitignore\"] = {\n  --   icon = \"\",\n  --   color = \"#f1502f\",\n  --   cterm_color = \"196\",\n  --   name = \"Gitignore\",\n  -- },\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "override_by_extension",
+      "label": "Override by Extension",
+      "description": "Override icons for specific file extensions (e.g. 'log', 'txt'). Extension matching is case-sensitive. Takes effect when strict mode is enabled.",
+      "type": "lua",
+      "group": "Icon Overrides",
+      "default": "{\n  -- [\"log\"] = {\n  --   icon = \"\",\n  --   color = \"#81e043\",\n  --   cterm_color = \"113\",\n  --   name = \"Log\",\n  -- },\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "override_by_operating_system",
+      "label": "Override by Operating System",
+      "description": "Override icons for operating system identifiers used in file trees and pickers (e.g. 'apple', 'linux', 'windows').",
+      "type": "lua",
+      "group": "Icon Overrides",
+      "default": "{\n  -- [\"apple\"] = {\n  --   icon = \"\",\n  --   color = \"#A2AAAD\",\n  --   cterm_color = \"248\",\n  --   name = \"Apple\",\n  -- },\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "override_by_desktop_environment",
+      "label": "Override by Desktop Environment",
+      "description": "Override icons for desktop environment names (e.g. 'gnome', 'kde', 'xfce'). Useful for users running Linux desktop environments that are represented in file tree views.",
+      "type": "lua",
+      "group": "Icon Overrides",
+      "default": "{\n  -- [\"gnome\"] = {\n  --   icon = \"\",\n  --   color = \"#4A90D9\",\n  --   cterm_color = \"68\",\n  --   name = \"Gnome\",\n  -- },\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "override_by_window_manager",
+      "label": "Override by Window Manager",
+      "description": "Override icons for window manager names (e.g. 'i3', 'hyprland', 'sway'). Useful for users whose file trees display window manager config files.",
+      "type": "lua",
+      "group": "Icon Overrides",
+      "default": "{\n  -- [\"i3\"] = {\n  --   icon = \"\",\n  --   color = \"#E8EBEE\",\n  --   cterm_color = \"255\",\n  --   name = \"I3\",\n  -- },\n}",
+      "expectedReturnType": "table"
+    }
+  ],
+  "functions": [
+    {
+      "name": "refresh",
+      "label": "Refresh Icons",
+      "description": "Re-apply icon color variant and all highlight groups. Call this after changing colorscheme if icons lose their colors.",
+      "whatItDoes": "Reloads the icon tables for the current light/dark variant and re-applies all DevIcon highlight groups. Useful in startup graphs that switch colorschemes programmatically.",
+      "isPopular": false,
+      "aliases": ["reload icons", "reapply icon colors", "devicons refresh"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('nvim-web-devicons').refresh()"
+    },
+    {
+      "name": "get_icon",
+      "label": "Get Icon",
+      "description": "Get the icon glyph for a file given its filename and/or extension. Returns the icon character only — the highlight group name returned by the plugin is not captured in the graph.",
+      "whatItDoes": "Returns the Nerd Font icon character for the given file. The plugin also returns a highlight group name as a second value, but graph nodes capture only the first return value (the icon glyph). Primarily useful when building custom UI components that need to display file icons.",
+      "isPopular": false,
+      "aliases": ["file icon", "devicon lookup", "icon for file"],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "description": "The filename to look up (e.g. 'init.lua', '.bashrc')"
+        },
+        {
+          "name": "extension",
+          "type": "string",
+          "optional": true,
+          "description": "File extension without leading dot (e.g. 'lua', 'py'). Used as fallback when filename has no exact match."
+        }
+      ],
+      "returns": "string",
+      "luaCall": "require('nvim-web-devicons').get_icon($params.filename, $params.extension)"
+    },
+    {
+      "name": "get_icon_color",
+      "label": "Get Icon with Color",
+      "description": "Get the icon glyph for a file. Returns the icon character only — the hex color string returned by the plugin as a second value is not captured in the graph.",
+      "whatItDoes": "The plugin returns both the icon character and its hex color code (e.g. '#51a0cf'). Graph nodes capture only the first return value (the icon glyph). To use the raw color value, call this function directly in a lua node.",
+      "isPopular": false,
+      "aliases": ["icon color", "file icon color"],
+      "params": [
+        {
+          "name": "filename",
+          "type": "string",
+          "description": "The filename to look up (e.g. 'init.lua')"
+        },
+        {
+          "name": "extension",
+          "type": "string",
+          "optional": true,
+          "description": "File extension without leading dot (e.g. 'lua')"
+        }
+      ],
+      "returns": "string",
+      "luaCall": "require('nvim-web-devicons').get_icon_color($params.filename, $params.extension)"
+    },
+    {
+      "name": "get_icon_by_filetype",
+      "label": "Get Icon by Filetype",
+      "description": "Get the icon glyph for a Neovim filetype string. Returns the icon character only — the highlight group name returned by the plugin as a second value is not captured in the graph.",
+      "whatItDoes": "Looks up the icon using Neovim's filetype name (from vim.bo.filetype) rather than a filename. Graph nodes capture only the first return value (the icon glyph). Convenient when you have a buffer's filetype but not a filename.",
+      "isPopular": false,
+      "aliases": ["icon by filetype", "filetype icon"],
+      "params": [
+        {
+          "name": "filetype",
+          "type": "string",
+          "description": "Neovim filetype string (e.g. 'lua', 'python', 'typescript')"
+        }
+      ],
+      "returns": "string",
+      "luaCall": "require('nvim-web-devicons').get_icon_by_filetype($params.filetype)"
+    },
+    {
+      "name": "set_default_icon",
+      "label": "Set Default Icon",
+      "description": "Override the fallback icon shown when no specific icon is found for a file.",
+      "whatItDoes": "Changes the default icon glyph and color at runtime. The default is used whenever a file has no matching extension or filename entry and the 'default' option is enabled.",
+      "isPopular": false,
+      "aliases": ["default icon", "fallback icon"],
+      "params": [
+        {
+          "name": "icon",
+          "type": "string",
+          "description": "Nerd Font glyph character for the default icon"
+        },
+        {
+          "name": "color",
+          "type": "string",
+          "description": "Hex color string (e.g. '#6d8086')"
+        },
+        {
+          "name": "cterm_color",
+          "type": "string",
+          "description": "cterm 256-color code as a string (e.g. '66')"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('nvim-web-devicons').set_default_icon($params.icon, $params.color, $params.cterm_color)"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "refresh-icons",
+      "baseFunctionName": "refresh",
+      "label": "Refresh Icon Highlights",
+      "shortDescription": "Re-apply all DevIcon highlight groups after a colorscheme change",
+      "whatItDoes": "Useful in a startup graph after loading a colorscheme: add this node after your colorscheme setup to ensure icons always appear with the correct colors.",
+      "isPopular": true,
+      "aliases": ["reload devicons", "fix icon colors"],
+      "defaults": {}
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "NvimWebDeviconsHiTest",
+      "description": "Display all registered icon highlight groups in a scratch buffer. Shows every icon glyph with its assigned color — useful for verifying your Nerd Font is installed correctly and overrides are applied.",
+      "template": ":NvimWebDeviconsHiTest",
+      "example": ":NvimWebDeviconsHiTest",
+      "sourceDoc": "https://github.com/nvim-tree/nvim-web-devicons#readme"
+    }
+  ]
+}

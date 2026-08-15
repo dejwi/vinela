@@ -1,0 +1,305 @@
+{
+  "id": "mason-nvim",
+  "pluginName": "mason.nvim",
+  "pluginRepo": "https://github.com/mason-org/mason.nvim",
+  "version": "1.0.0",
+  "description": "Package manager for LSP servers, formatters, linters, and DAP servers. Provides a UI for installing and managing external tools.",
+  "author": "williamboman",
+  "stars": 8200,
+  "category": "lsp",
+  "tags": ["lsp", "mason", "installer", "formatter", "linter"],
+  "tagline": "Portable package manager for LSP servers, formatters & linters",
+  "capabilities": [
+    {
+      "kind": "lsp-package-installer",
+      "provider": "mason-registry"
+    }
+  ],
+  "options": [
+    {
+      "key": "PATH",
+      "label": "PATH Handling",
+      "description": "How Mason adds its bin directory to your system PATH. 'prepend' puts Mason tools first (recommended), 'append' puts them last, 'skip' doesn't modify PATH.",
+      "type": "select",
+      "group": "General",
+      "default": "prepend",
+      "options": [
+        { "value": "prepend", "label": "Prepend (recommended)" },
+        { "value": "append", "label": "Append" },
+        { "value": "skip", "label": "Skip (don't modify PATH)" }
+      ]
+    },
+    {
+      "key": "max_concurrent_installers",
+      "label": "Max Concurrent Installers",
+      "description": "Maximum number of packages to install at the same time.",
+      "type": "number",
+      "group": "General",
+      "default": 4,
+      "validation": {
+        "min": 1,
+        "max": 16,
+        "integer": true
+      }
+    },
+    {
+      "key": "log_level",
+      "label": "Log Level",
+      "description": "Controls how much detail is written to Mason's log file.",
+      "type": "select",
+      "group": "General",
+      "default": "INFO",
+      "emit": {
+        "valueRule": {
+          "kind": "value-map",
+          "values": {
+            "TRACE": { "kind": "lua", "lua": "vim.log.levels.TRACE" },
+            "DEBUG": { "kind": "lua", "lua": "vim.log.levels.DEBUG" },
+            "INFO": { "kind": "lua", "lua": "vim.log.levels.INFO" },
+            "WARN": { "kind": "lua", "lua": "vim.log.levels.WARN" },
+            "ERROR": { "kind": "lua", "lua": "vim.log.levels.ERROR" },
+            "OFF": { "kind": "lua", "lua": "vim.log.levels.OFF" }
+          }
+        }
+      },
+      "options": [
+        { "value": "TRACE", "label": "Trace (most verbose)" },
+        { "value": "DEBUG", "label": "Debug" },
+        { "value": "INFO", "label": "Info (default)" },
+        { "value": "WARN", "label": "Warn" },
+        { "value": "ERROR", "label": "Error" },
+        { "value": "OFF", "label": "Off (no logging)" }
+      ]
+    },
+    {
+      "key": "registries",
+      "label": "Registries",
+      "description": "Package registries to source packages from. The default mason-org registry contains most popular tools.",
+      "type": "array",
+      "group": "General",
+      "default": ["github:mason-org/mason-registry"],
+      "items": {
+        "itemType": "string"
+      }
+    },
+    {
+      "key": "ui.check_outdated_packages_on_open",
+      "label": "Check Outdated on Open",
+      "description": "Automatically check for new versions when opening the :Mason window.",
+      "type": "boolean",
+      "group": "UI",
+      "default": true
+    },
+    {
+      "key": "ui.border",
+      "label": "Window Border",
+      "description": "Border style for the Mason floating window.",
+      "type": "select",
+      "group": "UI",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "single", "label": "Single" },
+        { "value": "double", "label": "Double" },
+        { "value": "rounded", "label": "Rounded" },
+        { "value": "solid", "label": "Solid" },
+        { "value": "shadow", "label": "Shadow" }
+      ]
+    },
+    {
+      "key": "ui.width",
+      "label": "Window Width",
+      "description": "Width of the Mason window. Use a decimal between 0-1 for percentage of screen width (e.g., 0.8 = 80%), or an integer > 1 for fixed columns.",
+      "type": "number",
+      "group": "UI",
+      "default": 0.8,
+      "validation": {
+        "min": 0.1,
+        "max": 500
+      }
+    },
+    {
+      "key": "ui.height",
+      "label": "Window Height",
+      "description": "Height of the Mason window. Use a decimal between 0-1 for percentage of screen height, or an integer > 1 for fixed rows.",
+      "type": "number",
+      "group": "UI",
+      "default": 0.9,
+      "validation": {
+        "min": 0.1,
+        "max": 500
+      }
+    },
+    {
+      "key": "ui.icons.package_installed",
+      "label": "Installed Icon",
+      "description": "Icon shown next to installed packages.",
+      "type": "string",
+      "group": "UI Icons",
+      "default": "\u2713"
+    },
+    {
+      "key": "ui.icons.package_pending",
+      "label": "Pending Icon",
+      "description": "Icon shown next to packages being installed.",
+      "type": "string",
+      "group": "UI Icons",
+      "default": "\u279c"
+    },
+    {
+      "key": "ui.icons.package_uninstalled",
+      "label": "Uninstalled Icon",
+      "description": "Icon shown next to uninstalled packages.",
+      "type": "string",
+      "group": "UI Icons",
+      "default": "\u2717"
+    },
+    {
+      "key": "pip.upgrade_pip",
+      "label": "Upgrade pip",
+      "description": "Upgrade pip to the latest version in Python virtual environments created by Mason.",
+      "type": "boolean",
+      "group": "Python",
+      "default": false
+    },
+    {
+      "key": "pip.install_args",
+      "label": "pip Install Arguments",
+      "description": "Extra arguments to pass to 'pip install' when installing Python-based tools.",
+      "type": "array",
+      "group": "Python",
+      "default": [],
+      "items": {
+        "itemType": "string"
+      }
+    },
+    {
+      "key": "github.download_url_template",
+      "label": "GitHub Download URL Template",
+      "description": "URL template for downloading releases from GitHub. Useful for GitHub Enterprise or mirror setups. Uses %s placeholders for owner/repo, tag, and asset name.",
+      "type": "string",
+      "group": "Advanced",
+      "default": "https://github.com/%s/releases/download/%s/%s"
+    }
+  ],
+  "functions": [
+    {
+      "name": "open",
+      "label": "Open Mason UI",
+      "description": "Open the Mason UI window",
+      "whatItDoes": "Opens the Mason graphical interface where you can browse, install, update, and remove LSP servers, formatters, and linters.",
+      "isPopular": true,
+      "aliases": ["mason ui", "package manager", "open mason"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('Mason')"
+    },
+    {
+      "name": "install",
+      "label": "Install Package",
+      "description": "Install a package by name",
+      "whatItDoes": "Installs a Mason-managed tool (LSP server, formatter, linter, etc.) by its package name.",
+      "isPopular": false,
+      "aliases": ["install tool", "install lsp", "mason install"],
+      "params": [
+        {
+          "name": "package_name",
+          "type": "string",
+          "description": "Package name to install (e.g., 'lua-language-server', 'stylua')"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "vim.cmd('MasonInstall ' .. $params.package_name)"
+    },
+    {
+      "name": "uninstall",
+      "label": "Uninstall Package",
+      "description": "Uninstall a package by name",
+      "whatItDoes": "Removes a Mason-managed tool from your system.",
+      "isPopular": false,
+      "aliases": ["remove tool", "remove lsp", "mason uninstall"],
+      "params": [
+        {
+          "name": "package_name",
+          "type": "string",
+          "description": "Package name to uninstall"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "vim.cmd('MasonUninstall ' .. $params.package_name)"
+    },
+    {
+      "name": "update",
+      "label": "Update Registries",
+      "description": "Update all managed registries to refresh available package info",
+      "whatItDoes": "Refreshes Mason's package registry to fetch the latest available versions and newly added packages.",
+      "isPopular": false,
+      "aliases": ["refresh packages", "update registry", "mason update"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('MasonUpdate')"
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "Mason",
+      "description": "Open the Mason graphical status window to browse, install, uninstall, and update packages.",
+      "template": ":Mason",
+      "example": ":Mason",
+      "sourceDoc": ":help :Mason"
+    },
+    {
+      "name": "MasonInstall",
+      "description": "Install one or more packages by name. Supports version pinning with @version syntax (e.g., rust-analyzer@nightly).",
+      "template": ":MasonInstall {package}",
+      "example": ":MasonInstall stylua lua-language-server",
+      "sourceDoc": ":help :MasonInstall",
+      "params": [
+        {
+          "name": "package",
+          "placeholder": "lua-language-server",
+          "description": "Package name(s) to install. Supports version pinning with @version."
+        }
+      ]
+    },
+    {
+      "name": "MasonUpdate",
+      "description": "Update all managed registries. This refreshes the list of available packages and their versions, but does not update installed packages themselves.",
+      "template": ":MasonUpdate",
+      "example": ":MasonUpdate",
+      "sourceDoc": ":help :MasonUpdate"
+    },
+    {
+      "name": "MasonUninstall",
+      "description": "Uninstall one or more Mason packages by name.",
+      "template": ":MasonUninstall {package}",
+      "example": ":MasonUninstall stylua",
+      "sourceDoc": ":help :MasonUninstall",
+      "params": [
+        {
+          "name": "package",
+          "placeholder": "lua-language-server",
+          "description": "Package name(s) to uninstall."
+        }
+      ]
+    },
+    {
+      "name": "MasonUninstallAll",
+      "description": "Uninstall all installed Mason packages.",
+      "template": ":MasonUninstallAll",
+      "example": ":MasonUninstallAll",
+      "sourceDoc": ":help :MasonUninstallAll"
+    },
+    {
+      "name": "MasonLog",
+      "description": "Open the Mason log file in a new tab window. Useful for debugging package installation issues.",
+      "template": ":MasonLog",
+      "example": ":MasonLog",
+      "sourceDoc": ":help :MasonLog"
+    }
+  ],
+  "setup": {
+    "requirePath": "mason"
+  }
+}

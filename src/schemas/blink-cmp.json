@@ -1,0 +1,559 @@
+{
+  "id": "blink-cmp",
+  "pluginName": "blink.cmp",
+  "pluginRepo": "https://github.com/saghen/blink.cmp",
+  "version": "1.0.0",
+  "pack": {
+    "version": {
+      "mode": "semver-range",
+      "value": "1.*"
+    }
+  },
+  "description": "Performant, batteries-included completion plugin for Neovim with LSP support, snippet integration, signature help, and fuzzy matching. Works out of the box with no configuration required.",
+  "author": "saghen",
+  "stars": 10000,
+  "category": "lsp",
+  "tags": ["completion", "lsp", "snippets", "fuzzy", "cmp", "autocomplete", "signature-help"],
+  "tagline": "Fast async completion engine with LSP, snippets, and fuzzy matching",
+  "setup": {
+    "requirePath": "blink.cmp",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "keymap",
+      "label": "Keymaps",
+      "description": "Configure keyboard shortcuts for blink.cmp completion actions. Select a preset for sensible defaults, then override individual keys as needed.",
+      "type": "plugin-keymap",
+      "group": "Keymap",
+      "defaultPreset": "default",
+      "allowDisable": true,
+      "commands": [
+        { "name": "show", "label": "Show Menu", "description": "Shows the completion menu. Can optionally filter to specific providers." },
+        { "name": "show_and_insert", "label": "Show & Insert", "description": "Shows menu and inserts the first item." },
+        { "name": "show_and_insert_or_accept_single", "label": "Show & Insert or Accept Single", "description": "Shows menu and inserts first item, or accepts if only one match." },
+        { "name": "hide", "label": "Hide Menu", "description": "Hides the completion menu." },
+        { "name": "cancel", "label": "Cancel", "description": "Reverts auto-inserted preview text and hides menu." },
+        { "name": "accept", "label": "Accept", "description": "Accepts the currently selected completion item." },
+        { "name": "accept_and_enter", "label": "Accept & Enter", "description": "Accepts selected item and feeds Enter key. Useful for cmdline mode." },
+        { "name": "select_and_accept", "label": "Select & Accept", "description": "Accepts selected item, or first item if none selected." },
+        { "name": "select_accept_and_enter", "label": "Select, Accept & Enter", "description": "Accepts selected or first item and feeds Enter." },
+        { "name": "select_prev", "label": "Select Previous", "description": "Moves selection to the previous item in the list." },
+        { "name": "select_next", "label": "Select Next", "description": "Moves selection to the next item in the list." },
+        { "name": "insert_prev", "label": "Insert Previous", "description": "Inserts (auto-insert) the previous item. Triggers completions if none available." },
+        { "name": "insert_next", "label": "Insert Next", "description": "Inserts (auto-insert) the next item. Triggers completions if none available." },
+        { "name": "show_documentation", "label": "Show Documentation", "description": "Shows documentation for the selected item." },
+        { "name": "hide_documentation", "label": "Hide Documentation", "description": "Hides the documentation window." },
+        { "name": "scroll_documentation_up", "label": "Scroll Docs Up", "description": "Scrolls the documentation window up by 4 lines." },
+        { "name": "scroll_documentation_down", "label": "Scroll Docs Down", "description": "Scrolls the documentation window down by 4 lines." },
+        { "name": "show_signature", "label": "Show Signature", "description": "Shows the function signature help window." },
+        { "name": "hide_signature", "label": "Hide Signature", "description": "Hides the signature help window." },
+        { "name": "scroll_signature_up", "label": "Scroll Signature Up", "description": "Scrolls signature help up." },
+        { "name": "scroll_signature_down", "label": "Scroll Signature Down", "description": "Scrolls signature help down." },
+        { "name": "snippet_forward", "label": "Snippet Forward", "description": "Jumps to the next snippet placeholder." },
+        { "name": "snippet_backward", "label": "Snippet Backward", "description": "Jumps to the previous snippet placeholder." },
+        { "name": "fallback", "label": "Fallback", "description": "Runs the next non-blink keymap, or the built-in Neovim binding.", "isTerminal": true },
+        { "name": "fallback_to_mappings", "label": "Fallback to Mappings", "description": "Runs the next non-blink keymap only (not built-in Neovim behavior).", "isTerminal": true }
+      ],
+      "presets": [
+        {
+          "id": "default",
+          "label": "Default (Ctrl+n/p, Ctrl+y)",
+          "description": "Mirrors built-in Neovim completion keys",
+          "mappings": {
+            "<C-space>": ["show", "show_documentation", "hide_documentation"],
+            "<C-e>": ["hide", "fallback"],
+            "<C-y>": ["select_and_accept", "fallback"],
+            "<Up>": ["select_prev", "fallback"],
+            "<Down>": ["select_next", "fallback"],
+            "<C-p>": ["select_prev", "fallback_to_mappings"],
+            "<C-n>": ["select_next", "fallback_to_mappings"],
+            "<C-b>": ["scroll_documentation_up", "fallback"],
+            "<C-f>": ["scroll_documentation_down", "fallback"],
+            "<Tab>": ["snippet_forward", "fallback"],
+            "<S-Tab>": ["snippet_backward", "fallback"],
+            "<C-k>": ["show_signature", "hide_signature", "fallback"]
+          }
+        },
+        {
+          "id": "super-tab",
+          "label": "Super-Tab (Tab/Shift-Tab, Tab to accept)",
+          "description": "Uses Tab for selection, snippet jumping, and accepting",
+          "mappings": {
+            "<C-space>": ["show", "show_documentation", "hide_documentation"],
+            "<C-e>": ["hide", "fallback"],
+            "<Tab>": ["accept", "snippet_forward", "fallback"],
+            "<S-Tab>": ["snippet_backward", "fallback"],
+            "<Up>": ["select_prev", "fallback"],
+            "<Down>": ["select_next", "fallback"],
+            "<C-p>": ["select_prev", "fallback_to_mappings"],
+            "<C-n>": ["select_next", "fallback_to_mappings"],
+            "<C-b>": ["scroll_documentation_up", "fallback"],
+            "<C-f>": ["scroll_documentation_down", "fallback"],
+            "<C-k>": ["show_signature", "hide_signature", "fallback"]
+          }
+        },
+        {
+          "id": "enter",
+          "label": "Enter (Tab/Shift-Tab, Enter to accept)",
+          "description": "Uses Enter to accept completions",
+          "mappings": {
+            "<C-space>": ["show", "show_documentation", "hide_documentation"],
+            "<C-e>": ["hide", "fallback"],
+            "<CR>": ["accept", "fallback"],
+            "<Tab>": ["snippet_forward", "fallback"],
+            "<S-Tab>": ["snippet_backward", "fallback"],
+            "<Up>": ["select_prev", "fallback"],
+            "<Down>": ["select_next", "fallback"],
+            "<C-p>": ["select_prev", "fallback_to_mappings"],
+            "<C-n>": ["select_next", "fallback_to_mappings"],
+            "<C-b>": ["scroll_documentation_up", "fallback"],
+            "<C-f>": ["scroll_documentation_down", "fallback"],
+            "<C-k>": ["show_signature", "hide_signature", "fallback"]
+          }
+        },
+        {
+          "id": "none",
+          "label": "None (define all keymaps manually)",
+          "description": "Disables all built-in keymaps. Define everything yourself.",
+          "mappings": {}
+        }
+      ]
+    },
+    {
+      "key": "completion.keyword.range",
+      "label": "Keyword Match Range",
+      "description": "Controls how the completion keyword is determined. 'prefix' matches only the text before the cursor. 'full' matches text before AND after the cursor, so typing in the middle of a word still finds full matches.",
+      "type": "select",
+      "group": "Completion",
+      "default": "prefix",
+      "options": [
+        { "value": "prefix", "label": "Prefix (text before cursor)" },
+        { "value": "full", "label": "Full (text before and after cursor)" }
+      ]
+    },
+    {
+      "key": "completion.trigger.show_on_keyword",
+      "label": "Show on Keyword",
+      "description": "Automatically show the completion menu when typing alphanumeric characters, hyphens, or underscores.",
+      "type": "boolean",
+      "group": "Completion",
+      "default": true
+    },
+    {
+      "key": "completion.trigger.show_in_snippet",
+      "label": "Show Inside Snippets",
+      "description": "Show the completion menu while inside an active snippet. Disable this when using 'super-tab' or 'enter' presets to avoid conflicts with snippet navigation.",
+      "type": "boolean",
+      "group": "Completion",
+      "default": true
+    },
+    {
+      "key": "completion.list.selection.preselect",
+      "label": "Pre-select First Item",
+      "description": "Automatically select the first completion item when the menu opens. When disabled, no item is selected until you press the next/prev keys.",
+      "type": "boolean",
+      "group": "Completion",
+      "default": true
+    },
+    {
+      "key": "completion.list.selection.auto_insert",
+      "label": "Auto-insert on Selection",
+      "description": "Insert a temporary preview of the selected item as you navigate the list. The preview is removed if you cancel. Requires pre-select to be useful.",
+      "type": "boolean",
+      "group": "Completion",
+      "default": true
+    },
+    {
+      "key": "completion.accept.auto_brackets.enabled",
+      "label": "Auto-add Brackets",
+      "description": "Automatically insert parentheses after completing a function or method, placing the cursor inside. Uses LSP semantic tokens to determine if brackets are needed. Note: some LSPs add brackets themselves regardless of this setting.",
+      "type": "boolean",
+      "group": "Completion",
+      "default": true
+    },
+    {
+      "key": "completion.menu.auto_show",
+      "label": "Auto-show Completion Menu",
+      "description": "Show the completion popup menu automatically as you type. Disable to only show the menu when manually triggered (default Ctrl+Space).",
+      "type": "boolean",
+      "group": "Completion",
+      "default": true
+    },
+    {
+      "key": "completion.menu.border",
+      "label": "Menu Border Style",
+      "description": "Border style for the completion popup menu window. 'none' is equivalent to Neovim's default (no border), which is blink.cmp's actual default.",
+      "type": "select",
+      "group": "Completion",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None (default — no border)" },
+        { "value": "single", "label": "Single line" },
+        { "value": "double", "label": "Double line" },
+        { "value": "rounded", "label": "Rounded corners" },
+        { "value": "padded", "label": "Padded (single with inner padding)" },
+        { "value": "solid", "label": "Solid (no gaps in border)" }
+      ]
+    },
+    {
+      "key": "completion.menu.winblend",
+      "label": "Menu Transparency",
+      "description": "Transparency level of the completion menu window. 0 = fully opaque, 100 = fully transparent.",
+      "type": "number",
+      "group": "Completion",
+      "default": 0,
+      "validation": {
+        "min": 0,
+        "max": 100,
+        "step": 5,
+        "integer": true
+      }
+    },
+    {
+      "key": "completion.documentation.auto_show",
+      "label": "Auto-show Documentation",
+      "description": "Automatically show the documentation window when an item is selected in the completion menu. Requires auto_show_delay_ms to avoid flickering.",
+      "type": "boolean",
+      "group": "Completion",
+      "default": false
+    },
+    {
+      "key": "completion.documentation.auto_show_delay_ms",
+      "label": "Documentation Show Delay (ms)",
+      "description": "How long to wait after selecting an item before showing the documentation window. Increase this if the doc window feels intrusive.",
+      "type": "number",
+      "group": "Completion",
+      "default": 500,
+      "validation": {
+        "min": 0,
+        "max": 5000,
+        "step": 50,
+        "integer": true
+      },
+      "visibleWhen": {
+        "key": "completion.documentation.auto_show",
+        "equals": true
+      }
+    },
+    {
+      "key": "completion.documentation.window.border",
+      "label": "Documentation Window Border",
+      "description": "Border style for the documentation popup window. blink.cmp defaults to 'padded' for this window.",
+      "type": "select",
+      "group": "Completion",
+      "default": "padded",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "single", "label": "Single line" },
+        { "value": "double", "label": "Double line" },
+        { "value": "rounded", "label": "Rounded corners" },
+        { "value": "padded", "label": "Padded (single with inner padding) — default" },
+        { "value": "solid", "label": "Solid" }
+      ]
+    },
+    {
+      "key": "completion.ghost_text.enabled",
+      "label": "Enable Ghost Text",
+      "description": "Show a preview of the currently selected completion item as dimmed virtual text inline in the buffer. Pairs well with disabling auto-show so the menu stays hidden until manually triggered.",
+      "type": "boolean",
+      "group": "Completion",
+      "default": false
+    },
+    {
+      "key": "sources.default",
+      "label": "Active Completion Sources",
+      "description": "Ordered list of completion sources to use. 'lsp' provides language server completions, 'path' completes file paths, 'snippets' provides snippet completions, and 'buffer' completes from the current buffer text. Remove sources you don't want.",
+      "type": "array",
+      "group": "Sources",
+      "default": ["lsp", "path", "snippets", "buffer"],
+      "items": {
+        "itemType": "select",
+        "options": [
+          { "value": "lsp", "label": "LSP (language server)" },
+          { "value": "path", "label": "Path (file system paths)" },
+          { "value": "snippets", "label": "Snippets" },
+          { "value": "buffer", "label": "Buffer (words in current buffer)" },
+          { "value": "omni", "label": "Omni (vim omnifunc)" }
+        ]
+      },
+      "validation": {
+        "minItems": 0,
+        "maxItems": 20,
+        "uniqueItems": true
+      }
+    },
+    {
+      "key": "sources.min_keyword_length",
+      "label": "Minimum Keyword Length",
+      "description": "Minimum number of characters you must type before completion results are shown. Set to 0 to show results immediately, or 2-3 to reduce noise in large files.",
+      "type": "number",
+      "group": "Sources",
+      "default": 0,
+      "validation": {
+        "min": 0,
+        "max": 10,
+        "step": 1,
+        "integer": true
+      }
+    },
+    {
+      "key": "cmdline.enabled",
+      "label": "Enable Cmdline Completion",
+      "description": "Enable completion in Neovim's command-line mode (the ':' prompt). Provides completions for Ex commands, file paths, and command arguments.",
+      "type": "boolean",
+      "group": "Sources",
+      "default": true
+    },
+    {
+      "key": "snippets.preset",
+      "label": "Snippet Backend",
+      "description": "Which snippet engine to use for expanding and navigating snippets. 'default' uses Neovim's built-in vim.snippet (requires Neovim 0.10+). Choose the option that matches the snippet plugin you have installed.",
+      "type": "select",
+      "group": "Sources",
+      "default": "default",
+      "options": [
+        { "value": "default", "label": "Default (vim.snippet — built-in, Neovim 0.10+)" },
+        { "value": "luasnip", "label": "LuaSnip" },
+        { "value": "mini_snippets", "label": "mini.snippets" },
+        { "value": "vsnip", "label": "vsnip" }
+      ]
+    },
+    {
+      "key": "signature.enabled",
+      "label": "Enable Signature Help",
+      "description": "Show a floating window with function signature information (parameter names and types) as you type inside a function call. This is an experimental opt-in feature.",
+      "type": "boolean",
+      "group": "Signature Help",
+      "default": false
+    },
+    {
+      "key": "signature.trigger.show_on_keyword",
+      "label": "Show Signature on Keyword",
+      "description": "Show the signature help window after typing any alphanumeric character, hyphen, or underscore — not just trigger characters like '('. Useful for seeing signatures earlier.",
+      "type": "boolean",
+      "group": "Signature Help",
+      "default": false,
+      "visibleWhen": {
+        "key": "signature.enabled",
+        "equals": true
+      }
+    },
+    {
+      "key": "signature.trigger.show_on_insert",
+      "label": "Show Signature on Enter Insert",
+      "description": "Show the signature help window automatically when entering insert mode, if the cursor is already inside a function call.",
+      "type": "boolean",
+      "group": "Signature Help",
+      "default": false,
+      "visibleWhen": {
+        "key": "signature.enabled",
+        "equals": true
+      }
+    },
+    {
+      "key": "signature.window.border",
+      "label": "Signature Window Border",
+      "description": "Border style for the signature help floating window. blink.cmp defaults to no border for this window.",
+      "type": "select",
+      "group": "Signature Help",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None (default)" },
+        { "value": "single", "label": "Single line" },
+        { "value": "double", "label": "Double line" },
+        { "value": "rounded", "label": "Rounded corners" },
+        { "value": "padded", "label": "Padded" },
+        { "value": "solid", "label": "Solid" }
+      ],
+      "visibleWhen": {
+        "key": "signature.enabled",
+        "equals": true
+      }
+    },
+    {
+      "key": "signature.window.show_documentation",
+      "label": "Show Documentation in Signature Window",
+      "description": "Include the full parameter documentation text inside the signature help window, in addition to the signature itself.",
+      "type": "boolean",
+      "group": "Signature Help",
+      "default": false,
+      "visibleWhen": {
+        "key": "signature.enabled",
+        "equals": true
+      }
+    },
+    {
+      "key": "appearance.nerd_font_variant",
+      "label": "Nerd Font Variant",
+      "description": "Controls icon spacing to match your installed Nerd Font variant. 'mono' is for Nerd Font Mono (single-width icons), 'normal' is for standard Nerd Font (double-width icons).",
+      "type": "select",
+      "group": "Appearance",
+      "default": "mono",
+      "options": [
+        { "value": "mono", "label": "Mono (Nerd Font Mono — single-width icons)" },
+        { "value": "normal", "label": "Normal (Nerd Font — double-width icons)" }
+      ]
+    },
+    {
+      "key": "appearance.use_nvim_cmp_as_default",
+      "label": "Use nvim-cmp Highlight Groups",
+      "description": "Fall back to nvim-cmp highlight groups when your colorscheme doesn't natively support blink.cmp. Enable this if items appear without color in the completion menu.",
+      "type": "boolean",
+      "group": "Appearance",
+      "default": false
+    },
+    {
+      "key": "fuzzy.implementation",
+      "label": "Fuzzy Matcher Implementation",
+      "description": "Which fuzzy matching engine to use. The Rust implementation (frizbee) is faster and supports typo tolerance and frecency scoring. The Lua implementation is a pure-Lua fallback with no extra dependencies.",
+      "type": "select",
+      "group": "Fuzzy",
+      "default": "prefer_rust_with_warning",
+      "options": [
+        { "value": "prefer_rust_with_warning", "label": "Prefer Rust (warn if unavailable) — Recommended" },
+        { "value": "prefer_rust", "label": "Prefer Rust (silent fallback to Lua)" },
+        { "value": "rust", "label": "Rust only (error if unavailable)" },
+        { "value": "lua", "label": "Lua only (no binary dependency)" }
+      ]
+    },
+    {
+      "key": "fuzzy.use_proximity",
+      "label": "Proximity Boost",
+      "description": "Boost the score of completion items that match words near the cursor in the current buffer. Helps surface contextually relevant items. Only applies to the Rust implementation.",
+      "type": "boolean",
+      "group": "Fuzzy",
+      "default": true
+    },
+    {
+      "key": "fuzzy.frecency.enabled",
+      "label": "Frecency Scoring",
+      "description": "Track which completion items you use most frequently and most recently, and boost their score. Frequently accepted items will rise to the top of the list over time. Only applies to the Rust implementation.",
+      "type": "boolean",
+      "group": "Fuzzy",
+      "default": true,
+      "emit": {
+        "include": {
+          "kind": "non-default"
+        }
+      }
+    }
+  ],
+  "functions": [
+    {
+      "name": "show",
+      "description": "Manually show the completion menu",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').show()"
+    },
+    {
+      "name": "hide",
+      "description": "Hide the completion menu",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').hide()"
+    },
+    {
+      "name": "accept",
+      "description": "Accept the currently selected completion item",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').accept()"
+    },
+    {
+      "name": "cancel",
+      "description": "Cancel the current completion, undoing any auto-inserted preview",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').cancel()"
+    },
+    {
+      "name": "select_next",
+      "description": "Select the next completion item in the list",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').select_next()"
+    },
+    {
+      "name": "select_prev",
+      "description": "Select the previous completion item in the list",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').select_prev()"
+    },
+    {
+      "name": "scroll_documentation_up",
+      "description": "Scroll the documentation window up",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').scroll_documentation_up(4)"
+    },
+    {
+      "name": "scroll_documentation_down",
+      "description": "Scroll the documentation window down",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').scroll_documentation_down(4)"
+    },
+    {
+      "name": "snippet_forward",
+      "description": "Jump forward to the next snippet placeholder",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').snippet_forward()"
+    },
+    {
+      "name": "snippet_backward",
+      "description": "Jump backward to the previous snippet placeholder",
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('blink.cmp').snippet_backward()"
+    },
+    {
+      "name": "is_visible",
+      "description": "Check whether the completion menu is currently visible",
+      "params": [],
+      "returns": "boolean",
+      "luaCall": "require('blink.cmp').is_visible()"
+    },
+    {
+      "name": "snippet_active",
+      "description": "Check whether the cursor is currently inside an active snippet",
+      "params": [],
+      "returns": "boolean",
+      "luaCall": "require('blink.cmp').snippet_active()"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "show-completions",
+      "baseFunctionName": "show",
+      "label": "Show Completion Menu",
+      "shortDescription": "Manually open the blink.cmp completion menu",
+      "whatItDoes": "Triggers the completion menu to appear at the cursor position, showing all available completions from configured sources.",
+      "isPopular": true,
+      "defaults": {}
+    },
+    {
+      "key": "accept-completion",
+      "baseFunctionName": "accept",
+      "label": "Accept Completion",
+      "shortDescription": "Accept the currently highlighted completion item",
+      "whatItDoes": "Inserts the currently selected completion item and closes the menu. Use this in a keymap node to set up a custom accept binding.",
+      "isPopular": true,
+      "defaults": {}
+    }
+  ],
+  "events": [
+    "BlinkCmpMenuOpen",
+    "BlinkCmpMenuClose",
+    "BlinkCmpMenuPositionUpdate",
+    "BlinkCmpListSelect",
+    "BlinkCmpAccept",
+    "BlinkCmpShow",
+    "BlinkCmpHide"
+  ],
+  "exCommands": []
+}

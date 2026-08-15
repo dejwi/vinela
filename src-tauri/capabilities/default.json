@@ -1,0 +1,108 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Default capabilities for vinela",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+
+    "fs:default",
+    "fs:allow-app-read-recursive",
+    "fs:allow-app-write-recursive",
+    "fs:allow-home-read-recursive",
+    "fs:allow-home-write-recursive",
+    "fs:allow-home-meta-recursive",
+    {
+      "identifier": "fs:allow-mkdir",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-remove",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-rename",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-stat",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-write-text-file",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-read-text-file",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+    {
+      "identifier": "fs:allow-read-dir",
+      "allow": [
+        { "path": "$HOME/**" },
+        { "path": "$HOME/.*" },
+        { "path": "$HOME/.*/**" }
+      ]
+    },
+
+    "dialog:default",
+    "dialog:allow-open",
+    "dialog:allow-save",
+    "dialog:allow-message",
+    "dialog:allow-ask",
+
+    "shell:default",
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        { "name": "nvim", "cmd": "nvim", "args": ["--version"] },
+        { "name": "which", "cmd": "which", "args": ["nvim"] },
+        { "name": "where", "cmd": "where", "args": ["nvim"] }
+      ]
+    },
+
+    "process:default",
+    "updater:default",
+    "os:default",
+
+    {
+      "identifier": "http:default",
+      "allow": [
+        { "url": "https://api.github.com/**" },
+        { "url": "https://raw.githubusercontent.com/**" }
+      ]
+    }
+  ]
+}

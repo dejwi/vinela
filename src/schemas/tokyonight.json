@@ -1,0 +1,31 @@
+{
+  "id": "tokyonight",
+  "pluginName": "tokyonight.nvim",
+  "pluginRepo": "https://github.com/folke/tokyonight.nvim",
+  "version": "1.0.0",
+  "description": "Clean dark/light Neovim theme inspired by Tokyo night skies with rich syntax contrast.",
+  "author": "folke",
+  "stars": 7000,
+  "category": "ui",
+  "tagline": "Storm-blue palette with bold purples and cyan accents",
+  "tags": ["colorscheme", "theme", "both", "night", "storm", "moon", "day", "#24283b", "#7aa2f7", "#f7768e"],
+  "setup": { "requirePath": "tokyonight", "setupFunction": "setup", "optionMapping": "table" },
+  "options": [
+    { "key": "style", "label": "Variant / Flavor", "type": "select", "group": "Appearance", "default": "storm", "options": [{ "value": "night", "label": "Night" }, { "value": "storm", "label": "Storm" }, { "value": "moon", "label": "Moon" }, { "value": "day", "label": "Day" }] },
+    { "key": "light_style", "label": "Light Style", "type": "select", "group": "Appearance", "default": "day", "options": [{ "value": "night", "label": "Night" }, { "value": "storm", "label": "Storm" }, { "value": "moon", "label": "Moon" }, { "value": "day", "label": "Day" }] },
+    { "key": "transparent", "label": "Transparent Background", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "terminal_colors", "label": "Set Terminal Colors", "type": "boolean", "group": "Appearance", "default": true },
+    { "key": "styles.comments.italic", "label": "Italic Comments", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "styles.keywords.italic", "label": "Italic Keywords", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "styles.functions.bold", "label": "Bold Functions", "type": "boolean", "group": "Styles", "default": false },
+    { "key": "styles.sidebars", "label": "Sidebar Style", "type": "select", "group": "Styles", "default": "dark", "options": [{ "value": "dark", "label": "Dark" }, { "value": "transparent", "label": "Transparent" }, { "value": "normal", "label": "Normal" }] },
+    { "key": "styles.floats", "label": "Float Style", "type": "select", "group": "Styles", "default": "dark", "options": [{ "value": "dark", "label": "Dark" }, { "value": "transparent", "label": "Transparent" }, { "value": "normal", "label": "Normal" }] },
+    { "key": "dim_inactive", "label": "Dim Inactive Windows", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "lualine_bold", "label": "Bold Lualine Section Headers", "type": "boolean", "group": "Styles", "default": false },
+    { "key": "on_colors", "label": "on_colors Callback", "type": "lua", "group": "Advanced", "default": "function(colors)\n  -- override colors here\nend", "expectedReturnType": "void" },
+    { "key": "on_highlights", "label": "on_highlights Callback", "type": "lua", "group": "Advanced", "default": "function(highlights, colors)\nend", "expectedReturnType": "void" }
+  ],
+  "functions": [{ "name": "apply", "description": "Apply a TokyoNight style.", "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Variant name; accepts night/storm/moon/day or full colorscheme name." }], "returns": "void", "luaCall": "local v = $params.variant or 'storm'; local names = { night = 'tokyonight-night', storm = 'tokyonight-storm', moon = 'tokyonight-moon', day = 'tokyonight-day' }; vim.cmd('colorscheme ' .. (names[v] or v))" }],
+  "exCommands": [],
+  "events": []
+}

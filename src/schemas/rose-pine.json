@@ -1,0 +1,32 @@
+{
+  "id": "rose-pine",
+  "pluginName": "rose-pine",
+  "pluginRepo": "https://github.com/rose-pine/neovim",
+  "version": "1.0.0",
+  "description": "All natural pine, faux fur and a bit of soho vibes for the classy minimalist.",
+  "author": "rose-pine",
+  "stars": 5600,
+  "category": "ui",
+  "tagline": "Soft natural palette with moon and dawn variants",
+  "tags": ["colorscheme", "theme", "both", "main", "moon", "dawn", "#191724", "#31748f", "#eb6f92"],
+  "setup": { "requirePath": "rose-pine", "setupFunction": "setup", "optionMapping": "table" },
+  "options": [
+    { "key": "variant", "label": "Variant / Flavor", "type": "select", "group": "Appearance", "default": "auto", "options": [{ "value": "auto", "label": "Auto" }, { "value": "main", "label": "Main" }, { "value": "moon", "label": "Moon" }, { "value": "dawn", "label": "Dawn" }] },
+    { "key": "dark_variant", "label": "Dark Variant", "type": "select", "group": "Appearance", "default": "main", "options": [{ "value": "main", "label": "Main" }, { "value": "moon", "label": "Moon" }] },
+    { "key": "dim_inactive_windows", "label": "Dim Inactive Windows", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "extend_background_behind_borders", "label": "Extend Background Behind Borders", "type": "boolean", "group": "Appearance", "default": true },
+    { "key": "enable.terminal", "label": "Enable Terminal Colors", "type": "boolean", "group": "General", "default": true },
+    { "key": "enable.legacy_highlights", "label": "Enable Legacy Highlights", "type": "boolean", "group": "General", "default": true },
+    { "key": "enable.migrations", "label": "Enable Migrations", "type": "boolean", "group": "General", "default": true },
+    { "key": "styles.bold", "label": "Bold Style", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "styles.italic", "label": "Italic Style", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "styles.transparency", "label": "Transparency Style", "type": "boolean", "group": "Styles", "default": false },
+    { "key": "groups", "label": "Group Overrides", "type": "lua", "group": "Advanced", "default": "{}", "expectedReturnType": "table" },
+    { "key": "palette", "label": "Palette Overrides", "type": "lua", "group": "Advanced", "default": "{}", "expectedReturnType": "table" },
+    { "key": "highlight_groups", "label": "Highlight Group Overrides", "type": "lua", "group": "Advanced", "default": "{}", "expectedReturnType": "table" },
+    { "key": "before_highlight", "label": "before_highlight Callback", "type": "lua", "group": "Advanced", "default": "function(group, highlight, palette)\nend", "expectedReturnType": "void" }
+  ],
+  "functions": [{ "name": "apply", "description": "Apply rose-pine colorscheme.", "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Variant name; accepts auto/main/moon/dawn or full colorscheme name." }], "returns": "void", "luaCall": "local v = $params.variant or 'auto'; local names = { auto = 'rose-pine', main = 'rose-pine-main', moon = 'rose-pine-moon', dawn = 'rose-pine-dawn' }; vim.cmd('colorscheme ' .. (names[v] or v))" }],
+  "exCommands": [],
+  "events": []
+}

@@ -1,0 +1,32 @@
+{
+  "id": "kanagawa",
+  "pluginName": "kanagawa.nvim",
+  "pluginRepo": "https://github.com/rebelot/kanagawa.nvim",
+  "version": "1.0.0",
+  "description": "A dark Japanese-inspired Neovim theme with wave, dragon, and lotus variants.",
+  "author": "rebelot",
+  "stars": 6000,
+  "category": "ui",
+  "tagline": "Elegant Japanese palette with wave, dragon, and lotus themes",
+  "tags": ["colorscheme", "theme", "both", "wave", "dragon", "lotus", "#181616", "#7e9cd8", "#e82424"],
+  "setup": { "requirePath": "kanagawa", "setupFunction": "setup", "optionMapping": "table" },
+  "options": [
+    { "key": "theme", "label": "Variant / Flavor", "type": "select", "group": "Appearance", "default": "wave", "options": [{ "value": "wave", "label": "Wave" }, { "value": "dragon", "label": "Dragon" }, { "value": "lotus", "label": "Lotus" }] },
+    { "key": "background.dark", "label": "Dark Background Theme", "type": "select", "group": "Appearance", "default": "wave", "options": [{ "value": "wave", "label": "Wave" }, { "value": "dragon", "label": "Dragon" }] },
+    { "key": "background.light", "label": "Light Background Theme", "type": "select", "group": "Appearance", "default": "lotus", "options": [{ "value": "lotus", "label": "Lotus" }] },
+    { "key": "compile", "label": "Compile Highlights", "type": "boolean", "group": "General", "default": false },
+    { "key": "undercurl", "label": "Enable Undercurl", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "commentStyle.italic", "label": "Italic Comments", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "functionStyle", "label": "Function Style Table", "type": "lua", "group": "Styles", "default": "{}", "expectedReturnType": "table" },
+    { "key": "keywordStyle.italic", "label": "Italic Keywords", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "statementStyle.bold", "label": "Bold Statements", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "transparent", "label": "Transparent Background", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "dimInactive", "label": "Dim Inactive Windows", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "terminalColors", "label": "Set Terminal Colors", "type": "boolean", "group": "Appearance", "default": true },
+    { "key": "colors", "label": "Theme Color Overrides", "type": "lua", "group": "Advanced", "default": "{ palette = {}, theme = { wave = {}, lotus = {}, dragon = {}, all = {} } }", "expectedReturnType": "table" },
+    { "key": "overrides", "label": "Highlight Overrides", "type": "lua", "group": "Advanced", "default": "function(colors)\n  return {}\nend", "expectedReturnType": "table" }
+  ],
+  "functions": [{ "name": "apply", "description": "Apply Kanagawa colorscheme.", "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Variant name; accepts wave/dragon/lotus or full colorscheme name." }], "returns": "void", "luaCall": "local v = $params.variant or 'wave'; local names = { wave = 'kanagawa-wave', dragon = 'kanagawa-dragon', lotus = 'kanagawa-lotus' }; vim.cmd('colorscheme ' .. (names[v] or v))" }],
+  "exCommands": [],
+  "events": []
+}

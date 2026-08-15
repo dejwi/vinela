@@ -1,0 +1,934 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/dejwi/vinela/main/schema/plugin-schema.schema.json",
+  "title": "Vinela Plugin Schema",
+  "description": "Public authoring contract for repository-root vinela.schema.json files.",
+  "type": "object",
+  "required": ["id", "pluginName", "pluginRepo", "version", "options", "functions"],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri",
+      "description": "Editor annotation pointing to the public Vinela JSON Schema."
+    },
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*(?::[A-Za-z0-9][A-Za-z0-9._/-]*)?$",
+      "description": "Unique schema identity. Kebab-style and generic namespaced ids such as github:owner/repository are supported."
+    },
+    "pluginName": {
+      "$ref": "#/$defs/nonEmptyString",
+      "description": "Plugin display name."
+    },
+    "pluginRepo": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "HTTP(S) plugin repository URL."
+    },
+    "version": {
+      "$ref": "#/$defs/nonEmptyString",
+      "description": "Version of this schema definition, not the plugin release."
+    },
+    "description": {
+      "type": "string",
+      "description": "Longer plugin description."
+    },
+    "pack": { "$ref": "#/$defs/pack" },
+    "dependencies": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "description": "Other Vinela schema ids required by this plugin."
+    },
+    "options": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/schemaOption" },
+      "description": "Configuration fields rendered by Vinela and emitted into Lua."
+    },
+    "functions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/schemaFunction" },
+      "description": "Plugin functions available to graph authors."
+    },
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "description": "Custom event names emitted by the plugin."
+    },
+    "exCommands": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/exCommand" },
+      "description": "Ex commands supplied by the plugin."
+    },
+    "exCommandTemplates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/exCommandTemplate" }
+    },
+    "functionTemplates": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/functionTemplate" },
+      "description": "Preconfigured variants of declared plugin functions."
+    },
+    "generationRules": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/generationRule" },
+      "description": "Generic conflict, subtree gate, and subtree filter rules."
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/pluginCapability" },
+      "description": "Generic plugin capabilities consumed by Vinela."
+    },
+    "setup": { "$ref": "#/$defs/setup" },
+    "author": {
+      "$ref": "#/$defs/nonEmptyString",
+      "description": "Fallback author display name for external schemas."
+    },
+    "stars": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Optional non-negative repository stars snapshot."
+    },
+    "category": {
+      "$ref": "#/$defs/pluginCategory",
+      "description": "Browse catalog category."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/nonEmptyString" },
+      "description": "Search tags for discovery."
+    },
+    "tagline": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Short catalog tagline."
+    },
+    "iconUrl": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "description": "Optional HTTP(S) icon or logo URL."
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "portDataType": {
+      "type": "string",
+      "enum": ["any", "string", "number", "boolean", "buffer", "window", "table", "void"]
+    },
+    "pluginCategory": {
+      "type": "string",
+      "enum": ["editor", "lsp", "ui", "navigation", "git", "debugging", "syntax", "utility"]
+    },
+    "pack": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/nonBlankString",
+          "description": "Optional vim.pack package-name override."
+        },
+        "version": {
+          "type": "object",
+          "required": ["mode", "value"],
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": ["ref", "semver-range"],
+              "description": "Whether value is a Git ref or a semantic-version range."
+            },
+            "value": { "$ref": "#/$defs/nonBlankString" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "description": "Optional default vim.pack.add installation metadata."
+    },
+    "nonBlankString": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "condition": {
+      "type": "object",
+      "required": ["key", "equals"],
+      "properties": {
+        "key": {
+          "$ref": "#/$defs/nonBlankString",
+          "description": "Schema option key whose effective value controls the condition."
+        },
+        "equals": {
+          "type": ["string", "number", "boolean"],
+          "description": "Primitive value required for the condition to match."
+        }
+      },
+      "additionalProperties": false
+    },
+    "selectChoice": {
+      "type": "object",
+      "required": ["value", "label"],
+      "properties": {
+        "value": { "$ref": "#/$defs/nonEmptyString" },
+        "label": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "noticeWhen": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind"],
+          "properties": { "kind": { "const": "has-explicit-value" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "equals" },
+            "value": { "type": ["string", "number", "boolean"] }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "not-equals" },
+            "value": { "type": ["string", "number", "boolean"] }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "optionNotice": {
+      "type": "object",
+      "required": ["severity", "surfaces", "when", "message"],
+      "properties": {
+        "severity": { "const": "warning" },
+        "surfaces": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["configuration", "generation"] }
+        },
+        "when": { "$ref": "#/$defs/noticeWhen" },
+        "message": { "$ref": "#/$defs/nonBlankString" },
+        "details": { "$ref": "#/$defs/nonBlankString" },
+        "suggestions": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/nonEmptyString" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "emitInclude": {
+      "oneOf": [
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "always" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "explicit-only" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "non-default" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "non-empty" } }, "additionalProperties": false }
+      ]
+    },
+    "jsonValue": {
+      "oneOf": [
+        { "type": ["string", "number", "boolean", "null"] },
+        { "type": "array", "items": { "$ref": "#/$defs/jsonValue" } },
+        { "type": "object", "additionalProperties": { "$ref": "#/$defs/jsonValue" } }
+      ]
+    },
+    "luaValue": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": { "const": "json" },
+            "value": { "$ref": "#/$defs/jsonValue" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "lua"],
+          "properties": {
+            "kind": { "const": "lua" },
+            "lua": { "$ref": "#/$defs/nonBlankString" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "valueRule": {
+      "type": "object",
+      "required": ["kind", "values"],
+      "properties": {
+        "kind": { "const": "value-map" },
+        "values": {
+          "type": "object",
+          "propertyNames": { "minLength": 1 },
+          "additionalProperties": { "$ref": "#/$defs/luaValue" }
+        },
+        "onUnknown": {
+          "type": "string",
+          "enum": ["omit", "emit-original", "warn-and-omit"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "stringRule": {
+      "type": "object",
+      "required": ["kind"],
+      "properties": {
+        "kind": { "const": "path" },
+        "trim": { "type": "boolean" },
+        "omitWhenEmpty": { "type": "boolean" },
+        "expandWithVimFnExpand": { "type": "boolean" },
+        "warnWhenRelative": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "optionEmit": {
+      "type": "object",
+      "properties": {
+        "include": { "$ref": "#/$defs/emitInclude" },
+        "valueRule": { "$ref": "#/$defs/valueRule" },
+        "stringRule": { "$ref": "#/$defs/stringRule" }
+      },
+      "additionalProperties": false,
+      "description": "Generic Lua emission behavior for an option. stringRule is valid only for string options."
+    },
+    "optionMetadata": {
+      "type": "object",
+      "required": ["key", "label"],
+      "properties": {
+        "key": { "$ref": "#/$defs/nonEmptyString" },
+        "emitKey": { "$ref": "#/$defs/nonBlankString" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "type": "string" },
+        "required": { "type": "boolean" },
+        "visibleWhen": { "$ref": "#/$defs/condition" },
+        "enabledWhen": { "$ref": "#/$defs/condition" },
+        "group": { "$ref": "#/$defs/nonEmptyString" },
+        "notices": { "type": "array", "items": { "$ref": "#/$defs/optionNotice" } },
+        "defaultEmission": { "type": "string", "enum": ["emit", "explicit-only"] }
+      }
+    },
+    "stringValidation": {
+      "type": "object",
+      "properties": {
+        "minLength": { "type": "number" },
+        "maxLength": { "type": "number" },
+        "pattern": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "numberValidation": {
+      "type": "object",
+      "properties": {
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "step": { "type": "number" },
+        "integer": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "arrayValidation": {
+      "type": "object",
+      "properties": {
+        "minItems": { "type": "number" },
+        "maxItems": { "type": "number" },
+        "uniqueItems": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "arrayItems": {
+      "oneOf": [
+        { "type": "object", "required": ["itemType"], "properties": { "itemType": { "const": "string" } }, "additionalProperties": false },
+        { "type": "object", "required": ["itemType"], "properties": { "itemType": { "const": "number" } }, "additionalProperties": false },
+        {
+          "type": "object",
+          "required": ["itemType", "options"],
+          "properties": {
+            "itemType": { "const": "select" },
+            "options": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/selectChoice" } }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "mappingAutoFill": {
+      "type": "object",
+      "required": ["kind", "sourceColumn", "values"],
+      "properties": {
+        "kind": { "const": "value-by-column" },
+        "sourceColumn": { "$ref": "#/$defs/nonBlankString" },
+        "values": {
+          "type": "object",
+          "propertyNames": { "minLength": 1 },
+          "additionalProperties": { "type": "string" }
+        },
+        "fallback": { "type": "string", "enum": ["preserve", "empty", "column-default"] }
+      },
+      "additionalProperties": false
+    },
+    "mappingColumn": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["key", "label", "type"],
+          "properties": {
+            "key": { "$ref": "#/$defs/nonBlankString" },
+            "label": { "$ref": "#/$defs/nonBlankString" },
+            "type": { "const": "string" },
+            "default": { "type": "string" },
+            "autoFill": { "$ref": "#/$defs/mappingAutoFill" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["key", "label", "type", "options"],
+          "properties": {
+            "key": { "$ref": "#/$defs/nonBlankString" },
+            "label": { "$ref": "#/$defs/nonBlankString" },
+            "type": { "const": "select" },
+            "default": { "type": "string" },
+            "autoFill": { "$ref": "#/$defs/mappingAutoFill" },
+            "options": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/selectChoice" } }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "mappingEmit": {
+      "type": "object",
+      "required": ["targetKey", "keyColumn", "valueColumn", "valueTemplate"],
+      "properties": {
+        "targetKey": { "$ref": "#/$defs/nonBlankString" },
+        "keyColumn": { "$ref": "#/$defs/nonBlankString" },
+        "valueColumn": { "$ref": "#/$defs/nonBlankString" },
+        "valueTemplate": { "$ref": "#/$defs/nonBlankString" },
+        "outputKeyMap": {
+          "type": "object",
+          "propertyNames": { "minLength": 1 },
+          "additionalProperties": { "$ref": "#/$defs/nonBlankString" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "mappingConflictGroup": {
+      "type": "object",
+      "required": ["column", "values", "severity", "message"],
+      "properties": {
+        "column": { "$ref": "#/$defs/nonEmptyString" },
+        "values": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "severity": { "const": "warning" },
+        "message": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "mappingDefaultRow": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "keymapCommand": {
+      "type": "object",
+      "required": ["name", "label"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "type": "string" },
+        "isTerminal": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "keymapPreset": {
+      "type": "object",
+      "required": ["id", "label", "mappings"],
+      "properties": {
+        "id": { "$ref": "#/$defs/nonEmptyString" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "type": "string" },
+        "mappings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/nonEmptyString" }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "schemaOption": {
+      "oneOf": [
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "const": "string" },
+                "default": { "type": "string" },
+                "validation": { "$ref": "#/$defs/stringValidation" },
+                "uiHint": { "type": "string", "enum": ["input", "textarea"] },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "const": "number" },
+                "default": { "type": "number" },
+                "validation": { "$ref": "#/$defs/numberValidation" },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            { "type": "object", "required": ["type"], "properties": { "type": { "const": "boolean" }, "default": { "type": "boolean" }, "emit": { "$ref": "#/$defs/optionEmit" } } }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type", "options"],
+              "properties": {
+                "type": { "const": "select" },
+                "options": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/selectChoice" } },
+                "multi": { "type": "boolean" },
+                "default": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }] },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              },
+              "allOf": [
+                {
+                  "if": { "properties": { "multi": { "const": true } }, "required": ["multi"] },
+                  "then": { "properties": { "default": { "type": "array", "items": { "type": "string" } } } },
+                  "else": { "properties": { "multi": { "const": false }, "default": { "type": "string" } } }
+                }
+              ]
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type", "items"],
+              "properties": {
+                "type": { "const": "array" },
+                "default": { "type": "array" },
+                "items": { "$ref": "#/$defs/arrayItems" },
+                "validation": { "$ref": "#/$defs/arrayValidation" },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type", "columns", "emit"],
+              "properties": {
+                "type": { "const": "mapping-table" },
+                "default": { "type": "array", "items": { "$ref": "#/$defs/mappingDefaultRow" } },
+                "columns": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/mappingColumn" } },
+                "emit": { "$ref": "#/$defs/mappingEmit" },
+                "conflictGroups": { "type": "array", "items": { "$ref": "#/$defs/mappingConflictGroup" } }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type", "properties"],
+              "properties": {
+                "type": { "const": "object" },
+                "default": { "type": "object" },
+                "properties": { "type": "array", "items": { "$ref": "#/$defs/schemaOption" } },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "const": "color" },
+                "default": { "type": "string" },
+                "format": { "type": "string", "enum": ["hex", "rgb", "hsl"] },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            { "type": "object", "required": ["type"], "properties": { "type": { "const": "keysequence" }, "default": { "type": "string" }, "emit": { "$ref": "#/$defs/optionEmit" } } }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": { "const": "lua" },
+                "default": { "type": "string" },
+                "inputPlaceholder": { "type": "string" },
+                "uiHint": { "type": "string", "enum": ["input", "textarea"] },
+                "expectedReturnType": { "$ref": "#/$defs/portDataType" },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "object",
+          "allOf": [
+            { "$ref": "#/$defs/optionMetadata" },
+            {
+              "type": "object",
+              "required": ["type", "commands", "presets", "defaultPreset"],
+              "properties": {
+                "type": { "const": "plugin-keymap" },
+                "commands": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/keymapCommand" } },
+                "presets": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/keymapPreset" } },
+                "defaultPreset": { "$ref": "#/$defs/nonEmptyString" },
+                "allowDisable": { "type": "boolean" },
+                "emit": { "$ref": "#/$defs/optionEmit" }
+              }
+            }
+          ],
+          "unevaluatedProperties": false
+        }
+      ]
+    },
+    "functionDefault": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "value"],
+          "properties": { "kind": { "const": "scalar" }, "value": { "type": ["string", "number", "boolean"] } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "lua"],
+          "properties": { "kind": { "const": "lua" }, "lua": { "type": "string" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "values"],
+          "properties": { "kind": { "const": "multiselect" }, "values": { "type": "array", "items": { "type": "string" } } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "entries"],
+          "properties": { "kind": { "const": "object" }, "entries": { "type": "object", "additionalProperties": { "$ref": "#/$defs/functionDefault" } } },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "functionParam": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "type": { "$ref": "#/$defs/portDataType" },
+        "optional": { "type": "boolean" },
+        "description": { "type": "string" },
+        "tier": { "type": "string", "enum": ["basic", "advanced"] },
+        "group": { "type": "string" },
+        "allowedValues": { "type": "array", "items": { "type": "string" } },
+        "allowedValueDescriptions": { "type": "object", "additionalProperties": { "type": "string" } },
+        "multi": { "type": "boolean" },
+        "objectShape": { "type": "array", "items": { "$ref": "#/$defs/functionParam" } },
+        "defaultValue": { "$ref": "#/$defs/functionDefault" },
+        "portLabel": { "type": "string" },
+        "example": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "schemaFunction": {
+      "type": "object",
+      "required": ["name", "params", "luaCall"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "type": "string" },
+        "params": { "type": "array", "items": { "$ref": "#/$defs/functionParam" } },
+        "returns": { "$ref": "#/$defs/portDataType" },
+        "luaCall": { "$ref": "#/$defs/nonEmptyString" },
+        "paramEmission": {
+          "type": "object",
+          "properties": { "unsetOptional": { "type": "string", "enum": ["emit-nil", "omit-trailing"] } },
+          "additionalProperties": false
+        },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "shortDescription": { "$ref": "#/$defs/nonEmptyString" },
+        "whatItDoes": { "$ref": "#/$defs/nonEmptyString" },
+        "technicalNote": { "$ref": "#/$defs/nonEmptyString" },
+        "isPopular": { "type": "boolean" },
+        "aliases": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "category": { "$ref": "#/$defs/nonEmptyString" },
+        "example": { "$ref": "#/$defs/nonEmptyString" },
+        "sourceDoc": { "$ref": "#/$defs/nonEmptyString" },
+        "relatedCommand": { "$ref": "#/$defs/nonEmptyString" }
+      },
+      "additionalProperties": false
+    },
+    "functionTemplate": {
+      "type": "object",
+      "required": ["key", "baseFunctionName", "label", "shortDescription", "defaults"],
+      "properties": {
+        "key": { "$ref": "#/$defs/nonEmptyString" },
+        "baseFunctionName": { "$ref": "#/$defs/nonEmptyString" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "shortDescription": { "$ref": "#/$defs/nonEmptyString" },
+        "whatItDoes": { "type": "string" },
+        "defaults": { "type": "object", "additionalProperties": { "$ref": "#/$defs/functionDefault" } },
+        "aliases": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "isPopular": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "exCommandParam": {
+      "type": "object",
+      "required": ["name", "placeholder", "description"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "placeholder": { "type": "string" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "label": { "type": "string" },
+        "type": { "type": "string", "enum": ["string", "number", "boolean", "file-path", "directory-path", "select"] },
+        "optional": { "type": "boolean" },
+        "defaultValue": { "type": ["string", "number", "boolean"] },
+        "allowedValues": { "type": "array", "items": { "type": "string" } },
+        "allowedValueDescriptions": { "type": "object", "additionalProperties": { "type": "string" } },
+        "tier": { "type": "string", "enum": ["basic", "advanced"] },
+        "group": { "type": "string" },
+        "escape": { "const": "ex-argument" },
+        "emit": { "$ref": "#/$defs/exCommandParamEmit" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "const": "select" } }, "required": ["type"] },
+          "then": { "properties": { "allowedValues": {} }, "required": ["allowedValues"] },
+          "else": { "not": { "properties": { "allowedValues": {} }, "required": ["allowedValues"] } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "select" } }, "required": ["type"] },
+          "else": { "not": { "properties": { "allowedValueDescriptions": {} }, "required": ["allowedValueDescriptions"] } }
+        },
+        {
+          "if": { "properties": { "type": { "const": "number" } }, "required": ["type"] },
+          "then": { "properties": { "defaultValue": { "type": "number" } } },
+          "else": {
+            "if": { "properties": { "type": { "const": "boolean" } }, "required": ["type"] },
+            "then": { "properties": { "defaultValue": { "type": "boolean" } } },
+            "else": { "properties": { "defaultValue": { "type": "string" } } }
+          }
+        },
+        {
+          "if": { "properties": { "emit": { "type": "object", "properties": { "kind": { "const": "flag" } }, "required": ["kind"] } }, "required": ["emit"] },
+          "then": { "properties": { "type": { "const": "boolean" } }, "required": ["type"] }
+        },
+        {
+          "if": { "properties": { "emit": { "type": "object", "properties": { "kind": { "const": "option" } }, "required": ["kind"] } }, "required": ["emit"] },
+          "then": { "properties": { "type": { "not": { "const": "boolean" } } } }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "exCommandParamEmit": {
+      "oneOf": [
+        { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "value" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "token"], "properties": { "kind": { "const": "flag" }, "token": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false },
+        { "type": "object", "required": ["kind", "prefix"], "properties": { "kind": { "const": "option" }, "prefix": { "$ref": "#/$defs/nonEmptyString" } }, "additionalProperties": false }
+      ]
+    },
+    "exCommand": {
+      "type": "object",
+      "required": ["name", "description", "template", "example", "sourceDoc"],
+      "properties": {
+        "name": { "$ref": "#/$defs/nonEmptyString" },
+        "description": { "$ref": "#/$defs/nonEmptyString" },
+        "template": { "$ref": "#/$defs/nonEmptyString" },
+        "example": { "$ref": "#/$defs/nonEmptyString" },
+        "sourceDoc": { "$ref": "#/$defs/nonEmptyString" },
+        "params": { "type": "array", "items": { "$ref": "#/$defs/exCommandParam" } },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "shortDescription": { "$ref": "#/$defs/nonEmptyString" },
+        "category": { "$ref": "#/$defs/nonEmptyString" },
+        "whatItDoes": { "$ref": "#/$defs/nonEmptyString" },
+        "technicalNote": { "$ref": "#/$defs/nonEmptyString" },
+        "isPopular": { "type": "boolean" },
+        "aliases": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+      },
+      "additionalProperties": false
+    },
+    "exCommandTemplate": {
+      "type": "object",
+      "required": ["key", "baseCommandName", "label", "shortDescription", "defaults"],
+      "properties": {
+        "key": { "$ref": "#/$defs/nonEmptyString" },
+        "baseCommandName": { "$ref": "#/$defs/nonEmptyString" },
+        "label": { "$ref": "#/$defs/nonEmptyString" },
+        "shortDescription": { "$ref": "#/$defs/nonEmptyString" },
+        "defaults": { "type": "object", "additionalProperties": { "type": ["string", "number", "boolean"] } },
+        "example": { "$ref": "#/$defs/nonEmptyString" },
+        "whatItDoes": { "type": "string" },
+        "aliases": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } },
+        "isPopular": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "generationRule": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "left", "right", "severity", "message"],
+          "properties": {
+            "kind": { "const": "conflict" },
+            "left": { "$ref": "#/$defs/nonEmptyString" },
+            "right": { "$ref": "#/$defs/nonEmptyString" },
+            "severity": { "type": "string", "enum": ["warning", "error"] },
+            "when": { "type": "string", "enum": ["both-explicit", "both-meaningful"] },
+            "message": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "scope", "when", "action"],
+          "properties": {
+            "kind": { "const": "subtree-gate" },
+            "scope": { "$ref": "#/$defs/nonBlankString" },
+            "when": { "$ref": "#/$defs/condition" },
+            "action": { "const": "omit-subtree" },
+            "warnOnExplicitDescendants": { "type": "boolean" },
+            "message": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "scope", "mode"],
+          "properties": {
+            "kind": { "const": "subtree-filter" },
+            "scope": { "$ref": "#/$defs/nonBlankString" },
+            "mode": { "const": "meaningful-only" },
+            "preserveKeys": { "type": "array", "items": { "$ref": "#/$defs/nonEmptyString" } }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "pluginCapability": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "provider"],
+          "properties": { "kind": { "const": "lsp-package-installer" }, "provider": { "const": "mason-registry" } },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["kind", "api", "minNvimVersion"],
+          "properties": {
+            "kind": { "const": "lsp-server-enabler" },
+            "api": { "const": "vim.lsp.enable" },
+            "minNvimVersion": { "$ref": "#/$defs/nonEmptyString" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "setup": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["requirePath"],
+          "properties": {
+            "requirePath": { "$ref": "#/$defs/nonBlankString" },
+            "setupFunction": { "$ref": "#/$defs/nonBlankString" },
+            "optionMapping": { "type": "string", "enum": ["table", "individual"] },
+            "preSetup": { "type": "string" },
+            "postSetup": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["requirePath", "render"],
+          "properties": {
+            "requirePath": { "$ref": "#/$defs/nonBlankString" },
+            "preSetup": { "type": "string" },
+            "postSetup": { "type": "string" },
+            "render": {
+              "type": "object",
+              "required": ["kind", "template"],
+              "properties": {
+                "kind": { "const": "lua-template" },
+                "template": { "$ref": "#/$defs/nonBlankString" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ],
+      "description": "Optional plugin startup setup metadata. Raw Lua fields are trusted author content."
+    }
+  }
+}

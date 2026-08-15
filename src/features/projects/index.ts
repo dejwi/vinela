@@ -1,0 +1,2 @@
+// Projects feature module
+export {}

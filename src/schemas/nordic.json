@@ -1,0 +1,33 @@
+{
+  "id": "nordic",
+  "pluginName": "nordic.nvim",
+  "pluginRepo": "https://github.com/AlexvZyl/nordic.nvim",
+  "version": "1.0.0",
+  "description": "Nord-inspired Neovim theme with balanced contrast and sensible plugin styling defaults.",
+  "author": "AlexvZyl",
+  "stars": 1500,
+  "category": "ui",
+  "tagline": "Nord-inspired dark palette with soft contrast",
+  "tags": ["colorscheme", "theme", "dark", "nordic", "#242933", "#88c0d0", "#bf616a"],
+  "setup": { "requirePath": "nordic", "setupFunction": "setup", "optionMapping": "table" },
+  "options": [
+    { "key": "bold_keywords", "label": "Bold Keywords", "type": "boolean", "group": "Styles", "default": false },
+    { "key": "italic_comments", "label": "Italic Comments", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "transparent.bg", "label": "Transparent Background", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "bright_border", "label": "Bright Borders", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "reduced_blue", "label": "Reduced Blue Tones", "type": "boolean", "group": "Appearance", "default": true },
+    { "key": "swap_backgrounds", "label": "Swap Backgrounds", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "cursorline.theme", "label": "Cursorline Theme", "type": "select", "group": "Appearance", "default": "dark", "options": [{ "value": "dark", "label": "Dark" }, { "value": "light", "label": "Light" }] },
+    { "key": "cursorline.blend", "label": "Cursorline Blend", "type": "number", "group": "Appearance", "default": 0.85, "validation": { "min": 0, "max": 1, "step": 0.05 } },
+    { "key": "noice.style", "label": "Noice Style", "type": "select", "group": "Integrations", "default": "classic", "options": [{ "value": "classic", "label": "Classic" }, { "value": "flat", "label": "Flat" }] },
+    { "key": "telescope.style", "label": "Telescope Style", "type": "select", "group": "Integrations", "default": "classic", "options": [{ "value": "classic", "label": "Classic" }, { "value": "flat", "label": "Flat" }] },
+    { "key": "leap.dim_backdrop", "label": "Leap Dim Backdrop", "type": "boolean", "group": "Integrations", "default": false },
+    { "key": "ts_context.dark_background", "label": "TS Context Dark Background", "type": "boolean", "group": "Integrations", "default": true },
+    { "key": "on_palette", "label": "on_palette Callback", "type": "lua", "group": "Advanced", "default": "function(palette)\n  return palette\nend", "expectedReturnType": "table" },
+    { "key": "after_palette", "label": "after_palette Callback", "type": "lua", "group": "Advanced", "default": "function(palette)\nend", "expectedReturnType": "void" },
+    { "key": "override", "label": "Highlight Override Callback", "type": "lua", "group": "Advanced", "default": "function(c)\n  return {}\nend", "expectedReturnType": "table" }
+  ],
+  "functions": [{ "name": "apply", "description": "Apply nordic colorscheme.", "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Variant name; defaults to nordic." }], "returns": "void", "luaCall": "vim.cmd('colorscheme ' .. ($params.variant or 'nordic'))" }],
+  "exCommands": [],
+  "events": []
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "vinela",
+  "version": "0.1.22",
+  "identifier": "com.vinela.app",
+  "build": {
+    "beforeDevCommand": "bun run --bun vite",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "bun run --bun vite build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "vinela",
+        "width": 1200,
+        "height": 800,
+        "minWidth": 800,
+        "minHeight": 600
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "connect-src": "ipc: http://ipc.localhost",
+        "img-src": "'self' data: blob:",
+        "style-src": "'self' 'unsafe-inline'"
+      },
+      "devCsp": {
+        "default-src": "'self'",
+        "connect-src": "ipc: http://ipc.localhost ws:",
+        "img-src": "'self' data: blob:",
+        "style-src": "'self' 'unsafe-inline'"
+      }
+    }
+  },
+  "plugins": {
+    "fs": {
+      "requireLiteralLeadingDot": false
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "copyright": "Copyright (C) 2026 Vinela contributors",
+    "homepage": "https://github.com/dejwi/vinela",
+    "license": "AGPL-3.0-only",
+    "resources": {
+      "../LICENSE": "LICENSE",
+      "../NOTICE": "NOTICE"
+    },
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

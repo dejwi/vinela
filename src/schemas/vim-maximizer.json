@@ -1,0 +1,110 @@
+{
+  "id": "vim-maximizer",
+  "pluginName": "vim-maximizer",
+  "pluginRepo": "https://github.com/szw/vim-maximizer",
+  "version": "1.0.0",
+  "description": "Maximizes and restores the current split window with a single toggle. Saves all window positions before maximizing and restores them on the next invocation.",
+  "author": "szw",
+  "stars": 1800,
+  "category": "editor",
+  "tags": [
+    "window",
+    "split",
+    "maximize",
+    "toggle",
+    "layout"
+  ],
+  "tagline": "Toggle-maximize the current split window and restore it automatically.",
+  "options": [
+    {
+      "key": "config",
+      "label": "Vimscript Global Config",
+      "description": "Raw Lua assignments for vim-maximizer's global variables. Edit these to configure the plugin. vim-maximizer is a Vimscript plugin — it has no require().setup() call, so configuration is done via vim.g.* globals. The three commented lines show all available options with their defaults.",
+      "type": "lua",
+      "group": "General",
+      "default": "-- vim-maximizer: Vimscript plugin — configure via vim.g globals\nvim.g.maximizer_set_default_mapping = true   -- set false to disable <F3> auto-mapping\nvim.g.maximizer_set_mapping_with_bang = false -- set true to use :MaximizerToggle! for the auto-map\nvim.g.maximizer_default_mapping_key = '<F3>' -- key used when set_default_mapping is true",
+      "expectedReturnType": "void"
+    },
+    {
+      "key": "set_default_mapping",
+      "label": "Set Default Mapping (UI reference)",
+      "description": "When enabled, vim-maximizer automatically creates <F3> keymaps in normal, insert, and visual modes. This is the upstream default. Disable in the Lua config above if you want to set your own key binding — use a Set Keymap node with MaximizerToggle instead. NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "boolean",
+      "group": "General",
+      "default": true
+    },
+    {
+      "key": "set_mapping_with_bang",
+      "label": "Use Force-Restore Mapping (UI reference)",
+      "description": "When the auto-mapping is enabled, this makes the default key use :MaximizerToggle! (force-restore). NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "boolean",
+      "group": "General",
+      "default": false,
+      "visibleWhen": {
+        "key": "set_default_mapping",
+        "equals": true
+      }
+    },
+    {
+      "key": "default_mapping_key",
+      "label": "Default Mapping Key (UI reference)",
+      "description": "The key sequence used for the auto-created mapping. Only applies when 'Set Default Mapping' is enabled. NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "keysequence",
+      "group": "General",
+      "default": "<F3>",
+      "visibleWhen": {
+        "key": "set_default_mapping",
+        "equals": true
+      }
+    }
+  ],
+  "functions": [
+    {
+      "name": "toggle",
+      "label": "Toggle Maximize",
+      "description": "Maximize the current split window, or restore all windows to their previous sizes if already maximized.",
+      "whatItDoes": "Expands the active split to fill the entire tab page. Running it again restores every window to the exact size and position it had before. Ideal for temporarily focusing on one file without closing other splits.",
+      "isPopular": true,
+      "aliases": [
+        "maximize window",
+        "maximize split",
+        "toggle maximize",
+        "fullscreen split"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('MaximizerToggle')"
+    },
+    {
+      "name": "toggle_force",
+      "label": "Toggle Maximize (Force Restore)",
+      "description": "Force-restore all windows to their previously saved positions, even if the layout has changed since maximizing.",
+      "whatItDoes": "Like Toggle Maximize, but uses the bang (!) variant. If you rearranged windows while in maximized state and the current window is no longer the maximized one, this will still restore everything to the pre-maximize snapshot.",
+      "isPopular": false,
+      "aliases": [
+        "force restore",
+        "force maximize restore"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('MaximizerToggle!')"
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "MaximizerToggle",
+      "description": "Toggle the current split window between maximized (fills the tab) and its original size. Saves window layout before maximizing and restores it on the second call.",
+      "template": ":MaximizerToggle",
+      "example": ":MaximizerToggle",
+      "sourceDoc": ":help maximizer"
+    },
+    {
+      "name": "MaximizerToggleBang",
+      "description": "Force-restore all windows to their previously saved positions. Useful after rearranging windows while in maximized state. Invoked as :MaximizerToggle! (with bang).",
+      "template": ":MaximizerToggle!",
+      "example": ":MaximizerToggle!",
+      "sourceDoc": ":help maximizer"
+    }
+  ]
+}

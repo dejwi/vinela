@@ -1,0 +1,961 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-08-09T15:19:54.000Z",
+  "provider": "github-rest",
+  "repositories": [
+    {
+      "repoSlug": "alexvzyl/nordic.nvim",
+      "repoUrl": "https://github.com/AlexvZyl/nordic.nvim",
+      "owner": "AlexvZyl",
+      "author": "AlexvZyl",
+      "authorSource": "repo-owner",
+      "name": "nordic.nvim",
+      "description": "🌒  Nord for Neovim, but warmer and darker.  Supports a variety of plugins and other platforms.",
+      "stars": 1045,
+      "forks": 68,
+      "openIssues": 3,
+      "createdAt": "2023-01-21T15:54:53Z",
+      "pushedAt": "2026-05-03T11:29:10Z",
+      "providerUpdatedAt": "2026-08-01T16:59:30Z",
+      "topics": [
+        "colorscheme",
+        "lua",
+        "neovim",
+        "neovim-colorscheme",
+        "neovim-plugin",
+        "neovim-theme",
+        "nord",
+        "nordic",
+        "nvim",
+        "theme"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:01.769Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "catppuccin/nvim",
+      "repoUrl": "https://github.com/catppuccin/nvim",
+      "owner": "catppuccin",
+      "author": "catppuccin",
+      "authorSource": "repo-owner",
+      "name": "nvim",
+      "description": "🍨 Soothing pastel theme for Neovim",
+      "stars": 7555,
+      "forks": 337,
+      "openIssues": 12,
+      "createdAt": "2021-08-18T01:14:49Z",
+      "pushedAt": "2026-07-25T11:26:50Z",
+      "providerUpdatedAt": "2026-08-01T08:41:43Z",
+      "topics": [
+        "catppuccin",
+        "colorscheme",
+        "hacktoberfest",
+        "lua",
+        "neovim",
+        "neovim-colorscheme",
+        "neovim-lua",
+        "neovim-plugin",
+        "neovim-theme",
+        "nvim",
+        "theme",
+        "vim",
+        "vim-theme"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:02.142Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "christoomey/vim-tmux-navigator",
+      "repoUrl": "https://github.com/christoomey/vim-tmux-navigator",
+      "owner": "christoomey",
+      "author": "christoomey",
+      "authorSource": "repo-owner",
+      "name": "vim-tmux-navigator",
+      "description": "Seamless navigation between tmux panes and vim splits",
+      "stars": 6263,
+      "forks": 366,
+      "openIssues": 87,
+      "createdAt": "2013-04-12T17:53:07Z",
+      "pushedAt": "2026-01-25T19:44:18Z",
+      "providerUpdatedAt": "2026-08-01T02:30:57Z",
+      "topics": [
+        "tmux",
+        "vim"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:02.448Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "edeneast/nightfox.nvim",
+      "repoUrl": "https://github.com/EdenEast/nightfox.nvim",
+      "owner": "EdenEast",
+      "author": "EdenEast",
+      "authorSource": "repo-owner",
+      "name": "nightfox.nvim",
+      "description": "🦊A highly customizable theme for vim and neovim with support for lsp, treesitter and a variety of plugins.",
+      "stars": 4051,
+      "forks": 171,
+      "openIssues": 37,
+      "createdAt": "2021-07-20T23:19:53Z",
+      "pushedAt": "2026-07-04T15:03:03Z",
+      "providerUpdatedAt": "2026-07-28T20:12:20Z",
+      "topics": [
+        "colorblind",
+        "colorscheme",
+        "daltonism",
+        "lua",
+        "neovim",
+        "neovim-theme",
+        "theme",
+        "vim",
+        "vim-theme"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:02.680Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "ellisonleao/dotenv.nvim",
+      "repoUrl": "https://github.com/ellisonleao/dotenv.nvim",
+      "owner": "ellisonleao",
+      "author": "ellisonleao",
+      "authorSource": "repo-owner",
+      "name": "dotenv.nvim",
+      "description": "A minimalist .env support for Neovim",
+      "stars": 58,
+      "forks": 7,
+      "openIssues": 3,
+      "createdAt": "2022-02-16T01:26:19Z",
+      "pushedAt": "2025-03-27T17:19:01Z",
+      "providerUpdatedAt": "2026-07-23T08:19:40Z",
+      "topics": [
+        "dotenv",
+        "hacktoberfest",
+        "lua",
+        "neovim",
+        "neovim-plugin",
+        "neovim-plugins",
+        "plugin",
+        "vim"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:03.064Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "ellisonleao/gruvbox.nvim",
+      "repoUrl": "https://github.com/ellisonleao/gruvbox.nvim",
+      "owner": "ellisonleao",
+      "author": "ellisonleao",
+      "authorSource": "repo-owner",
+      "name": "gruvbox.nvim",
+      "description": "Lua port of the most famous vim colorscheme",
+      "stars": 2595,
+      "forks": 241,
+      "openIssues": 28,
+      "createdAt": "2020-11-02T05:27:15Z",
+      "pushedAt": "2026-04-15T12:42:43Z",
+      "providerUpdatedAt": "2026-07-30T06:23:26Z",
+      "topics": [
+        "colorscheme",
+        "gruvbox",
+        "lua",
+        "neovim",
+        "neovim-colorscheme",
+        "neovim-plugin",
+        "neovim-plugins"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:03.283Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "esmuellert/codediff.nvim",
+      "repoUrl": "https://github.com/esmuellert/codediff.nvim",
+      "owner": "esmuellert",
+      "author": "esmuellert",
+      "authorSource": "repo-owner",
+      "name": "codediff.nvim",
+      "description": "A Neovim plugin that provides VSCode-style diff rendering with two-tier highlighting (line + character level) in side-by-side and inline layouts, using VSCode's algorithm implemented in C.",
+      "stars": 1496,
+      "forks": 88,
+      "openIssues": 84,
+      "createdAt": "2025-10-23T05:28:45Z",
+      "pushedAt": "2026-08-01T18:53:03Z",
+      "providerUpdatedAt": "2026-08-01T18:41:01Z",
+      "topics": [
+        "c",
+        "diff",
+        "lua",
+        "neovim",
+        "vscode"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:03.626Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "folke/snacks.nvim",
+      "repoUrl": "https://github.com/folke/snacks.nvim",
+      "owner": "folke",
+      "author": "folke",
+      "authorSource": "repo-owner",
+      "name": "snacks.nvim",
+      "description": "🍿 A collection of QoL plugins for Neovim",
+      "stars": 7935,
+      "forks": 487,
+      "openIssues": 125,
+      "createdAt": "2024-11-02T22:24:00Z",
+      "pushedAt": "2026-05-25T17:30:32Z",
+      "providerUpdatedAt": "2026-08-01T19:37:55Z",
+      "topics": [
+        "neovim-plugin"
+      ],
+      "license": "Apache-2.0",
+      "fetchedAt": "2026-08-01T20:27:03.859Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "folke/tokyonight.nvim",
+      "repoUrl": "https://github.com/folke/tokyonight.nvim",
+      "owner": "folke",
+      "author": "folke",
+      "authorSource": "repo-owner",
+      "name": "tokyonight.nvim",
+      "description": "🏙  A clean, dark Neovim theme written in Lua, with support for lsp, treesitter and lots of plugins. Includes additional themes for Kitty, Alacritty, iTerm and Fish.",
+      "stars": 8149,
+      "forks": 548,
+      "openIssues": 20,
+      "createdAt": "2021-04-16T17:21:40Z",
+      "pushedAt": "2026-03-24T15:25:11Z",
+      "providerUpdatedAt": "2026-08-01T20:05:37Z",
+      "topics": [
+        "alacritty",
+        "alacritty-colorscheme",
+        "alacritty-theme",
+        "fish-shell",
+        "fish-theme",
+        "iterm2",
+        "iterm2-colors",
+        "kitty",
+        "kitty-themes",
+        "neovim",
+        "neovim-colorscheme",
+        "neovim-lua",
+        "neovim-theme",
+        "vim",
+        "vim-colorscheme",
+        "vim-theme"
+      ],
+      "license": "Apache-2.0",
+      "fetchedAt": "2026-08-01T20:27:04.241Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "gbprod/substitute.nvim",
+      "repoUrl": "https://github.com/gbprod/substitute.nvim",
+      "owner": "gbprod",
+      "author": "gbprod",
+      "authorSource": "repo-owner",
+      "name": "substitute.nvim",
+      "description": "Neovim plugin introducing a new operators motions to quickly replace and exchange text.",
+      "stars": 741,
+      "forks": 9,
+      "openIssues": 7,
+      "createdAt": "2021-12-20T14:46:06Z",
+      "pushedAt": "2026-02-17T10:40:45Z",
+      "providerUpdatedAt": "2026-07-30T05:47:09Z",
+      "topics": [
+        "neovim",
+        "neovim-plugin",
+        "nvim",
+        "nvim-plugin"
+      ],
+      "license": "WTFPL",
+      "fetchedAt": "2026-08-01T20:27:04.471Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "kylechui/nvim-surround",
+      "repoUrl": "https://github.com/kylechui/nvim-surround",
+      "owner": "kylechui",
+      "author": "kylechui",
+      "authorSource": "repo-owner",
+      "name": "nvim-surround",
+      "description": "Add/change/delete surrounding delimiter pairs with ease. Written with :heart: in Lua.",
+      "stars": 4261,
+      "forks": 80,
+      "openIssues": 10,
+      "createdAt": "2022-04-29T19:23:26Z",
+      "pushedAt": "2026-06-08T23:21:30Z",
+      "providerUpdatedAt": "2026-08-01T15:08:41Z",
+      "topics": [
+        "lua",
+        "neovim",
+        "neovim-plugin",
+        "nvim",
+        "surround",
+        "ucla-opensource"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:04.696Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "marko-cerovac/material.nvim",
+      "repoUrl": "https://github.com/marko-cerovac/material.nvim",
+      "owner": "marko-cerovac",
+      "author": "marko-cerovac",
+      "authorSource": "repo-owner",
+      "name": "material.nvim",
+      "description": ":trident: Material colorscheme for NeoVim written in Lua with built-in support for native LSP, TreeSitter and many more plugins",
+      "stars": 1089,
+      "forks": 139,
+      "openIssues": 6,
+      "createdAt": "2021-03-21T00:44:43Z",
+      "pushedAt": "2026-02-23T21:10:37Z",
+      "providerUpdatedAt": "2026-07-21T07:10:10Z",
+      "topics": [
+        "colorscheme",
+        "lua",
+        "material",
+        "neovim",
+        "neovim-lua",
+        "treesitter"
+      ],
+      "license": "GPL-2.0",
+      "fetchedAt": "2026-08-01T20:27:04.920Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "mason-org/mason.nvim",
+      "repoUrl": "https://github.com/mason-org/mason.nvim",
+      "owner": "mason-org",
+      "author": "mason-org",
+      "authorSource": "repo-owner",
+      "name": "mason.nvim",
+      "description": "Portable package manager for Neovim that runs everywhere Neovim runs. Easily install and manage LSP servers, DAP servers, linters, and formatters.",
+      "stars": 10418,
+      "forks": 337,
+      "openIssues": 275,
+      "createdAt": "2022-07-06T18:00:30Z",
+      "pushedAt": "2026-06-19T01:05:36Z",
+      "providerUpdatedAt": "2026-08-01T13:31:10Z",
+      "topics": [
+        "lua",
+        "mason",
+        "neovim",
+        "neovim-plugin",
+        "nvim",
+        "nvim-lsp-installer",
+        "nvim-plugin",
+        "package",
+        "package-manager",
+        "packages"
+      ],
+      "license": "Apache-2.0",
+      "fetchedAt": "2026-08-01T20:27:05.152Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "mhartington/formatter.nvim",
+      "repoUrl": "https://github.com/mhartington/formatter.nvim",
+      "owner": "mhartington",
+      "author": "mhartington",
+      "authorSource": "repo-owner",
+      "name": "formatter.nvim",
+      "stars": 1456,
+      "forks": 145,
+      "openIssues": 44,
+      "createdAt": "2020-09-14T17:54:11Z",
+      "pushedAt": "2025-05-29T22:48:52Z",
+      "providerUpdatedAt": "2026-07-21T05:02:39Z",
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:05.368Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "mofiqul/dracula.nvim",
+      "repoUrl": "https://github.com/Mofiqul/dracula.nvim",
+      "owner": "Mofiqul",
+      "author": "Mofiqul",
+      "authorSource": "repo-owner",
+      "name": "dracula.nvim",
+      "description": "Dracula colorscheme for neovim written in Lua",
+      "stars": 778,
+      "forks": 123,
+      "openIssues": 24,
+      "createdAt": "2021-06-03T16:40:41Z",
+      "pushedAt": "2025-11-05T01:08:01Z",
+      "providerUpdatedAt": "2026-07-29T15:58:11Z",
+      "topics": [
+        "color-scheme",
+        "dracula-color-scheme",
+        "neovim",
+        "treesitter"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:05.601Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "mofiqul/vscode.nvim",
+      "repoUrl": "https://github.com/Mofiqul/vscode.nvim",
+      "owner": "Mofiqul",
+      "author": "Mofiqul",
+      "authorSource": "repo-owner",
+      "name": "vscode.nvim",
+      "description": "Neovim/Vim color scheme inspired by Dark+ and Light+ theme in Visual Studio Code",
+      "stars": 991,
+      "forks": 139,
+      "openIssues": 50,
+      "createdAt": "2021-05-19T11:16:33Z",
+      "pushedAt": "2025-12-03T15:06:51Z",
+      "providerUpdatedAt": "2026-07-31T23:41:36Z",
+      "topics": [
+        "codedark",
+        "color-scheme",
+        "colorscheme",
+        "lua",
+        "lualine-theme",
+        "neovim",
+        "nvim",
+        "scheme",
+        "treesitter",
+        "vim",
+        "vscode"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:05.823Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "muniftanjim/prettier.nvim",
+      "repoUrl": "https://github.com/MunifTanjim/prettier.nvim",
+      "owner": "MunifTanjim",
+      "author": "MunifTanjim",
+      "authorSource": "repo-owner",
+      "name": "prettier.nvim",
+      "description": "Prettier plugin for Neovim's built-in LSP client.",
+      "stars": 316,
+      "forks": 10,
+      "openIssues": 5,
+      "createdAt": "2021-07-04T10:37:01Z",
+      "pushedAt": "2025-04-08T13:02:39Z",
+      "providerUpdatedAt": "2026-07-14T16:56:37Z",
+      "topics": [
+        "neovim",
+        "neovim-lsp",
+        "neovim-plugin",
+        "prettier"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:06.037Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "navarasu/onedark.nvim",
+      "repoUrl": "https://github.com/navarasu/onedark.nvim",
+      "owner": "navarasu",
+      "author": "navarasu",
+      "authorSource": "repo-owner",
+      "name": "onedark.nvim",
+      "description": "One dark and light colorscheme for neovim >= 0.5.0 written in lua based on Atom's One Dark and Light theme. Additionally, it comes with 5 color variant styles",
+      "stars": 1998,
+      "forks": 179,
+      "openIssues": 57,
+      "createdAt": "2021-05-09T18:43:01Z",
+      "pushedAt": "2026-04-13T10:10:07Z",
+      "providerUpdatedAt": "2026-07-31T21:59:08Z",
+      "topics": [
+        "dark-theme",
+        "lua",
+        "neovim",
+        "neovim-theme",
+        "nvim",
+        "onedark",
+        "theme",
+        "treesitter",
+        "vim"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:06.248Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "neovim/nvim-lspconfig",
+      "repoUrl": "https://github.com/neovim/nvim-lspconfig",
+      "owner": "neovim",
+      "author": "neovim",
+      "authorSource": "repo-owner",
+      "name": "nvim-lspconfig",
+      "description": "Quickstart configs for Nvim LSP",
+      "stars": 13821,
+      "forks": 2474,
+      "openIssues": 34,
+      "createdAt": "2019-11-13T17:12:28Z",
+      "pushedAt": "2026-08-01T10:07:44Z",
+      "providerUpdatedAt": "2026-08-01T12:10:30Z",
+      "topics": [
+        "language-server",
+        "language-server-protocol",
+        "lsp",
+        "neovim",
+        "nvim",
+        "plugin",
+        "vim"
+      ],
+      "license": "Apache-2.0",
+      "fetchedAt": "2026-08-01T20:27:06.463Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "nvim-mini/mini.pairs",
+      "repoUrl": "https://github.com/nvim-mini/mini.pairs",
+      "owner": "nvim-mini",
+      "author": "nvim-mini",
+      "authorSource": "repo-owner",
+      "name": "mini.pairs",
+      "description": "Neovim Lua plugin to automatically manage character pairs. Part of 'mini.nvim' library.",
+      "stars": 257,
+      "forks": 7,
+      "openIssues": 0,
+      "createdAt": "2022-10-24T16:26:51Z",
+      "pushedAt": "2026-07-23T09:44:15Z",
+      "providerUpdatedAt": "2026-07-31T15:20:04Z",
+      "topics": [
+        "lua",
+        "mini-nvim",
+        "neovim",
+        "neovim-plugin"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:06.749Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "nvim-telescope/telescope.nvim",
+      "repoUrl": "https://github.com/nvim-telescope/telescope.nvim",
+      "owner": "nvim-telescope",
+      "author": "nvim-telescope",
+      "authorSource": "repo-owner",
+      "name": "telescope.nvim",
+      "description": "Find, Filter, Preview, Pick. All lua, all the time.",
+      "stars": 19667,
+      "forks": 959,
+      "openIssues": 456,
+      "createdAt": "2020-07-15T04:04:58Z",
+      "pushedAt": "2026-06-27T21:24:09Z",
+      "providerUpdatedAt": "2026-07-31T18:59:24Z",
+      "topics": [
+        "lua",
+        "neovim",
+        "neovim-plugin",
+        "nvim",
+        "nvim-lua"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:06.971Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "nvim-tree/nvim-web-devicons",
+      "repoUrl": "https://github.com/nvim-tree/nvim-web-devicons",
+      "owner": "nvim-tree",
+      "author": "nvim-tree",
+      "authorSource": "repo-owner",
+      "name": "nvim-web-devicons",
+      "description": "Provides Nerd Font icons (glyphs) for use by neovim plugins",
+      "stars": 2704,
+      "forks": 238,
+      "openIssues": 16,
+      "createdAt": "2020-05-29T13:37:01Z",
+      "pushedAt": "2026-07-22T22:11:55Z",
+      "providerUpdatedAt": "2026-07-29T08:35:26Z",
+      "topics": [
+        "icons",
+        "lua",
+        "neovim",
+        "neovim-plugins",
+        "nerd-fonts"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:07.261Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "nvim-treesitter/nvim-treesitter",
+      "repoUrl": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "owner": "nvim-treesitter",
+      "author": "nvim-treesitter",
+      "authorSource": "repo-owner",
+      "name": "nvim-treesitter",
+      "description": "Nvim Treesitter configurations and abstraction layer",
+      "stars": 14241,
+      "forks": 1432,
+      "openIssues": 271,
+      "createdAt": "2020-04-18T15:24:10Z",
+      "pushedAt": "2026-08-01T08:55:45Z",
+      "providerUpdatedAt": "2026-08-01T18:00:49Z",
+      "topics": [
+        "neovim",
+        "nvim-treesitter",
+        "tree-sitter"
+      ],
+      "license": "Apache-2.0",
+      "fetchedAt": "2026-08-01T20:27:07.486Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "nyoom-engineering/oxocarbon.nvim",
+      "repoUrl": "https://github.com/nyoom-engineering/oxocarbon.nvim",
+      "owner": "nyoom-engineering",
+      "author": "nyoom-engineering",
+      "authorSource": "repo-owner",
+      "name": "oxocarbon.nvim",
+      "description": "A dark and light Neovim theme written in fennel, inspired by IBM Carbon.",
+      "stars": 1618,
+      "forks": 94,
+      "openIssues": 21,
+      "createdAt": "2022-07-30T19:44:30Z",
+      "pushedAt": "2026-07-30T16:24:13Z",
+      "providerUpdatedAt": "2026-08-01T16:30:41Z",
+      "topics": [
+        "color-scheme",
+        "neovim",
+        "neovim-colorscheme",
+        "neovim-theme",
+        "rust",
+        "theme",
+        "vim",
+        "vim-colorscheme"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:07.773Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "oxy2dev/markview.nvim",
+      "repoUrl": "https://github.com/OXY2DEV/markview.nvim",
+      "owner": "OXY2DEV",
+      "author": "OXY2DEV",
+      "authorSource": "repo-owner",
+      "name": "markview.nvim",
+      "description": "A hackable markdown, Typst, latex, html(inline) & Asciidoc previewer for Neovim",
+      "stars": 3589,
+      "forks": 106,
+      "openIssues": 4,
+      "createdAt": "2024-06-25T14:18:39Z",
+      "pushedAt": "2026-07-13T09:53:08Z",
+      "providerUpdatedAt": "2026-08-08T13:09:00Z",
+      "topics": [
+        "asciidoc",
+        "document-preview",
+        "latex",
+        "neovim",
+        "neovim-plugin",
+        "typst"
+      ],
+      "license": "Apache-2.0",
+      "fetchedAt": "2026-08-09T15:19:54.000Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "rebelot/kanagawa.nvim",
+      "repoUrl": "https://github.com/rebelot/kanagawa.nvim",
+      "owner": "rebelot",
+      "author": "rebelot",
+      "authorSource": "repo-owner",
+      "name": "kanagawa.nvim",
+      "description": "NeoVim dark colorscheme inspired by the colors of the famous painting by Katsushika Hokusai.",
+      "stars": 6294,
+      "forks": 233,
+      "openIssues": 90,
+      "createdAt": "2021-12-20T18:51:22Z",
+      "pushedAt": "2026-05-10T16:31:53Z",
+      "providerUpdatedAt": "2026-08-01T16:21:03Z",
+      "topics": [
+        "lsp",
+        "lua",
+        "neovim",
+        "neovim-colorscheme",
+        "neovim-theme",
+        "nvim",
+        "syntax-highlighting",
+        "terminal-colors",
+        "theme",
+        "tree-sitter-highlight"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:08.002Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "rmagatti/auto-session",
+      "repoUrl": "https://github.com/rmagatti/auto-session",
+      "owner": "rmagatti",
+      "author": "rmagatti",
+      "authorSource": "repo-owner",
+      "name": "auto-session",
+      "description": "A small automated session manager for Neovim",
+      "stars": 1853,
+      "forks": 63,
+      "openIssues": 28,
+      "createdAt": "2021-01-30T14:21:06Z",
+      "pushedAt": "2026-06-10T05:33:06Z",
+      "providerUpdatedAt": "2026-07-18T11:39:20Z",
+      "topics": [
+        "hacktoberfest",
+        "lua",
+        "neovim",
+        "neovim-plugin"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:08.213Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "rose-pine/neovim",
+      "repoUrl": "https://github.com/rose-pine/neovim",
+      "owner": "rose-pine",
+      "author": "rose-pine",
+      "authorSource": "repo-owner",
+      "name": "neovim",
+      "description": "Soho vibes for Neovim",
+      "stars": 3063,
+      "forks": 176,
+      "openIssues": 5,
+      "createdAt": "2021-05-18T16:16:46Z",
+      "pushedAt": "2026-05-15T15:21:54Z",
+      "providerUpdatedAt": "2026-08-01T15:50:27Z",
+      "topics": [
+        "editor",
+        "lua",
+        "neovim",
+        "neovim-theme",
+        "nvim",
+        "rose-pine",
+        "soho-vibes",
+        "theme",
+        "vim",
+        "vim-theme"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:08.490Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "saghen/blink.cmp",
+      "repoUrl": "https://github.com/saghen/blink.cmp",
+      "owner": "saghen",
+      "author": "saghen",
+      "authorSource": "repo-owner",
+      "name": "blink.cmp",
+      "description": "Performant, batteries-included completion plugin for Neovim ",
+      "stars": 6490,
+      "forks": 355,
+      "openIssues": 97,
+      "createdAt": "2024-07-31T01:56:33Z",
+      "pushedAt": "2026-07-31T08:42:32Z",
+      "providerUpdatedAt": "2026-08-01T13:46:23Z",
+      "topics": [
+        "neovim",
+        "neovim-lua-plugin",
+        "neovim-plugin"
+      ],
+      "homepage": "https://cmp.saghen.dev",
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:08.820Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "sainnhe/everforest",
+      "repoUrl": "https://github.com/sainnhe/everforest",
+      "owner": "sainnhe",
+      "author": "sainnhe",
+      "authorSource": "repo-owner",
+      "name": "everforest",
+      "description": "🌲 Comfortable & Pleasant Color Scheme for Vim",
+      "stars": 4139,
+      "forks": 147,
+      "openIssues": 6,
+      "createdAt": "2019-03-03T06:10:46Z",
+      "pushedAt": "2026-06-08T19:09:46Z",
+      "providerUpdatedAt": "2026-08-01T14:29:59Z",
+      "topics": [
+        "airline",
+        "color-scheme",
+        "lightline",
+        "theme",
+        "vim"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:09.047Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "sainnhe/sonokai",
+      "repoUrl": "https://github.com/sainnhe/sonokai",
+      "owner": "sainnhe",
+      "author": "sainnhe",
+      "authorSource": "repo-owner",
+      "name": "sonokai",
+      "description": "High Contrast & Vivid Color Scheme based on Monokai Pro",
+      "stars": 1953,
+      "forks": 121,
+      "openIssues": 1,
+      "createdAt": "2020-02-16T12:57:43Z",
+      "pushedAt": "2026-01-21T13:24:43Z",
+      "providerUpdatedAt": "2026-07-24T22:35:01Z",
+      "topics": [
+        "airline",
+        "lightline",
+        "monokai",
+        "theme",
+        "vim"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:09.272Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "shaunsingh/nord.nvim",
+      "repoUrl": "https://github.com/shaunsingh/nord.nvim",
+      "owner": "shaunsingh",
+      "author": "shaunsingh",
+      "authorSource": "repo-owner",
+      "name": "nord.nvim",
+      "description": "Neovim theme based off of the Nord Color Palette, written in lua with tree sitter support",
+      "stars": 1013,
+      "forks": 122,
+      "openIssues": 33,
+      "createdAt": "2021-05-14T15:41:09Z",
+      "pushedAt": "2024-06-25T08:37:58Z",
+      "providerUpdatedAt": "2026-07-29T01:29:27Z",
+      "topics": [
+        "colorscheme",
+        "neovim",
+        "nord",
+        "nvim",
+        "theme"
+      ],
+      "license": "GPL-2.0",
+      "fetchedAt": "2026-08-01T20:27:09.617Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "szw/vim-maximizer",
+      "repoUrl": "https://github.com/szw/vim-maximizer",
+      "owner": "szw",
+      "author": "szw",
+      "authorSource": "repo-owner",
+      "name": "vim-maximizer",
+      "description": "Maximizes and restores the current window in Vim.",
+      "stars": 528,
+      "forks": 19,
+      "openIssues": 8,
+      "createdAt": "2012-11-21T21:25:50Z",
+      "pushedAt": "2022-03-10T13:04:03Z",
+      "providerUpdatedAt": "2026-07-31T16:09:37Z",
+      "homepage": "http://www.vim.org/scripts/script.php?script_id=4376",
+      "fetchedAt": "2026-08-01T20:27:09.924Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    },
+    {
+      "repoSlug": "vague-theme/vague.nvim",
+      "repoUrl": "https://github.com/vague-theme/vague.nvim",
+      "owner": "vague-theme",
+      "author": "vague-theme",
+      "authorSource": "repo-owner",
+      "name": "vague.nvim",
+      "description": "A cool, dark, low contrast colorscheme for Neovim. Pastel yet vivid, like a fleeting memory...",
+      "stars": 1168,
+      "forks": 30,
+      "openIssues": 2,
+      "createdAt": "2024-07-12T03:48:13Z",
+      "pushedAt": "2026-07-20T23:08:39Z",
+      "providerUpdatedAt": "2026-08-01T14:40:24Z",
+      "topics": [
+        "colorscheme",
+        "neovim",
+        "neovim-colorscheme",
+        "neovim-plugin",
+        "neovim-theme"
+      ],
+      "license": "MIT",
+      "fetchedAt": "2026-08-01T20:27:10.345Z",
+      "unavailable": {
+        "downloads": "not-publicly-available"
+      }
+    }
+  ]
+}

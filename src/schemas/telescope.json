@@ -1,0 +1,439 @@
+{
+  "id": "telescope-nvim",
+  "pluginName": "telescope.nvim",
+  "pluginRepo": "https://github.com/nvim-telescope/telescope.nvim",
+  "version": "1.0.0",
+  "description": "Highly extensible fuzzy finder for files, grep, LSP, and more. Requires ripgrep for live_grep.",
+  "author": "nvim-telescope",
+  "stars": 16400,
+  "category": "navigation",
+  "tags": ["fuzzy", "finder", "search", "files", "grep"],
+  "tagline": "Highly extensible fuzzy finder over lists",
+  "dependencies": [],
+  "options": [
+    {
+      "key": "defaults.layout_strategy",
+      "label": "Layout Strategy",
+      "description": "How the picker window is arranged on screen.",
+      "type": "select",
+      "group": "Layout",
+      "default": "horizontal",
+      "options": [
+        { "value": "horizontal", "label": "Horizontal (results left, preview right)" },
+        { "value": "vertical", "label": "Vertical (results top, preview bottom)" },
+        { "value": "center", "label": "Center (centered floating window)" },
+        { "value": "flex", "label": "Flex (switches based on window size)" },
+        { "value": "cursor", "label": "Cursor (appears at cursor position)" },
+        { "value": "bottom_pane", "label": "Bottom Pane (full-width at bottom)" }
+      ]
+    },
+    {
+      "key": "defaults.layout_config.horizontal.preview_width",
+      "label": "Preview Width (Horizontal)",
+      "description": "Width of the preview pane in horizontal layout. Use a decimal 0-1 for percentage (e.g., 0.55 = 55%).",
+      "type": "number",
+      "group": "Layout",
+      "default": 0.55,
+      "validation": {
+        "min": 0.1,
+        "max": 0.9
+      },
+      "visibleWhen": {
+        "key": "defaults.layout_strategy",
+        "equals": "horizontal"
+      }
+    },
+    {
+      "key": "defaults.layout_config.width",
+      "label": "Picker Width",
+      "description": "Total width of the telescope window. Use decimal for percentage or integer for fixed columns.",
+      "type": "number",
+      "group": "Layout",
+      "default": 0.87,
+      "validation": {
+        "min": 0.1,
+        "max": 500
+      }
+    },
+    {
+      "key": "defaults.layout_config.height",
+      "label": "Picker Height",
+      "description": "Total height of the telescope window. Use decimal for percentage or integer for fixed rows.",
+      "type": "number",
+      "group": "Layout",
+      "default": 0.80,
+      "validation": {
+        "min": 0.1,
+        "max": 500
+      }
+    },
+    {
+      "key": "defaults.sorting_strategy",
+      "label": "Sorting Strategy",
+      "description": "How results are sorted in the picker list.",
+      "type": "select",
+      "group": "Behavior",
+      "default": "descending",
+      "options": [
+        { "value": "descending", "label": "Descending (best match at bottom)" },
+        { "value": "ascending", "label": "Ascending (best match at top)" }
+      ]
+    },
+    {
+      "key": "defaults.selection_strategy",
+      "label": "Selection Strategy",
+      "description": "How the selection cursor behaves when the list updates.",
+      "type": "select",
+      "group": "Behavior",
+      "default": "reset",
+      "options": [
+        { "value": "reset", "label": "Reset (jump to best match)" },
+        { "value": "follow", "label": "Follow (stay on current item)" },
+        { "value": "row", "label": "Row (stay on current row position)" },
+        { "value": "closest", "label": "Closest (jump to nearest match)" }
+      ]
+    },
+    {
+      "key": "defaults.scroll_strategy",
+      "label": "Scroll Strategy",
+      "description": "What happens when scrolling past the edge of the results list.",
+      "type": "select",
+      "group": "Behavior",
+      "default": "cycle",
+      "options": [
+        { "value": "cycle", "label": "Cycle (wrap around)" },
+        { "value": "limit", "label": "Limit (stop at edge)" }
+      ]
+    },
+    {
+      "key": "defaults.initial_mode",
+      "label": "Initial Mode",
+      "description": "Which mode to start in when opening a picker.",
+      "type": "select",
+      "group": "Behavior",
+      "default": "insert",
+      "options": [
+        { "value": "insert", "label": "Insert (start typing immediately)" },
+        { "value": "normal", "label": "Normal (navigate with j/k)" }
+      ]
+    },
+    {
+      "key": "defaults.wrap_results",
+      "label": "Wrap Results",
+      "description": "Wrap long result lines instead of truncating them.",
+      "type": "boolean",
+      "group": "Behavior",
+      "default": false
+    },
+    {
+      "key": "defaults.prompt_prefix",
+      "label": "Prompt Prefix",
+      "description": "Text shown before the search input.",
+      "type": "string",
+      "group": "Appearance",
+      "default": "> "
+    },
+    {
+      "key": "defaults.selection_caret",
+      "label": "Selection Caret",
+      "description": "Text shown next to the currently selected item.",
+      "type": "string",
+      "group": "Appearance",
+      "default": "> "
+    },
+    {
+      "key": "defaults.entry_prefix",
+      "label": "Entry Prefix",
+      "description": "Text shown before each non-selected item.",
+      "type": "string",
+      "group": "Appearance",
+      "default": "  "
+    },
+    {
+      "key": "defaults.multi_icon",
+      "label": "Multi-Select Icon",
+      "description": "Icon shown next to multi-selected items.",
+      "type": "string",
+      "group": "Appearance",
+      "default": "+"
+    },
+    {
+      "key": "defaults.path_display",
+      "label": "Path Display",
+      "description": "How file paths are displayed in results.",
+      "type": "select",
+      "group": "Appearance",
+      "default": "truncate",
+      "options": [
+        { "value": "truncate", "label": "Truncate (shorten long paths)" },
+        { "value": "shorten", "label": "Shorten (abbreviate directories)" },
+        { "value": "absolute", "label": "Absolute (full path)" },
+        { "value": "tail", "label": "Tail (filename only)" },
+        { "value": "smart", "label": "Smart (show disambiguating path)" }
+      ]
+    },
+    {
+      "key": "defaults.winblend",
+      "label": "Window Transparency",
+      "description": "Transparency of the telescope window. 0 = fully opaque, 100 = fully transparent.",
+      "type": "number",
+      "group": "Appearance",
+      "default": 0,
+      "validation": {
+        "min": 0,
+        "max": 100,
+        "integer": true
+      }
+    },
+    {
+      "key": "defaults.borderchars",
+      "label": "Border Characters",
+      "description": "Characters used for window borders. Array of 8 strings: top, right, bottom, left, top-left, top-right, bottom-right, bottom-left.",
+      "type": "array",
+      "group": "Appearance",
+      "default": ["\u2500", "\u2502", "\u2500", "\u2502", "\u256d", "\u256e", "\u256f", "\u2570"],
+      "items": {
+        "itemType": "string"
+      },
+      "validation": {
+        "minItems": 8,
+        "maxItems": 8
+      }
+    },
+    {
+      "key": "defaults.color_devicons",
+      "label": "Color Devicons",
+      "description": "Show colored file type icons (requires nvim-web-devicons plugin).",
+      "type": "boolean",
+      "group": "Appearance",
+      "default": true
+    },
+    {
+      "key": "defaults.results_title",
+      "label": "Show Results Title",
+      "description": "Show a title in the results window border.",
+      "type": "boolean",
+      "group": "Appearance",
+      "default": true
+    },
+    {
+      "key": "defaults.preview",
+      "label": "Enable Preview",
+      "description": "Show a preview of the selected item. Disable to save screen space.",
+      "type": "boolean",
+      "group": "Preview",
+      "default": true
+    },
+    {
+      "key": "defaults.file_ignore_patterns",
+      "label": "File Ignore Patterns",
+      "description": "Lua patterns for files/directories to exclude from results. E.g., 'node_modules/', '.git/'.",
+      "type": "array",
+      "group": "Filtering",
+      "default": [],
+      "items": {
+        "itemType": "string"
+      }
+    },
+    {
+      "key": "defaults.vimgrep_arguments",
+      "label": "Vimgrep Arguments",
+      "description": "Command arguments for live_grep. Default uses ripgrep. Modify only if you know what you're doing.",
+      "type": "array",
+      "group": "Filtering",
+      "default": ["rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case"],
+      "items": {
+        "itemType": "string"
+      }
+    }
+  ],
+  "functions": [
+    {
+      "name": "find_files",
+      "label": "Find Files",
+      "description": "Open the file finder picker",
+      "whatItDoes": "Opens a fuzzy file finder to quickly search and open files in your project.",
+      "isPopular": true,
+      "aliases": ["search files", "open file", "file picker"],
+      "params": [
+        {
+          "name": "cwd",
+          "type": "string",
+          "optional": true,
+          "description": "Directory to search in (defaults to project root)"
+        },
+        {
+          "name": "hidden",
+          "type": "boolean",
+          "optional": true,
+          "description": "Include hidden files"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').find_files($params)"
+    },
+    {
+      "name": "live_grep",
+      "label": "Search in Files",
+      "description": "Search file contents with live grep (requires ripgrep)",
+      "whatItDoes": "Searches the contents of all files in your project. Type and see matching lines instantly. Requires ripgrep (rg) to be installed.",
+      "isPopular": true,
+      "aliases": ["grep", "search text", "find in files", "rg", "ripgrep"],
+      "params": [
+        {
+          "name": "cwd",
+          "type": "string",
+          "optional": true,
+          "description": "Directory to search in"
+        },
+        {
+          "name": "glob_pattern",
+          "type": "string",
+          "optional": true,
+          "description": "Glob pattern to filter files (e.g., '*.lua')"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').live_grep($params)"
+    },
+    {
+      "name": "buffers",
+      "label": "Switch Buffer",
+      "description": "List and switch between open buffers",
+      "whatItDoes": "Shows all currently open files (buffers) so you can quickly switch between them.",
+      "isPopular": true,
+      "aliases": ["open buffers", "switch file", "buffer list"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').buffers()"
+    },
+    {
+      "name": "help_tags",
+      "label": "Search Help",
+      "description": "Search Neovim help tags",
+      "whatItDoes": "Opens a fuzzy finder for Neovim's built-in help documentation. Great for learning Neovim commands.",
+      "isPopular": false,
+      "aliases": ["help", "documentation", "docs", "neovim help"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').help_tags()"
+    },
+    {
+      "name": "oldfiles",
+      "label": "Recent Files",
+      "description": "List recently opened files",
+      "whatItDoes": "Shows files you've recently opened in Neovim, so you can quickly reopen them.",
+      "isPopular": false,
+      "aliases": ["recent", "history", "mru", "most recently used"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').oldfiles()"
+    },
+    {
+      "name": "git_files",
+      "label": "Git Files",
+      "description": "List files tracked by git",
+      "whatItDoes": "Shows only files tracked by git in the current repository. Faster than find_files in large projects.",
+      "isPopular": false,
+      "aliases": ["git tracked", "repo files", "version controlled files"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').git_files()"
+    },
+    {
+      "name": "git_commits",
+      "label": "Browse Git Commits",
+      "description": "List and explore git commits",
+      "whatItDoes": "Shows the git commit history. Select a commit to see its diff and details.",
+      "isPopular": false,
+      "aliases": ["commit history", "git log", "commits"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').git_commits()"
+    },
+    {
+      "name": "lsp_references",
+      "label": "Find References",
+      "description": "List references to the symbol under the cursor",
+      "whatItDoes": "Shows all places in your codebase that reference the symbol your cursor is on. Requires an LSP server.",
+      "isPopular": false,
+      "aliases": ["references", "usages", "find usages", "where used"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').lsp_references()"
+    },
+    {
+      "name": "lsp_definitions",
+      "label": "Go to Definition",
+      "description": "Go to the definition of the symbol under the cursor",
+      "whatItDoes": "Jumps to where the symbol under your cursor is defined. Requires an LSP server.",
+      "isPopular": false,
+      "aliases": ["definition", "go to definition", "jump to definition"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').lsp_definitions()"
+    },
+    {
+      "name": "diagnostics",
+      "label": "Show Diagnostics",
+      "description": "List all diagnostics (errors, warnings) in the workspace",
+      "whatItDoes": "Shows all errors, warnings, and hints from your LSP servers across the entire project.",
+      "isPopular": false,
+      "aliases": ["errors", "warnings", "problems", "lsp errors"],
+      "params": [
+        {
+          "name": "bufnr",
+          "type": "number",
+          "optional": true,
+          "description": "Buffer number (nil for all buffers)"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('telescope.builtin').diagnostics($params)"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "find-lua-files",
+      "baseFunctionName": "live_grep",
+      "label": "Search in Lua Files",
+      "shortDescription": "Search text in Lua files only",
+      "whatItDoes": "Searches file contents filtered to only .lua files. Useful when working on Neovim config.",
+      "aliases": ["lua files", "config files", "search lua"],
+      "defaults": {
+        "glob_pattern": { "kind": "scalar", "value": "*.lua" }
+      }
+    },
+    {
+      "key": "find-hidden-files",
+      "baseFunctionName": "find_files",
+      "label": "Find Hidden Files",
+      "shortDescription": "Search files including hidden dotfiles",
+      "whatItDoes": "Opens the file finder including hidden files (dotfiles like .gitignore, .env, etc.).",
+      "aliases": ["dotfiles", "hidden", "find dotfiles"],
+      "defaults": {
+        "hidden": { "kind": "scalar", "value": true }
+      }
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "Telescope",
+      "description": "Open a Telescope picker by name. Without arguments, opens the builtin picker list.",
+      "template": ":Telescope {picker}",
+      "example": ":Telescope live_grep",
+      "sourceDoc": ":help :Telescope",
+      "params": [
+        {
+          "name": "picker",
+          "placeholder": "find_files",
+          "description": "Picker name to open (e.g. find_files, live_grep, buffers)."
+        }
+      ]
+    }
+  ],
+  "setup": {
+    "requirePath": "telescope"
+  }
+}

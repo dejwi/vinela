@@ -1,0 +1,409 @@
+{
+  "id": "substitute-nvim",
+  "pluginName": "substitute.nvim",
+  "pluginRepo": "https://github.com/gbprod/substitute.nvim",
+  "version": "1.0.0",
+  "description": "Operator motions to quickly substitute text objects with register contents, and exchange two text regions. A Lua rewrite of vim-subversive and vim-exchange.",
+  "author": "gbprod",
+  "category": "editor",
+  "tags": [
+    "substitute",
+    "exchange",
+    "operator",
+    "motion",
+    "register",
+    "text-objects"
+  ],
+  "tagline": "Quickly substitute text objects from registers and swap two text regions",
+  "setup": {
+    "requirePath": "substitute"
+  },
+  "options": [
+    {
+      "key": "on_substitute",
+      "label": "On Substitute Callback",
+      "description": "Lua function called after every substitution. Receives a params table with a 'register' field containing the register used. Example:\n\n  function(params)\n    -- params.register: the register used\n  end\n\nUseful for integrating with yanky.nvim: require('yanky.integration').substitute()",
+      "type": "lua",
+      "group": "Substitute",
+      "default": "nil",
+      "expectedReturnType": "void"
+    },
+    {
+      "key": "yank_substituted_text",
+      "label": "Yank Substituted Text",
+      "description": "When enabled, the text that was replaced during a substitution is pushed into the default register. Lets you swap two pieces of text by substituting one with the other and then pasting what was there.",
+      "type": "boolean",
+      "group": "Substitute",
+      "default": false
+    },
+    {
+      "key": "preserve_cursor_position",
+      "label": "Preserve Cursor Position",
+      "description": "When enabled, the cursor stays at its original position after performing a substitution instead of moving to the start of the substituted text.",
+      "type": "boolean",
+      "group": "Substitute",
+      "default": false
+    },
+    {
+      "key": "modifiers",
+      "label": "Default Text Modifiers",
+      "description": "Text transformations applied to register contents before substitution. Can be a list of modifier names or a function that returns a list based on context. Available modifiers: 'linewise' (force new line), 'reindent' (fix indentation), 'trim' (strip whitespace), 'join' (collapse to one line). Leave as nil to use register contents as-is.\n\nExample (array): { 'trim', 'reindent' }\nExample (function): function(state) return { 'trim' } end",
+      "type": "lua",
+      "group": "Substitute",
+      "default": "nil",
+      "expectedReturnType": "any"
+    },
+    {
+      "key": "highlight_substituted_text.enabled",
+      "label": "Highlight Substituted Text",
+      "description": "Briefly highlight the text that was just substituted so you can see exactly what changed.",
+      "type": "boolean",
+      "group": "Highlight",
+      "default": true
+    },
+    {
+      "key": "highlight_substituted_text.timer",
+      "label": "Highlight Duration (ms)",
+      "description": "How long in milliseconds to show the substitution highlight before it fades out.",
+      "type": "number",
+      "group": "Highlight",
+      "default": 500,
+      "validation": {
+        "min": 50,
+        "max": 5000,
+        "step": 50,
+        "integer": true
+      },
+      "visibleWhen": {
+        "key": "highlight_substituted_text.enabled",
+        "equals": true
+      }
+    },
+    {
+      "key": "exchange.use_esc_to_cancel",
+      "label": "Use Esc to Cancel Exchange",
+      "description": "When enabled, pressing Escape cancels a pending exchange selection. If you disable this, map the cancel function to a key instead (e.g., 'sxc').",
+      "type": "boolean",
+      "group": "Exchange",
+      "default": true
+    },
+    {
+      "key": "exchange.preserve_cursor_position",
+      "label": "Preserve Cursor Position After Exchange",
+      "description": "When enabled, the cursor stays at its original position after completing an exchange instead of moving to the exchanged text.",
+      "type": "boolean",
+      "group": "Exchange",
+      "default": false
+    },
+    {
+      "key": "exchange.motion",
+      "label": "Default Exchange Motion (Lua)",
+      "description": "Default motion to use for exchange. Plugin default is false (no default motion — user selects via keymap after pressing the exchange key). Set to a motion string like 'iw' to always operate on inner words, or leave as false to require a motion after each keypress.\n\nExample: 'iw'",
+      "type": "lua",
+      "group": "Exchange",
+      "default": "false",
+      "expectedReturnType": "any"
+    },
+    {
+      "key": "range.prefix",
+      "label": "Range Substitute Prefix",
+      "description": "The Ex command prefix used for range substitution. Use 's' for the built-in :substitute, or 'S' to use vim-abolish's :Subvert (case-aware substitution).",
+      "type": "select",
+      "group": "Range",
+      "default": "s",
+      "options": [
+        {
+          "value": "s",
+          "label": "s (built-in :substitute)"
+        },
+        {
+          "value": "S",
+          "label": "S (vim-abolish :Subvert)"
+        }
+      ]
+    },
+    {
+      "key": "range.prompt_current_text",
+      "label": "Pre-fill Replacement With Current Text",
+      "description": "When enabled, the replacement field in the substitute command is pre-filled with the matched text, giving you 's/word/word/g' to edit instead of 's/word//g'.",
+      "type": "boolean",
+      "group": "Range",
+      "default": false
+    },
+    {
+      "key": "range.confirm",
+      "label": "Confirm Each Substitution",
+      "description": "When enabled, Neovim will prompt you to confirm each individual substitution before making the change.",
+      "type": "boolean",
+      "group": "Range",
+      "default": false
+    },
+    {
+      "key": "range.complete_word",
+      "label": "Match Complete Words Only",
+      "description": "When enabled, the subject text is wrapped in \\< \\> word boundaries, so 'foo' matches only the whole word 'foo' and not 'foobar'.",
+      "type": "boolean",
+      "group": "Range",
+      "default": false
+    },
+    {
+      "key": "range.auto_apply",
+      "label": "Auto-apply Range Substitution",
+      "description": "When enabled, the substitution is applied immediately without showing the command line for review. Use with caution — there's no chance to adjust the replacement text.",
+      "type": "boolean",
+      "group": "Range",
+      "default": false
+    },
+    {
+      "key": "range.cursor_position",
+      "label": "Command Line Cursor Position",
+      "description": "Where to place the cursor in the command line after opening the range substitute prompt. 'End' places it after the replacement text; 'Start' places it at the beginning.",
+      "type": "select",
+      "group": "Range",
+      "default": "end",
+      "options": [
+        {
+          "value": "end",
+          "label": "End (after replacement text)"
+        },
+        {
+          "value": "start",
+          "label": "Start (before replacement text)"
+        }
+      ]
+    },
+    {
+      "key": "range.group_substituted_text",
+      "label": "Group Substituted Text",
+      "description": "When enabled, the matched subject text is wrapped in a capture group in the generated substitute command, allowing you to reference it as \\1 in the replacement. Useful for patterns like 's/\\(word\\)/prefix_\\1/g'.",
+      "type": "boolean",
+      "group": "Range",
+      "default": false
+    },
+    {
+      "key": "range.suffix",
+      "label": "Substitute Command Suffix",
+      "description": "String appended to the end of the generated substitute command. Use to add flags like 'g' (replace all occurrences), 'I' (case-sensitive), etc. Leave empty to let the user type flags manually.",
+      "type": "string",
+      "group": "Range",
+      "default": ""
+    },
+    {
+      "key": "range.register",
+      "label": "Range Substitute Register",
+      "description": "Register to use as the subject text source for range substitution. Leave empty to use the current word under the cursor. Set to a single character like '\"' or '+' to pull from a named register.",
+      "type": "string",
+      "group": "Range",
+      "default": ""
+    },
+    {
+      "key": "range.subject",
+      "label": "Range Subject (Lua)",
+      "description": "Advanced: override what text is used as the substitution subject. Accepts a string motion (e.g. 'iw'), a function returning a string, or a table with a 'motion' key. Leave as nil to use the default behavior (word under cursor or visual selection).\n\nExample: 'iw'\nExample: { motion = 'iw' }",
+      "type": "lua",
+      "group": "Range",
+      "default": "nil",
+      "expectedReturnType": "any"
+    },
+    {
+      "key": "range.range",
+      "label": "Range Definition (Lua)",
+      "description": "Advanced: override the line range for substitution. Accepts a string motion (e.g. 'ip'), a function, or a table with an 'expand' key. Leave as nil to use the default behavior (motion after first keypress).\n\nExample: 'ip'\nExample: { expand = '<cword>' }",
+      "type": "lua",
+      "group": "Range",
+      "default": "nil",
+      "expectedReturnType": "any"
+    }
+  ],
+  "functions": [
+    {
+      "name": "operator",
+      "label": "Substitute (with motion)",
+      "description": "Substitute the text object from the next motion with register contents. Dot-repeatable.",
+      "whatItDoes": "After pressing the key mapped to this function, wait for a motion (e.g., 'iw' for inner word, 'ip' for paragraph) and the selected text is replaced with the default register contents.",
+      "isPopular": true,
+      "aliases": [
+        "substitute operator",
+        "replace motion",
+        "paste over"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute').operator()"
+    },
+    {
+      "name": "line",
+      "label": "Substitute Line",
+      "description": "Substitute the entire current line with register contents.",
+      "whatItDoes": "Replaces the whole line the cursor is on with whatever is in the default register.",
+      "isPopular": true,
+      "aliases": [
+        "substitute line",
+        "replace line"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute').line()"
+    },
+    {
+      "name": "eol",
+      "label": "Substitute to End of Line",
+      "description": "Substitute from the cursor position to the end of the line with register contents.",
+      "whatItDoes": "Replaces everything from the cursor to the end of the line with the default register contents.",
+      "isPopular": false,
+      "aliases": [
+        "substitute eol",
+        "replace to end"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute').eol()"
+    },
+    {
+      "name": "visual",
+      "label": "Substitute Visual Selection",
+      "description": "Substitute the current visual selection with register contents.",
+      "whatItDoes": "Replaces the highlighted visual selection with the default register contents. Use this as a visual-mode mapping.",
+      "isPopular": true,
+      "aliases": [
+        "substitute visual",
+        "replace selection"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute').visual()"
+    },
+    {
+      "name": "exchange_operator",
+      "label": "Exchange (with motion)",
+      "description": "Mark the first region for exchange, then invoke again to swap with a second region.",
+      "whatItDoes": "First press marks a text region (e.g., a word). Press again on a different region to swap the two. Dot-repeatable for the second press.",
+      "isPopular": true,
+      "aliases": [
+        "exchange operator",
+        "swap text",
+        "swap motion"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute.exchange').operator()"
+    },
+    {
+      "name": "exchange_line",
+      "label": "Exchange Line",
+      "description": "Mark the current line for exchange. Invoke again on another line to swap them.",
+      "whatItDoes": "Selects the entire current line as the first exchange region. Then move to another line and invoke again to swap the two lines.",
+      "isPopular": false,
+      "aliases": [
+        "exchange line",
+        "swap line"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute.exchange').line()"
+    },
+    {
+      "name": "exchange_visual",
+      "label": "Exchange Visual Selection",
+      "description": "Mark the visual selection for exchange. Invoke again on another selection to swap them.",
+      "whatItDoes": "Selects the highlighted visual region as the first exchange region. Move to another location, make a visual selection, and invoke again to swap.",
+      "isPopular": false,
+      "aliases": [
+        "exchange visual",
+        "swap visual selection"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute.exchange').visual()"
+    },
+    {
+      "name": "exchange_cancel",
+      "label": "Cancel Exchange",
+      "description": "Cancel a pending exchange selection without making any changes.",
+      "whatItDoes": "If you have marked the first exchange region but changed your mind, this clears the selection so you can start over.",
+      "isPopular": false,
+      "aliases": [
+        "cancel exchange",
+        "abort exchange",
+        "clear exchange"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute.exchange').cancel()"
+    },
+    {
+      "name": "range_operator",
+      "label": "Range Substitute (with two motions)",
+      "description": "Open a :substitute command pre-filled to replace the first motion's text across the second motion's line range.",
+      "whatItDoes": "After pressing the key, select what to replace (first motion), then select the range of lines to apply it to (second motion). The command line opens pre-filled for you to type the replacement.",
+      "isPopular": false,
+      "aliases": [
+        "range substitute",
+        "substitute range",
+        "replace in range"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute.range').operator()"
+    },
+    {
+      "name": "range_visual",
+      "label": "Range Substitute (from visual selection)",
+      "description": "Use a visual selection as the subject to replace, then pick a motion for the line range.",
+      "whatItDoes": "Select the text to replace visually, then invoke and pick a motion to define the range of lines. Opens the command line pre-filled.",
+      "isPopular": false,
+      "aliases": [
+        "range substitute visual"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute.range').visual()"
+    },
+    {
+      "name": "range_word",
+      "label": "Range Substitute (word under cursor)",
+      "description": "Use the word under the cursor as the subject, then pick a motion for the line range.",
+      "whatItDoes": "Treats the complete word under the cursor as the text to replace. Then pick a range motion (e.g., 'ip' for paragraph). Enforces word boundaries automatically.",
+      "isPopular": false,
+      "aliases": [
+        "range substitute word",
+        "replace word in range"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('substitute.range').word()"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "substitute-with-motion",
+      "baseFunctionName": "operator",
+      "label": "Substitute with Motion",
+      "shortDescription": "Replace the next motion's text object with register contents",
+      "whatItDoes": "Map this to a key (e.g., 's'). After pressing the key, type any motion (e.g., 'iw' for inner word, 'ap' for a paragraph) and that region is replaced with your register contents. Dot-repeatable.",
+      "isPopular": true,
+      "aliases": [
+        "replace motion",
+        "paste over motion",
+        "substitute operator"
+      ],
+      "defaults": {}
+    },
+    {
+      "key": "exchange-two-regions",
+      "baseFunctionName": "exchange_operator",
+      "label": "Exchange Text Regions",
+      "shortDescription": "Swap two text regions using back-to-back exchange motions",
+      "whatItDoes": "Map this to a key (e.g., 'sx'). Press once to mark the first region (e.g., 'sxiw' for a word). Press again on a different region to swap the two in place.",
+      "isPopular": true,
+      "aliases": [
+        "swap words",
+        "transpose text",
+        "exchange operator"
+      ],
+      "defaults": {}
+    }
+  ],
+  "events": [],
+  "exCommands": []
+}

@@ -1,0 +1,132 @@
+/* React Flow dark mode overrides */
+
+/* Controls panel - using !important to ensure override */
+.react-flow__controls {
+  background-color: #1c1c1c !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3) !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background-color: #1c1c1c !important;
+  border: none !important;
+  border-bottom: 1px solid #333 !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  padding: 6px !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+
+.react-flow__controls-button:hover {
+  background-color: #2a2a2a !important;
+}
+
+.react-flow__controls-button svg {
+  fill: #e5e5e5 !important;
+  width: 16px !important;
+  height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+}
+
+.react-flow__controls-button svg path {
+  fill: #e5e5e5 !important;
+}
+
+/* MiniMap */
+.react-flow__minimap {
+  background-color: #1c1c1c !important;
+  border: 1px solid #333 !important;
+  border-radius: 8px !important;
+}
+
+.react-flow__minimap-mask {
+  fill: #0a0a0a !important;
+  opacity: 0.9 !important;
+}
+
+.react-flow__minimap-node {
+  fill: #666 !important;
+  stroke: none !important;
+}
+
+/* Edges */
+.react-flow__edge-path {
+  stroke: #888 !important;
+  stroke-width: 2 !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge:focus .react-flow__edge-path,
+.react-flow__edge:focus-visible .react-flow__edge-path {
+  stroke: #f59e0b !important;
+}
+
+/* Connection line while dragging */
+.react-flow__connection-line {
+  stroke: #f59e0b !important;
+  stroke-width: 2 !important;
+}
+
+/* Handle styling */
+.react-flow__handle {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: #1c1c1c !important;
+  border: 2px solid #888 !important;
+}
+
+.react-flow__handle:hover {
+  border-color: #f59e0b !important;
+}
+
+.react-flow__handle-connecting {
+  border-color: #f59e0b !important;
+}
+
+/* Selection box */
+.react-flow__selection {
+  background: rgba(245, 158, 11, 0.1) !important;
+  border: 1px dashed #f59e0b !important;
+}
+
+/* Background */
+.react-flow__background {
+  background-color: #0a0a0a !important;
+}
+
+/* Edge hover — show pointer cursor on the invisible interaction path */
+.react-flow__edge-interaction {
+  cursor: pointer;
+}
+
+/* Delete button shown at edge midpoint on hover / selection */
+.edge-delete-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #dc2626;
+  border: 2px solid #1a1a1a;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.1s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.edge-delete-button:hover {
+  transform: scale(1.2);
+  background: #ef4444;
+}

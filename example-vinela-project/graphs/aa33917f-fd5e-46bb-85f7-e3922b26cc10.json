@@ -1,0 +1,47 @@
+{
+  "id": "aa33917f-fd5e-46bb-85f7-e3922b26cc10",
+  "name": "tabline",
+  "nodes": [
+    {
+      "id": "c6c2a2d1-e057-4444-8150-3768d74f0e06",
+      "type": "trigger",
+      "definitionId": "trigger",
+      "position": {
+        "x": 81.99048061273837,
+        "y": 353.4147685570733
+      },
+      "data": {
+        "nodeType": "trigger",
+        "triggerType": "startup"
+      }
+    },
+    {
+      "id": "c2a022c6-5e7d-4e21-b469-80176ee8891c",
+      "type": "code-block",
+      "definitionId": "code-block",
+      "position": {
+        "x": 360.5936689378491,
+        "y": 445.5481955817941
+      },
+      "data": {
+        "nodeType": "code-block",
+        "code": "vim.cmd [[\n  function MyTabLabel(n)\n    let buflist = tabpagebuflist(a:n)\n    let winnr = tabpagewinnr(a:n)\n    return fnamemodify(bufname(buflist[winnr - 1]), ':t')\n  endfunction\n\n\tfunction MyTabLine()\n\t  let s = ''\n\t  for i in range(tabpagenr('$'))\n\t    \" select the highlighting\n\t    if i + 1 == tabpagenr()\n\t      let s ..= '%#TabLineSel#'\n\t    else\n\t      let s ..= '%#TabLine#'\n\t    endif\n\n\t    \" set the tab page number (for mouse clicks)\n\t    let s ..= '%' .. (i + 1) .. 'T'\n\n\t    \" the label is made by MyTabLabel()\n\t    let s ..= ' %{MyTabLabel(' .. (i + 1) .. ')} '\n\t  endfor\n\n\t  \" after the last tab page fill with TabLineFill and reset tab page nr\n\t  let s ..= '%#TabLineFill#%T'\n\n\t  \" right-align the label to close the current tab page\n\t  if tabpagenr('$') > 1\n\t    let s ..= '%=%#TabLine#%999Xclose'\n\t  endif\n\n\t  return s\n\tendfunction\n]]\n\nvim.cmd(\"set tabline=%!MyTabLine()\")\n",
+        "inputs": [],
+        "outputs": []
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-c6c2a2d1-e057-4444-8150-3768d74f0e06-c2a022c6-5e7d-4e21-b469-80176ee8891c-1785658358902",
+      "source": "c6c2a2d1-e057-4444-8150-3768d74f0e06",
+      "sourcePort": "exec",
+      "target": "c2a022c6-5e7d-4e21-b469-80176ee8891c",
+      "targetPort": "exec"
+    }
+  ],
+  "createdAt": 1785658348715,
+  "updatedAt": 1785658362528,
+  "enabled": true,
+  "order": 0
+}

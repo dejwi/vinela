@@ -1,0 +1,13 @@
+{
+  "enabledServers": [
+    "clangd",
+    "cssls",
+    "gdscript",
+    "html",
+    "lua_ls",
+    "pyright",
+    "rust_analyzer",
+    "tailwindcss",
+    "vtsls"
+  ]
+}

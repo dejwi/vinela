@@ -1,0 +1,269 @@
+{
+  "configVersion": 2,
+  "plugins": [
+    {
+      "schemaId": "nvim-treesitter",
+      "enabled": true,
+      "config": {
+        "auto_install": true,
+        "ensure_installed": [
+          "c",
+          "lua",
+          "markdown",
+          "typescript",
+          "python",
+          "javascript"
+        ]
+      },
+      "addedAt": 1772915409771
+    },
+    {
+      "schemaId": "nvim-surround",
+      "enabled": true,
+      "config": {
+        "surrounds": "{\n  -- Example: add markdown bold surrounding\n  -- [\"*\"] = {\n  --   add = { \"**\", \"**\" },\n  --   find = \"%*%*.-%*%*\",\n  --   delete = \"^(%*%*)().-(%*%*)()$\",\n  -- },\n  -- Example: disable the 'i' (interactive) surround\n  -- [\"i\"] = false,\n}"
+      },
+      "addedAt": 1772915535107
+    },
+    {
+      "schemaId": "auto-session",
+      "enabled": true,
+      "config": {
+        "auto_restore": false,
+        "suppressed_dirs": [
+          "~/",
+          "~/Dev/",
+          "~/Downloads",
+          "~/Documents",
+          "~/Desktop"
+        ]
+      },
+      "addedAt": 1772915591875
+    },
+    {
+      "schemaId": "blink-cmp",
+      "enabled": true,
+      "config": {
+        "keymap": {
+          "preset": "super-tab",
+          "overrides": {
+            "<C-k>": [
+              "select_prev",
+              "fallback"
+            ],
+            "<c-j>": [
+              "select_next",
+              "fallback"
+            ],
+            "<cr>": [
+              "accept",
+              "fallback"
+            ]
+          }
+        },
+        "completion.documentation.auto_show": true,
+        "completion.trigger.show_on_keyword": false
+      },
+      "addedAt": 1772915789035
+    },
+    {
+      "schemaId": "mason-nvim",
+      "enabled": true,
+      "config": {},
+      "addedAt": 1776791610660
+    },
+    {
+      "schemaId": "nvim-lspconfig",
+      "enabled": true,
+      "config": {},
+      "addedAt": 1776791610679
+    },
+    {
+      "schemaId": "prettier-nvim",
+      "enabled": true,
+      "config": {
+        "filetypes": [
+          "css",
+          "graphql",
+          "html",
+          "javascript",
+          "javascriptreact",
+          "json",
+          "less",
+          "markdown",
+          "scss",
+          "typescript",
+          "typescriptreact",
+          "yaml"
+        ],
+        "bin": "prettierd",
+        "cli_options.tab_width": 2,
+        "cli_options.print_width": 80
+      },
+      "addedAt": 1777570881196
+    },
+    {
+      "schemaId": "vim-maximizer",
+      "enabled": true,
+      "config": {},
+      "addedAt": 1777571286053
+    },
+    {
+      "schemaId": "formatter-nvim",
+      "enabled": true,
+      "config": {
+        "presets": [
+          {
+            "filetype": "javascript",
+            "preset": "prettierd"
+          }
+        ],
+        "logging": false
+      },
+      "addedAt": 1777572276455
+    },
+    {
+      "schemaId": "snacks-nvim",
+      "enabled": true,
+      "config": {
+        "picker.sort.fields": [
+          "score:desc",
+          "#text",
+          "idx"
+        ],
+        "picker.layout.preset_fn": "function() return \"default\" end",
+        "picker.previewers.diff.cmd": [
+          "delta"
+        ],
+        "picker.previewers.diff.wo": "{}",
+        "picker.previewers.git.args": [],
+        "picker.toggles": "{}",
+        "picker.confirm": "nil",
+        "picker.win.input.keys": "{}",
+        "picker.win.list.keys": "{}",
+        "picker.win.preview.keys": "{}",
+        "picker.icons": "{}",
+        "picker.sources.explorer.win.input.keys": "{\n['<C-t>'] = { 'tab', mode = { 'i', 'n' } },\n[\"<Tab>\"] = { \"confirm\", mode = { \"n\", \"i\" } },\n[\"<CR>\"] = { \"confirm\", mode = { \"n\", \"i\" } },\n[\"<S-Tab>\"] = { \"select_and_next\", mode = { \"i\", \"n\" } },\n-- [\"<S-CR>\"] = { \"select_and_prev\", mode = { \"i\", \"n\" } }\n}",
+        "picker.sources.explorer.win.list.keys": "{\n-- ['<C-t>'] = 'tab',\n['<C-t>'] = 'tab',\n[\"<Tab>\"] = \"confirm\",\n[\"<CR>\"] = \"confirm\",\n[\"<S-Tab>\"] = { \"select_and_next\", mode = { \"x\", \"n\" } },\n-- [\"<S-CR>\"] = { \"select_and_prev\", mode = { \"x\", \"n\" } }\n}",
+        "picker.layouts": "{}",
+        "picker.actions": "{}",
+        "lazygit.args": [],
+        "lazygit.config": "{}",
+        "lazygit.theme": "{}",
+        "terminal.override": "function(cmd, opts) return cmd, opts end",
+        "indent.filter": "function(buf, win) return vim.bo[buf].buftype == '' end",
+        "dashboard.preset.keys": "{}",
+        "dashboard.formats": "{}",
+        "dashboard.sections": "{}",
+        "notifier.sort": [
+          "level",
+          "added"
+        ],
+        "notifier.level": "vim.log.levels.WARN",
+        "notifier.keep": "function(notif) return false end",
+        "notifier.style_fn": "function() return 'compact' end",
+        "scope.filter": "function(buf) return vim.bo[buf].buftype == '' end",
+        "scope.treesitter.field_blocks": [],
+        "statuscolumn.git.patterns": [
+          "GitSign",
+          "MiniDiffSign"
+        ],
+        "bigfile.setup": "function(ctx) end",
+        "quickfile.exclude": [
+          "latex"
+        ],
+        "scratch.ft": "function() return vim.bo.filetype end",
+        "scratch.win": "{}",
+        "scratch.win_by_ft": "{}",
+        "input.win": "{}",
+        "gitbrowse.remote_patterns": "{}",
+        "gitbrowse.url_patterns": "{}",
+        "zen.win": "{}",
+        "zen.toggles": "{}",
+        "zen.zoom": "{}",
+        "profiler.thresholds": "{}",
+        "profiler.presets": "{}",
+        "profiler.globals": [],
+        "profiler.icons": "{}",
+        "gh.keys": "{}",
+        "gh.wo": "{}",
+        "gh.bo": "{}",
+        "gh.icons": "{}",
+        "image.img_dirs": [
+          "img",
+          "images",
+          "assets",
+          "static",
+          "public",
+          "media",
+          "attachments"
+        ],
+        "image.wo": "{}",
+        "image.env": "{}",
+        "image.math.latex.packages": [],
+        "image.resolve": "function(path) return path end",
+        "win": "{}",
+        "styles": "{}",
+        "picker.enabled": true,
+        "explorer.enabled": true,
+        "lazygit.enabled": true,
+        "indent.enabled": true,
+        "picker.sources.explorer.hidden": true,
+        "picker.sources.explorer.ignored": true,
+        "picker.sources.files.hidden": false,
+        "picker.sources.files.formatters.file.filename_only": false,
+        "picker.sources.files.layout.preset": "telescope",
+        "picker.layout.preview": "true"
+      },
+      "addedAt": 1777818567312,
+      "luaFieldOverrides": {
+        "picker.sourcesRaw": false
+      }
+    },
+    {
+      "schemaId": "substitute-nvim",
+      "enabled": true,
+      "config": {},
+      "addedAt": 1778928328060
+    },
+    {
+      "schemaId": "nvim-web-devicons",
+      "enabled": true,
+      "config": {},
+      "addedAt": 1781359789640
+    },
+    {
+      "schemaId": "vim-tmux-navigator",
+      "enabled": true,
+      "config": {},
+      "addedAt": 1783777620534
+    },
+    {
+      "schemaId": "nightfox",
+      "enabled": true,
+      "config": {},
+      "addedAt": 1783791631121
+    },
+    {
+      "schemaId": "codediff-nvim",
+      "enabled": true,
+      "config": {
+        "diff.conflict_result_width_ratio": [
+          1,
+          1,
+          1
+        ],
+        "explorer.file_filter.ignore": [
+          ".git/**",
+          ".jj/**"
+        ],
+        "diff.layout": "inline",
+        "explorer.focus_on_select": true,
+        "explorer.line_stats.enabled": true,
+        "explorer.line_stats.count_untracked": true,
+        "explorer.position": "left"
+      },
+      "addedAt": 1785652713934
+    }
+  ]
+}

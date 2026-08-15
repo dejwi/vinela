@@ -1,0 +1,323 @@
+{
+  "id": "prettier-nvim",
+  "pluginName": "prettier.nvim",
+  "pluginRepo": "https://github.com/MunifTanjim/prettier.nvim",
+  "version": "1.0.0",
+  "description": "Prettier code formatter integration for Neovim. Formats JavaScript, TypeScript, CSS, HTML, JSON, YAML, Markdown, and more using the Prettier CLI. Works standalone without null-ls — provides the :Prettier command and plug mappings. Optionally integrates with null-ls.nvim if installed.",
+  "author": "MunifTanjim",
+  "category": "utility",
+  "tags": ["formatter", "prettier", "javascript", "typescript", "css", "html", "lsp"],
+  "tagline": "Prettier standalone formatter for Neovim",
+  "dependencies": [],
+  "setup": {
+    "requirePath": "prettier",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "bin",
+      "label": "Formatter Binary",
+      "description": "Which Prettier binary to use. 'prettier' is the standard CLI tool. 'prettierd' is a faster daemon that persists between runs (requires prettierd v0.23.3+ installed separately).",
+      "type": "select",
+      "group": "General",
+      "default": "prettier",
+      "options": [
+        { "value": "prettier", "label": "prettier (standard CLI)" },
+        { "value": "prettierd", "label": "prettierd (daemon, faster)" }
+      ]
+    },
+    {
+      "key": "filetypes",
+      "label": "Filetypes",
+      "description": "List of Neovim filetypes that prettier.nvim will register as a formatter for. Remove any filetypes you don't want Prettier to handle.",
+      "type": "array",
+      "group": "General",
+      "default": [
+        "css",
+        "graphql",
+        "html",
+        "javascript",
+        "javascriptreact",
+        "json",
+        "less",
+        "markdown",
+        "scss",
+        "typescript",
+        "typescriptreact",
+        "yaml"
+      ],
+      "items": {
+        "itemType": "string"
+      },
+      "validation": {
+        "uniqueItems": true
+      }
+    },
+    {
+      "key": "cli_options.print_width",
+      "label": "Print Width",
+      "description": "Target line length Prettier will try to wrap at. This is a soft limit — Prettier may produce shorter or longer lines as needed for correctness.",
+      "type": "number",
+      "group": "Formatting",
+      "default": 80,
+      "validation": {
+        "min": 1,
+        "max": 500,
+        "integer": true
+      }
+    },
+    {
+      "key": "cli_options.tab_width",
+      "label": "Tab Width",
+      "description": "Number of spaces per indentation level.",
+      "type": "number",
+      "group": "Formatting",
+      "default": 2,
+      "validation": {
+        "min": 1,
+        "max": 16,
+        "integer": true
+      }
+    },
+    {
+      "key": "cli_options.use_tabs",
+      "label": "Use Tabs",
+      "description": "Indent with tabs instead of spaces. When enabled, Tab Width still controls alignment (Prettier uses SmartTabs behavior).",
+      "type": "boolean",
+      "group": "Formatting",
+      "default": false
+    },
+    {
+      "key": "cli_options.semi",
+      "label": "Semicolons",
+      "description": "Print semicolons at the end of every statement. When disabled, semicolons are only added where required to prevent ASI failures.",
+      "type": "boolean",
+      "group": "Formatting",
+      "default": true
+    },
+    {
+      "key": "cli_options.single_quote",
+      "label": "Single Quotes",
+      "description": "Use single quotes instead of double quotes in JavaScript and TypeScript. JSX always uses double quotes regardless of this setting.",
+      "type": "boolean",
+      "group": "Formatting",
+      "default": false
+    },
+    {
+      "key": "cli_options.trailing_comma",
+      "label": "Trailing Commas",
+      "description": "Controls where Prettier adds trailing commas in multi-line structures. 'All' is the Prettier v3 default (ES2017+). 'ES5' is the Prettier v2 default. 'None' never adds trailing commas.",
+      "type": "select",
+      "group": "Formatting",
+      "default": "all",
+      "options": [
+        { "value": "all", "label": "All (ES2017+, Prettier v3 default)" },
+        { "value": "es5", "label": "ES5 (objects, arrays only, Prettier v2 default)" },
+        { "value": "none", "label": "None (no trailing commas)" }
+      ]
+    },
+    {
+      "key": "cli_options.bracket_spacing",
+      "label": "Bracket Spacing",
+      "description": "Print spaces between brackets in object literals. When enabled: { foo: bar }. When disabled: {foo: bar}.",
+      "type": "boolean",
+      "group": "Quotes & Style",
+      "default": true
+    },
+    {
+      "key": "cli_options.bracket_same_line",
+      "label": "Bracket Same Line",
+      "description": "Put the closing '>' of a multi-line HTML/JSX element on the same line as the last attribute rather than on its own line.",
+      "type": "boolean",
+      "group": "Quotes & Style",
+      "default": false
+    },
+    {
+      "key": "cli_options.jsx_bracket_same_line",
+      "label": "JSX Bracket Same Line",
+      "description": "JSX-specific: put the closing '>' of a multi-line JSX opening tag on the same line as the last prop. This option applies only to JSX, while Bracket Same Line applies to HTML and other formats.",
+      "type": "boolean",
+      "group": "Quotes & Style",
+      "default": false
+    },
+    {
+      "key": "cli_options.jsx_single_quote",
+      "label": "JSX Single Quotes",
+      "description": "Use single quotes instead of double quotes in JSX attributes. This setting applies only to JSX, regardless of the main Single Quotes setting.",
+      "type": "boolean",
+      "group": "Quotes & Style",
+      "default": false
+    },
+    {
+      "key": "cli_options.quote_props",
+      "label": "Quote Props",
+      "description": "When to add quotes around object property names. 'As Needed' only quotes properties that require it. 'Consistent' quotes all if any requires it. 'Preserve' respects the input.",
+      "type": "select",
+      "group": "Quotes & Style",
+      "default": "as-needed",
+      "options": [
+        { "value": "as-needed", "label": "As Needed (default)" },
+        { "value": "consistent", "label": "Consistent (quote all if any needs quotes)" },
+        { "value": "preserve", "label": "Preserve (respect input)" }
+      ]
+    },
+    {
+      "key": "cli_options.arrow_parens",
+      "label": "Arrow Function Parentheses",
+      "description": "Include parentheses around a sole arrow function parameter. 'Always': (x) => x. 'Avoid': x => x.",
+      "type": "select",
+      "group": "Quotes & Style",
+      "default": "always",
+      "options": [
+        { "value": "always", "label": "Always — (x) => x" },
+        { "value": "avoid", "label": "Avoid — x => x (when possible)" }
+      ]
+    },
+    {
+      "key": "cli_options.single_attribute_per_line",
+      "label": "Single Attribute Per Line",
+      "description": "Enforce one attribute per line in HTML, Vue, and JSX elements.",
+      "type": "boolean",
+      "group": "Quotes & Style",
+      "default": false
+    },
+    {
+      "key": "cli_options.prose_wrap",
+      "label": "Prose Wrap",
+      "description": "How to wrap prose in Markdown files. 'Preserve' leaves existing line breaks unchanged. 'Always' wraps at print width. 'Never' puts each paragraph on a single line.",
+      "type": "select",
+      "group": "Prose & Markup",
+      "default": "preserve",
+      "options": [
+        { "value": "preserve", "label": "Preserve (keep existing wrapping)" },
+        { "value": "always", "label": "Always (wrap at print width)" },
+        { "value": "never", "label": "Never (single line per paragraph)" }
+      ]
+    },
+    {
+      "key": "cli_options.html_whitespace_sensitivity",
+      "label": "HTML Whitespace Sensitivity",
+      "description": "Whitespace handling in HTML, Vue, Angular, and Handlebars. 'CSS' respects CSS display rules. 'Strict' treats all tag whitespace as significant. 'Ignore' treats it as insignificant.",
+      "type": "select",
+      "group": "Prose & Markup",
+      "default": "css",
+      "options": [
+        { "value": "css", "label": "CSS (respect CSS display property)" },
+        { "value": "strict", "label": "Strict (all whitespace significant)" },
+        { "value": "ignore", "label": "Ignore (whitespace not significant)" }
+      ]
+    },
+    {
+      "key": "cli_options.embedded_language_formatting",
+      "label": "Embedded Language Formatting",
+      "description": "Whether Prettier should format code embedded in template literals or Markdown code blocks. 'Auto' attempts to detect and format. 'Off' disables this feature.",
+      "type": "select",
+      "group": "Prose & Markup",
+      "default": "auto",
+      "options": [
+        { "value": "auto", "label": "Auto (format when recognized)" },
+        { "value": "off", "label": "Off (never format embedded code)" }
+      ]
+    },
+    {
+      "key": "cli_options.end_of_line",
+      "label": "End of Line",
+      "description": "Line ending style. 'LF' is standard on Linux/macOS and in git repos. 'CRLF' is standard on Windows. 'Auto' maintains existing line endings.",
+      "type": "select",
+      "group": "Prose & Markup",
+      "default": "lf",
+      "options": [
+        { "value": "lf", "label": "LF — \\n (Linux/macOS, default)" },
+        { "value": "crlf", "label": "CRLF — \\r\\n (Windows)" },
+        { "value": "cr", "label": "CR — \\r (rare)" },
+        { "value": "auto", "label": "Auto (preserve existing)" }
+      ]
+    },
+    {
+      "key": "cli_options.vue_indent_script_and_style",
+      "label": "Vue: Indent Script and Style",
+      "description": "Indent the code inside <script> and <style> tags in Vue single-file components.",
+      "type": "boolean",
+      "group": "Prose & Markup",
+      "default": false
+    },
+    {
+      "key": "cli_options.config_precedence",
+      "label": "Config Precedence",
+      "description": "Controls how CLI options interact with project-level Prettier config files (.prettierrc, etc.). 'Prefer File' uses CLI options only when no config file is found. 'CLI Override' always applies CLI options on top of any file config. 'File Override' always lets the config file win.",
+      "type": "select",
+      "group": "Integration",
+      "default": "prefer-file",
+      "options": [
+        { "value": "prefer-file", "label": "Prefer File (CLI options as fallback only)" },
+        { "value": "cli-override", "label": "CLI Override (CLI options always win)" },
+        { "value": "file-override", "label": "File Override (config file always wins)" }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "format",
+      "label": "Format Buffer",
+      "description": "Format the current buffer with Prettier",
+      "whatItDoes": "Triggers Prettier to format the entire current buffer using the plugin's own API. Equivalent to running :Prettier. Works in standalone mode — no null-ls required.",
+      "isPopular": true,
+      "aliases": ["prettier format", "format with prettier", "run prettier"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('prettier').format('textDocument/formatting')"
+    },
+    {
+      "name": "format_range",
+      "label": "Format Range",
+      "description": "Format the current visual selection with Prettier",
+      "whatItDoes": "Triggers Prettier range formatting for the currently selected lines. Use this in visual mode mappings. Works in standalone mode — no null-ls required.",
+      "isPopular": false,
+      "aliases": ["prettier format range", "format selection with prettier"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "require('prettier').format('textDocument/rangeFormatting')"
+    },
+    {
+      "name": "config_exists",
+      "label": "Check Config Exists",
+      "description": "Check whether a Prettier configuration file exists in the current project",
+      "whatItDoes": "Returns true if a Prettier config file (.prettierrc, prettier.config.js, or 'prettier' key in package.json) is found in the project directory. Useful for conditionally enabling formatting.",
+      "isPopular": false,
+      "aliases": ["prettier config check", "has prettier config"],
+      "params": [
+        {
+          "name": "check_package_json",
+          "type": "boolean",
+          "optional": true,
+          "description": "Also check package.json for a 'prettier' key (default: true)"
+        }
+      ],
+      "returns": "boolean",
+      "luaCall": "require('prettier').config_exists({ check_package_json = $params.check_package_json })"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "format-on-save",
+      "baseFunctionName": "format",
+      "label": "Format on Save",
+      "shortDescription": "Run :Prettier on the buffer — wire to BufWritePre for auto-format on save",
+      "whatItDoes": "Invokes the :Prettier command to format the current buffer. Connect this to a BufWritePre trigger node in the graph editor to auto-format every time you save a file. Uses the standalone prettier.nvim command path — no null-ls required.",
+      "isPopular": true,
+      "aliases": ["auto format", "format on save", "prettier on save"],
+      "defaults": {}
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "Prettier",
+      "description": "Format the current buffer with Prettier. Works in both normal mode (full buffer) and visual mode (selected range). This is the primary interface for prettier.nvim in standalone mode (no null-ls).",
+      "template": ":Prettier",
+      "example": ":Prettier",
+      "sourceDoc": ":help :Prettier"
+    }
+  ]
+}

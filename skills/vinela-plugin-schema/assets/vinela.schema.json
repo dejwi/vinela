@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dejwi/vinela/main/schema/plugin-schema.schema.json",
+  "id": "replace-with-plugin-id",
+  "pluginName": "Replace with plugin name",
+  "pluginRepo": "https://github.com/replace-owner/replace-repository",
+  "version": "1.0.0",
+  "options": [],
+  "functions": []
+}

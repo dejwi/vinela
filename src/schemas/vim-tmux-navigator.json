@@ -1,0 +1,234 @@
+{
+  "id": "vim-tmux-navigator",
+  "pluginName": "vim-tmux-navigator",
+  "pluginRepo": "https://github.com/christoomey/vim-tmux-navigator",
+  "version": "1.0.0",
+  "description": "Seamless navigation between Vim splits and Tmux panes using the same hotkeys. Requires a matching tmux configuration.",
+  "author": "christoomey",
+  "stars": 5100,
+  "category": "navigation",
+  "tags": [
+    "tmux",
+    "navigation",
+    "splits",
+    "panes",
+    "terminal",
+    "workflow"
+  ],
+  "tagline": "Navigate Vim splits and Tmux panes seamlessly with Ctrl+hjkl",
+  "options": [
+    {
+      "key": "config",
+      "label": "Vimscript Global Config",
+      "description": "Raw Lua assignments for vim-tmux-navigator's global variables. vim-tmux-navigator is a Vimscript plugin with no require().setup() call — all configuration uses vim.g.* globals. Note: Vimscript reads these as integers, so use 1/0 (not true/false) for boolean options. The defaults shown here match the plugin's upstream defaults (all options off).",
+      "type": "lua",
+      "group": "General",
+      "default": "-- vim-tmux-navigator: Vimscript plugin — configure via vim.g globals (use 1/0 for booleans)\n-- vim.g.tmux_navigator_no_mappings = 1           -- uncomment to disable default <C-hjkl> mappings\n-- vim.g.tmux_navigator_save_on_switch = 1        -- 1 = save current buffer, 2 = save all buffers\n-- vim.g.tmux_navigator_disable_when_zoomed = 1   -- block navigation when Tmux pane is zoomed\n-- vim.g.tmux_navigator_preserve_zoom = 1         -- keep zoom when navigating to another pane\n-- vim.g.tmux_navigator_no_wrap = 1               -- disable wraparound at screen edges\n-- vim.g.tmux_navigator_disable_netrw_workaround = 1  -- keep netrw's default <C-l> behavior",
+      "expectedReturnType": "void"
+    },
+    {
+      "key": "no_mappings",
+      "label": "Disable Default Key Mappings (UI reference)",
+      "description": "When enabled, the plugin will not create any key mappings. You must define your own mappings using the TmuxNavigate* commands. Use this if the default Ctrl+hjkl bindings conflict with other plugins. NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior (use integer 1, not true).",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    },
+    {
+      "key": "save_on_switch",
+      "label": "Save Buffers on Switch (UI reference)",
+      "description": "Automatically save buffers when navigating from Vim to a Tmux pane. 0 = off, 1 = save current buffer (:update), 2 = save all buffers (:wall). NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "select",
+      "group": "General",
+      "default": "0",
+      "options": [
+        {
+          "value": "0",
+          "label": "Off (no auto-save)"
+        },
+        {
+          "value": "1",
+          "label": "Save current buffer (:update)"
+        },
+        {
+          "value": "2",
+          "label": "Save all buffers (:wall)"
+        }
+      ]
+    },
+    {
+      "key": "disable_when_zoomed",
+      "label": "Disable Navigation When Tmux Pane Is Zoomed (UI reference)",
+      "description": "When the Tmux pane running Vim is zoomed, block all outward navigation. Prevents accidentally unzooming when pressing navigation keys near the edge of the Vim window. NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    },
+    {
+      "key": "preserve_zoom",
+      "label": "Preserve Tmux Zoom When Leaving Vim (UI reference)",
+      "description": "When navigating from a zoomed Vim pane to another Tmux pane, keep the window zoomed. Has no effect when 'Disable Navigation When Zoomed' is enabled. NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "boolean",
+      "group": "General",
+      "default": false,
+      "visibleWhen": {
+        "key": "disable_when_zoomed",
+        "equals": false
+      }
+    },
+    {
+      "key": "no_wrap",
+      "label": "Disable Edge Wrapping (UI reference)",
+      "description": "Prevent navigation from wrapping around to the opposite side of the screen when at an edge. Requires additional tmux configuration — see the plugin README for the matching tmux bindings. NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    },
+    {
+      "key": "disable_netrw_workaround",
+      "label": "Disable netrw Workaround (UI reference)",
+      "description": "By default, the plugin overrides netrw's built-in Ctrl+l mapping so navigation still works in the file explorer. Enable this if you prefer to keep netrw's default Ctrl+l behavior. NOTE: This field is informational. Edit the 'Vimscript Global Config' field above to actually change this behavior.",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    }
+  ],
+  "functions": [
+    {
+      "name": "navigate_left",
+      "label": "Navigate Left",
+      "description": "Move to the Vim split or Tmux pane on the left",
+      "whatItDoes": "Moves focus to the split/pane to the left of the current one, crossing the Vim/Tmux boundary seamlessly.",
+      "isPopular": true,
+      "aliases": [
+        "go left",
+        "tmux left",
+        "split left"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('TmuxNavigateLeft')"
+    },
+    {
+      "name": "navigate_down",
+      "label": "Navigate Down",
+      "description": "Move to the Vim split or Tmux pane below",
+      "whatItDoes": "Moves focus to the split/pane below the current one, crossing the Vim/Tmux boundary seamlessly.",
+      "isPopular": true,
+      "aliases": [
+        "go down",
+        "tmux down",
+        "split down"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('TmuxNavigateDown')"
+    },
+    {
+      "name": "navigate_up",
+      "label": "Navigate Up",
+      "description": "Move to the Vim split or Tmux pane above",
+      "whatItDoes": "Moves focus to the split/pane above the current one, crossing the Vim/Tmux boundary seamlessly.",
+      "isPopular": true,
+      "aliases": [
+        "go up",
+        "tmux up",
+        "split up"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('TmuxNavigateUp')"
+    },
+    {
+      "name": "navigate_right",
+      "label": "Navigate Right",
+      "description": "Move to the Vim split or Tmux pane on the right",
+      "whatItDoes": "Moves focus to the split/pane to the right of the current one, crossing the Vim/Tmux boundary seamlessly.",
+      "isPopular": true,
+      "aliases": [
+        "go right",
+        "tmux right",
+        "split right"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('TmuxNavigateRight')"
+    },
+    {
+      "name": "navigate_previous",
+      "label": "Navigate to Previous Pane",
+      "description": "Jump back to the previously active split or pane",
+      "whatItDoes": "Returns focus to whichever Vim split or Tmux pane was active before the last navigation.",
+      "isPopular": false,
+      "aliases": [
+        "go back",
+        "previous pane",
+        "last pane",
+        "tmux previous"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('TmuxNavigatePrevious')"
+    },
+    {
+      "name": "process_list",
+      "label": "Show Process List (Debug)",
+      "description": "Display the list of processes in the current Tmux pane for debugging",
+      "whatItDoes": "Runs :TmuxNavigatorProcessList to show what processes are detected in the current pane. Useful when navigation is not working to verify that Vim is being detected correctly.",
+      "isPopular": false,
+      "aliases": [
+        "debug tmux",
+        "tmux process",
+        "navigator debug"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('TmuxNavigatorProcessList')"
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "TmuxNavigateLeft",
+      "description": "Navigate to the Vim split or Tmux pane on the left.",
+      "template": ":TmuxNavigateLeft",
+      "example": ":TmuxNavigateLeft",
+      "sourceDoc": ":help vim-tmux-navigator"
+    },
+    {
+      "name": "TmuxNavigateDown",
+      "description": "Navigate to the Vim split or Tmux pane below.",
+      "template": ":TmuxNavigateDown",
+      "example": ":TmuxNavigateDown",
+      "sourceDoc": ":help vim-tmux-navigator"
+    },
+    {
+      "name": "TmuxNavigateUp",
+      "description": "Navigate to the Vim split or Tmux pane above.",
+      "template": ":TmuxNavigateUp",
+      "example": ":TmuxNavigateUp",
+      "sourceDoc": ":help vim-tmux-navigator"
+    },
+    {
+      "name": "TmuxNavigateRight",
+      "description": "Navigate to the Vim split or Tmux pane on the right.",
+      "template": ":TmuxNavigateRight",
+      "example": ":TmuxNavigateRight",
+      "sourceDoc": ":help vim-tmux-navigator"
+    },
+    {
+      "name": "TmuxNavigatePrevious",
+      "description": "Jump back to the previously active Vim split or Tmux pane.",
+      "template": ":TmuxNavigatePrevious",
+      "example": ":TmuxNavigatePrevious",
+      "sourceDoc": ":help vim-tmux-navigator"
+    },
+    {
+      "name": "TmuxNavigatorProcessList",
+      "description": "Display the list of processes running in the current Tmux pane. Use this to diagnose issues where Vim is not being detected correctly.",
+      "template": ":TmuxNavigatorProcessList",
+      "example": ":TmuxNavigatorProcessList",
+      "sourceDoc": ":help vim-tmux-navigator"
+    }
+  ]
+}

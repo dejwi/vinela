@@ -1,0 +1,265 @@
+{
+  "id": "formatter-nvim",
+  "pluginName": "formatter.nvim",
+  "pluginRepo": "https://github.com/mhartington/formatter.nvim",
+  "version": "1.2.0",
+  "description": "A fast, asynchronous code formatting runner. Use Formatter Presets to enable popular formatters (prettierd, stylua, black, rustfmt, gofmt, biome, shfmt, sqlformat, clang-format) with zero Lua required, or use the Custom Formatters (Lua) escape hatch for full control. ⚠️ Prerequisites: You must install formatter binaries (prettierd, stylua, black, etc.) separately via your package manager. This plugin only executes CLI commands — it does not install them for you.",
+  "author": "mhartington",
+  "stars": 1500,
+  "category": "editor",
+  "tags": ["formatter", "format", "prettier", "stylua", "black", "lint", "code-style", "presets"],
+  "tagline": "Async code formatter runner — pick presets or write custom Lua for any filetype",
+  "generationRules": [
+    {
+      "kind": "conflict",
+      "left": "presets",
+      "right": "filetype",
+      "severity": "warning",
+      "when": "both-explicit",
+      "message": "Raw Lua in 'Custom Formatters (Lua)' overrides 'Formatter Presets'. Clear one to silence this warning."
+    }
+  ],
+
+  "options": [
+    {
+      "key": "logging",
+      "label": "Enable Logging",
+      "description": "Write formatter activity to a log file. Useful for debugging formatter issues. The log file path is shown in :messages after a format.",
+      "type": "boolean",
+      "group": "General",
+      "default": true
+    },
+    {
+      "key": "log_level",
+      "label": "Log Level",
+      "description": "Controls how verbose the log output is. Values: 0=TRACE (most verbose), 1=DEBUG, 2=INFO, 3=WARN (default — only problems), 4=ERROR, 5=OFF (no logging). Lower values log more.",
+      "type": "number",
+      "group": "General",
+      "default": 3,
+      "validation": {
+        "min": 0,
+        "max": 5,
+        "integer": true
+      },
+      "visibleWhen": {
+        "key": "logging",
+        "equals": true
+      }
+    },
+    {
+      "key": "presets",
+      "label": "Formatter Presets",
+      "description": "Map filetypes to built-in formatter.nvim presets using structured rows. Multiple rows for the same filetype run in order. The wildcard '*' applies to all filetypes. ⚠️ Each preset shells out to a CLI binary you must install yourself.",
+      "type": "mapping-table",
+      "group": "Formatters",
+      "default": [],
+      "columns": [
+        {
+          "key": "filetype",
+          "label": "Filetype",
+          "type": "select",
+          "options": [
+            { "value": "lua", "label": "Lua" },
+            { "value": "python", "label": "Python" },
+            { "value": "rust", "label": "Rust" },
+            { "value": "go", "label": "Go" },
+            { "value": "sh", "label": "Shell" },
+            { "value": "c", "label": "C" },
+            { "value": "cpp", "label": "C++" },
+            { "value": "javascript", "label": "JavaScript" },
+            { "value": "typescript", "label": "TypeScript" },
+            { "value": "javascriptreact", "label": "JSX" },
+            { "value": "typescriptreact", "label": "TSX" },
+            { "value": "css", "label": "CSS" },
+            { "value": "html", "label": "HTML" },
+            { "value": "json", "label": "JSON" },
+            { "value": "yaml", "label": "YAML" },
+            { "value": "markdown", "label": "Markdown" },
+            { "value": "graphql", "label": "GraphQL" },
+            { "value": "sql", "label": "SQL" },
+            { "value": "*", "label": "Any filetype (*)" }
+          ]
+        },
+        {
+          "key": "preset",
+          "label": "Preset",
+          "type": "select",
+          "autoFill": {
+            "kind": "value-by-column",
+            "sourceColumn": "filetype",
+            "fallback": "preserve",
+            "values": {
+              "lua": "stylua",
+              "python": "black",
+              "rust": "rustfmt",
+              "go": "gofmt",
+              "sh": "shfmt",
+              "c": "clangformat",
+              "cpp": "clangformat",
+              "javascript": "prettierd",
+              "typescript": "prettierd",
+              "javascriptreact": "prettierd",
+              "typescriptreact": "prettierd",
+              "css": "prettierd",
+              "html": "prettierd",
+              "json": "prettierd",
+              "yaml": "prettierd",
+              "markdown": "prettierd",
+              "graphql": "prettierd",
+              "sql": "sql_formatter",
+              "*": "remove_trailing_whitespace"
+            }
+          },
+          "options": [
+            { "value": "stylua", "label": "stylua" },
+            { "value": "black", "label": "black" },
+            { "value": "ruff", "label": "ruff format" },
+            { "value": "isort", "label": "isort" },
+            { "value": "rustfmt", "label": "rustfmt" },
+            { "value": "gofmt", "label": "gofmt" },
+            { "value": "goimports", "label": "goimports" },
+            { "value": "gofumpt", "label": "gofumpt" },
+            { "value": "shfmt", "label": "shfmt" },
+            { "value": "clangformat", "label": "clang-format" },
+            { "value": "prettierd", "label": "prettierd" },
+            { "value": "prettier", "label": "prettier" },
+            { "value": "biome", "label": "biome" },
+            { "value": "yamlfmt", "label": "yamlfmt" },
+            { "value": "mdformat", "label": "mdformat" },
+            { "value": "sql_formatter", "label": "sql-formatter" },
+            { "value": "sqlfluff", "label": "sqlfluff" },
+            { "value": "remove_trailing_whitespace", "label": "remove trailing whitespace" }
+          ]
+        }
+      ],
+      "emit": {
+        "targetKey": "filetype",
+        "keyColumn": "filetype",
+        "valueColumn": "preset",
+        "valueTemplate": "require(\"formatter.filetypes.{{outputKey}}\").{{row.preset}}",
+        "outputKeyMap": {
+          "*": "any"
+        }
+      },
+      "conflictGroups": [
+        {
+          "column": "preset",
+          "values": ["prettierd", "prettier", "biome"],
+          "severity": "warning",
+          "message": "Filetype '{{key}}' has multiple competing formatter presets. Confirm this is intentional."
+        }
+      ]
+    },
+    {
+      "key": "filetype",
+      "label": "Custom Formatters (Lua)",
+      "description": "Custom Lua override for the entire 'filetype' table. If non-empty, this REPLACES the rows above (a warning will be emitted). Use only when the curated rows can't express your need.",
+      "type": "lua",
+      "group": "Formatters",
+      "inputPlaceholder": "local util = require(\"formatter.util\")\n\n{\n  -- Lua: use the built-in stylua preset\n  lua = {\n    require(\"formatter.filetypes.lua\").stylua,\n  },\n\n  -- Python: black for formatting\n  python = {\n    require(\"formatter.filetypes.python\").black,\n  },\n\n  -- Rust: built-in rustfmt preset\n  rust = {\n    require(\"formatter.filetypes.rust\").rustfmt,\n  },\n\n  -- Go: gofmt\n  go = {\n    require(\"formatter.filetypes.go\").gofmt,\n  },\n\n  -- Web files: prettierd (fast prettier daemon)\n  javascript = {\n    function()\n      return {\n        exe = \"prettierd\",\n        args = { util.escape_path(util.get_current_buffer_file_path()) },\n        stdin = true,\n      }\n    end,\n  },\n  typescript      = { require(\"formatter.filetypes.typescript\").prettierd },\n  javascriptreact = { require(\"formatter.filetypes.javascriptreact\").prettierd },\n  typescriptreact = { require(\"formatter.filetypes.typescriptreact\").prettierd },\n  css             = { require(\"formatter.filetypes.css\").prettierd },\n  json            = { require(\"formatter.filetypes.json\").prettierd },\n  yaml            = { require(\"formatter.filetypes.yaml\").prettierd },\n  html            = { require(\"formatter.filetypes.html\").prettierd },\n  markdown        = { require(\"formatter.filetypes.markdown\").prettierd },\n\n  -- Wildcard: remove trailing whitespace from any file\n  [\"*\"] = {\n    require(\"formatter.filetypes.any\").remove_trailing_whitespace,\n  },\n}",
+      "expectedReturnType": "table"
+    }
+  ],
+
+  "functions": [
+    {
+      "name": "format",
+      "label": "Format Buffer",
+      "description": "Format the current buffer using the configured formatters for its filetype",
+      "whatItDoes": "Runs all formatter functions mapped to the current buffer's filetype, applying the result asynchronously. Equivalent to :Format.",
+      "isPopular": true,
+      "aliases": ["format buffer", "run formatter", "format file"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('Format')"
+    },
+    {
+      "name": "format_write",
+      "label": "Format and Save",
+      "description": "Format the current buffer and write it to disk",
+      "whatItDoes": "Formats the current buffer and immediately saves it. Equivalent to :FormatWrite. Useful as an action in a BufWritePost autocmd graph node.",
+      "isPopular": true,
+      "aliases": ["format and save", "format write", "save with format"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('FormatWrite')"
+    },
+    {
+      "name": "format_lock",
+      "label": "Format Buffer (Locked)",
+      "description": "Format the current buffer with buffer locking enabled",
+      "whatItDoes": "Marks the buffer as non-modifiable while formatting runs, preventing concurrent edits. Equivalent to :FormatLock.",
+      "isPopular": false,
+      "aliases": ["format lock", "locked format"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('FormatLock')"
+    },
+    {
+      "name": "format_write_lock",
+      "label": "Format, Lock and Save",
+      "description": "Format with buffer locking and write to disk",
+      "whatItDoes": "Combines buffer locking, formatting, and saving in one operation. Equivalent to :FormatWriteLock.",
+      "isPopular": false,
+      "aliases": ["format write lock", "locked format and save"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('FormatWriteLock')"
+    }
+  ],
+
+  "functionTemplates": [
+    {
+      "key": "format-on-save-setup",
+      "baseFunctionName": "format_write",
+      "label": "Format on Save",
+      "shortDescription": "Format and save the buffer (use inside a BufWritePost autocmd node)",
+      "whatItDoes": "Triggers :FormatWrite — typically wired as the action of a BufWritePost autocmd so files are always formatted when saved.",
+      "isPopular": true,
+      "aliases": ["auto format", "format on save", "format write"],
+      "defaults": {}
+    }
+  ],
+
+  "events": [
+    "FormatterPre",
+    "FormatterPost"
+  ],
+
+  "exCommands": [
+    {
+      "name": "Format",
+      "description": "Format the current buffer using the configured formatters for its filetype. Runs asynchronously and does not save the file.",
+      "template": ":Format",
+      "example": ":Format",
+      "sourceDoc": ":help formatter.nvim"
+    },
+    {
+      "name": "FormatWrite",
+      "description": "Format the current buffer and write (save) it. The file is saved after all formatters complete. Commonly used in BufWritePost autocmds for format-on-save behavior.",
+      "template": ":FormatWrite",
+      "example": ":FormatWrite",
+      "sourceDoc": ":help formatter.nvim"
+    },
+    {
+      "name": "FormatLock",
+      "description": "Format the current buffer with buffer locking. Sets 'modifiable' to false while formatting runs, preventing edits from interfering with the formatter output.",
+      "template": ":FormatLock",
+      "example": ":FormatLock",
+      "sourceDoc": ":help formatter.nvim"
+    },
+    {
+      "name": "FormatWriteLock",
+      "description": "Format the current buffer with buffer locking, then write it to disk. Combines the safety of FormatLock with the convenience of FormatWrite.",
+      "template": ":FormatWriteLock",
+      "example": ":FormatWriteLock",
+      "sourceDoc": ":help formatter.nvim"
+    }
+  ],
+
+  "setup": {
+    "requirePath": "formatter",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "id": "vague",
+  "pluginName": "vague.nvim",
+  "pluginRepo": "https://github.com/vague-theme/vague.nvim",
+  "version": "1.0.0",
+  "description": "Minimal dark theme with a focused, low-distraction color palette and semantic overrides.",
+  "author": "vague2k",
+  "stars": 1200,
+  "category": "ui",
+  "tagline": "Muted dark palette with modern semantic highlights",
+  "tags": ["colorscheme", "theme", "dark", "vague", "#141415", "#7e98e8", "#d8647e"],
+  "setup": { "requirePath": "vague", "setupFunction": "setup", "optionMapping": "table" },
+  "options": [
+    { "key": "transparent", "label": "Transparent Background", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "style.boolean", "label": "Boolean Style", "type": "select", "group": "Styles", "default": "bold", "options": [{ "value": "none", "label": "None" }, { "value": "bold", "label": "Bold" }, { "value": "italic", "label": "Italic" }, { "value": "bold,italic", "label": "Bold + Italic" }] },
+    { "key": "style.functions", "label": "Function Style", "type": "select", "group": "Styles", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "bold", "label": "Bold" }, { "value": "italic", "label": "Italic" }, { "value": "bold,italic", "label": "Bold + Italic" }] },
+    { "key": "style.comments", "label": "Comment Style", "type": "select", "group": "Styles", "default": "italic", "options": [{ "value": "none", "label": "None" }, { "value": "bold", "label": "Bold" }, { "value": "italic", "label": "Italic" }, { "value": "bold,italic", "label": "Bold + Italic" }] },
+    { "key": "style.keywords", "label": "Keyword Style", "type": "select", "group": "Styles", "default": "none", "options": [{ "value": "none", "label": "None" }, { "value": "bold", "label": "Bold" }, { "value": "italic", "label": "Italic" }, { "value": "bold,italic", "label": "Bold + Italic" }] },
+    { "key": "colors", "label": "Color Overrides", "type": "lua", "group": "Advanced", "default": "{}", "expectedReturnType": "table" },
+    { "key": "plugins", "label": "Plugin Overrides", "type": "lua", "group": "Integrations", "default": "{}", "expectedReturnType": "table" }
+  ],
+  "functions": [{ "name": "apply", "description": "Apply vague colorscheme.", "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Variant name; defaults to vague." }], "returns": "void", "luaCall": "vim.cmd('colorscheme ' .. ($params.variant or 'vague'))" }],
+  "exCommands": [],
+  "events": []
+}

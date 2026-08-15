@@ -1,0 +1,57 @@
+{
+  "id": "catppuccin",
+  "pluginName": "catppuccin",
+  "pluginRepo": "https://github.com/catppuccin/nvim",
+  "version": "1.0.0",
+  "description": "Soothing pastel theme for Neovim with four flavours and broad integration support.",
+  "author": "catppuccin",
+  "stars": 7000,
+  "category": "ui",
+  "tagline": "Pastel-first theme with four polished flavours",
+  "tags": ["colorscheme", "theme", "both", "latte", "frappe", "macchiato", "mocha", "#1e1e2e", "#89b4fa", "#f38ba8"],
+  "setup": {
+    "requirePath": "catppuccin",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "flavour",
+      "label": "Variant / Flavor",
+      "description": "Which Catppuccin flavour to use.",
+      "type": "select",
+      "group": "Appearance",
+      "default": "mocha",
+      "options": [
+        { "value": "latte", "label": "Latte" },
+        { "value": "frappe", "label": "Frappé" },
+        { "value": "macchiato", "label": "Macchiato" },
+        { "value": "mocha", "label": "Mocha" }
+      ]
+    },
+    { "key": "transparent_background", "label": "Transparent Background", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "term_colors", "label": "Set Terminal Colors", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "dim_inactive.enabled", "label": "Dim Inactive Windows", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "dim_inactive.shade", "label": "Inactive Shade Direction", "type": "select", "group": "Appearance", "default": "dark", "visibleWhen": { "key": "dim_inactive.enabled", "equals": true }, "options": [{ "value": "dark", "label": "Darken" }, { "value": "light", "label": "Lighten" }] },
+    { "key": "dim_inactive.percentage", "label": "Inactive Shade Amount", "type": "number", "group": "Appearance", "default": 0.15, "validation": { "min": 0, "max": 1, "step": 0.05 } },
+    { "key": "no_italic", "label": "Disable Italic", "type": "boolean", "group": "Styles", "default": false },
+    { "key": "no_bold", "label": "Disable Bold", "type": "boolean", "group": "Styles", "default": false },
+    { "key": "no_underline", "label": "Disable Underline", "type": "boolean", "group": "Styles", "default": false },
+    { "key": "styles.comments", "label": "Comment Style", "type": "array", "group": "Styles", "default": ["italic"], "items": { "itemType": "select", "options": [{ "value": "bold", "label": "Bold" }, { "value": "italic", "label": "Italic" }, { "value": "underline", "label": "Underline" }, { "value": "undercurl", "label": "Undercurl" }, { "value": "strikethrough", "label": "Strikethrough" }] } },
+    { "key": "styles.functions", "label": "Function Style", "type": "array", "group": "Styles", "default": [], "items": { "itemType": "select", "options": [{ "value": "bold", "label": "Bold" }, { "value": "italic", "label": "Italic" }, { "value": "underline", "label": "Underline" }, { "value": "undercurl", "label": "Undercurl" }, { "value": "strikethrough", "label": "Strikethrough" }] } },
+    { "key": "integrations", "label": "Integrations", "description": "Advanced integration table passthrough.", "type": "lua", "group": "Integrations", "default": "{\n  cmp = true,\n  treesitter = true,\n  native_lsp = { enabled = true },\n}", "expectedReturnType": "table" },
+    { "key": "color_overrides", "label": "Color Overrides", "type": "lua", "group": "Advanced", "default": "{}", "expectedReturnType": "table" },
+    { "key": "custom_highlights", "label": "Custom Highlights", "type": "lua", "group": "Advanced", "default": "function(C)\n  return {}\nend", "expectedReturnType": "table" }
+  ],
+  "functions": [
+    {
+      "name": "apply",
+      "description": "Apply a Catppuccin flavour.",
+      "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Flavour name; accepts latte/frappe/macchiato/mocha or full colorscheme name." }],
+      "returns": "void",
+      "luaCall": "local v = $params.variant or 'mocha'; local names = { latte = 'catppuccin-latte', frappe = 'catppuccin-frappe', macchiato = 'catppuccin-macchiato', mocha = 'catppuccin-mocha' }; vim.cmd('colorscheme ' .. (names[v] or v))"
+    }
+  ],
+  "exCommands": [],
+  "events": []
+}

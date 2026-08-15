@@ -1,0 +1,141 @@
+{
+  "id": "dotenv-nvim",
+  "pluginName": "dotenv.nvim",
+  "pluginRepo": "https://github.com/ellisonleao/dotenv.nvim",
+  "version": "1.0.0",
+  "description": "Loads .env files into Neovim's environment (vim.env) so environment variables are available to Lua scripts, LSP servers, and shell commands launched by Neovim.",
+  "author": "ellisonleao",
+  "category": "utility",
+  "tags": ["dotenv", "env", "environment", "secrets", "config"],
+  "tagline": "Load .env files into Neovim's environment variables",
+  "setup": {
+    "requirePath": "dotenv",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "enable_on_load",
+      "label": "Auto-Load on Startup",
+      "description": "Automatically load the .env file when Neovim starts. The file is searched upward from the current working directory. If false, use :Dotenv manually or call it from a graph.",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    },
+    {
+      "key": "verbose",
+      "label": "Verbose Notifications",
+      "description": "Show vim.notify messages when the .env file loads successfully or when it cannot be found. Useful for debugging environment setup issues.",
+      "type": "boolean",
+      "group": "General",
+      "default": false
+    },
+    {
+      "key": "file_name",
+      "label": "Env File Name",
+      "description": "Filename to search for when loading environment variables. The plugin searches upward from the current working directory, so you can use project-root .env files from any subdirectory.",
+      "type": "string",
+      "group": "General",
+      "default": ".env",
+      "validation": {
+        "minLength": 1,
+        "maxLength": 255
+      }
+    },
+    {
+      "key": "event",
+      "label": "Auto-Load Trigger Event",
+      "description": "Neovim autocmd event that triggers the auto-load. Only active when Auto-Load on Startup is enabled. Common choices: VimEnter (after Neovim fully starts), BufEnter (on every buffer), BufRead (when reading a file).",
+      "type": "string",
+      "group": "General",
+      "default": "VimEnter",
+      "visibleWhen": {
+        "key": "enable_on_load",
+        "equals": true
+      }
+    }
+  ],
+  "functions": [
+    {
+      "name": "load_dotenv",
+      "label": "Load .env File",
+      "description": "Load a .env file into vim.env. If no path is given, searches upward from the current working directory for the configured file name.",
+      "whatItDoes": "Reads a .env file and sets each KEY=VALUE pair as a Neovim environment variable (vim.env.KEY), making them available to Lua and to any process Neovim spawns.",
+      "isPopular": true,
+      "aliases": ["load env", "dotenv load", "load environment"],
+      "params": [
+        {
+          "name": "path",
+          "type": "string",
+          "optional": true,
+          "description": "Absolute or relative path to the .env file. Leave empty to search upward from cwd."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "vim.cmd('Dotenv ' .. ($params.path or ''))"
+    },
+    {
+      "name": "get_env_var",
+      "label": "Get Environment Variable",
+      "description": "Print the current value of an environment variable loaded by dotenv.nvim. Variable name is case-insensitive (automatically uppercased).",
+      "whatItDoes": "Looks up a key in vim.env and prints it to the Neovim command line. Useful for verifying that a .env file loaded correctly.",
+      "isPopular": false,
+      "aliases": ["get env", "dotenv get", "inspect variable"],
+      "params": [
+        {
+          "name": "var_name",
+          "type": "string",
+          "optional": false,
+          "description": "The environment variable name to look up (e.g., DATABASE_URL). Case-insensitive."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "vim.cmd('DotenvGet ' .. $params.var_name)"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "load-dotenv-from-config",
+      "baseFunctionName": "load_dotenv",
+      "label": "Load .env from Neovim Config Dir",
+      "shortDescription": "Load a .env file located in your Neovim config directory (~/.config/nvim/.env)",
+      "whatItDoes": "Loads environment variables from a .env file stored alongside your Neovim configuration.",
+      "defaults": {
+        "path": { "kind": "lua", "lua": "vim.fn.stdpath('config') .. '/.env'" }
+      },
+      "isPopular": true,
+      "aliases": ["load config env", "config dotenv"]
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "Dotenv",
+      "description": "Load a .env file into Neovim's environment. With no argument, searches upward from the current working directory for the configured file name (default: .env). With a path argument, loads that specific file.",
+      "template": ":Dotenv {path}",
+      "example": ":Dotenv ~/.config/nvim/.env",
+      "sourceDoc": ":help dotenv.nvim",
+      "params": [
+        {
+          "name": "path",
+          "placeholder": "/path/to/.env",
+          "description": "Optional path to a .env file. If omitted, searches upward from the current working directory."
+        }
+      ]
+    },
+    {
+      "name": "DotenvGet",
+      "description": "Print the current value of an environment variable that was loaded by dotenv.nvim. The variable name is automatically converted to uppercase.",
+      "template": ":DotenvGet {var}",
+      "example": ":DotenvGet DATABASE_URL",
+      "sourceDoc": ":help dotenv.nvim",
+      "params": [
+        {
+          "name": "var",
+          "placeholder": "MY_API_KEY",
+          "description": "Environment variable name to look up (e.g., DATABASE_URL, API_KEY). Case-insensitive."
+        }
+      ]
+    }
+  ]
+}

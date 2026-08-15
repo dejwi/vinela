@@ -1,0 +1,244 @@
+{
+  "id": "mini-pairs",
+  "pluginName": "mini.pairs",
+  "pluginRepo": "https://github.com/nvim-mini/mini.pairs",
+  "version": "1.0.0",
+  "description": "Minimal and fast autopairs plugin. Automatically inserts matching closing brackets, quotes, and other paired characters as you type, with smart neighborhood-based conditions.",
+  "author": "nvim-mini",
+  "category": "editor",
+  "tags": ["autopairs", "brackets", "quotes", "pairs", "editing", "mini"],
+  "tagline": "Minimal autopairs: smart bracket and quote completion as you type",
+  "setup": {
+    "requirePath": "mini.pairs"
+  },
+  "options": [
+    {
+      "key": "modes.insert",
+      "label": "Enable in Insert Mode",
+      "description": "Create pair mappings in Insert mode. This is the primary mode for autopairs and is enabled by default.",
+      "type": "boolean",
+      "group": "Modes",
+      "default": true
+    },
+    {
+      "key": "modes.command",
+      "label": "Enable in Command Mode",
+      "description": "Create pair mappings in Command-line mode (:). Disabled by default — can interfere with complex Ex commands.",
+      "type": "boolean",
+      "group": "Modes",
+      "default": false
+    },
+    {
+      "key": "modes.terminal",
+      "label": "Enable in Terminal Mode",
+      "description": "Create pair mappings in Terminal mode. Disabled by default — can conflict with interactive terminal programs like ipython or radian that have their own autopair behavior.",
+      "type": "boolean",
+      "group": "Modes",
+      "default": false
+    },
+    {
+      "key": "mappings",
+      "label": "Pair Mappings",
+      "description": "Table defining which characters trigger autopair behavior and how. Each key is the typed character. Each value is a table with: 'action' (\"open\", \"close\", or \"closeopen\"), 'pair' (two-char string), 'neigh_pattern' (Lua pattern matched against the two chars surrounding the cursor — \\r = line start, \\n = line end), and optional 'register' ({bs=true, cr=true} controlling <BS>/<CR> pair recognition). Set a key's value to false to disable that mapping entirely.",
+      "type": "lua",
+      "group": "Mappings",
+      "default": "{\n  ['('] = { action = 'open',      pair = '()',  neigh_pattern = '^[^\\\\]' },\n  ['['] = { action = 'open',      pair = '[]',  neigh_pattern = '^[^\\\\]' },\n  ['{'] = { action = 'open',      pair = '{}',  neigh_pattern = '^[^\\\\]' },\n\n  [')'] = { action = 'close',     pair = '()',  neigh_pattern = '^[^\\\\]' },\n  [']'] = { action = 'close',     pair = '[]',  neigh_pattern = '^[^\\\\]' },\n  ['}'] = { action = 'close',     pair = '{}',  neigh_pattern = '^[^\\\\]' },\n\n  -- Quotes: not recognized by <CR> (register.cr = false)\n  -- '\\'' only inserts pair when not preceded by a letter (avoids contractions)\n  ['\"'] = { action = 'closeopen', pair = '\"\"', neigh_pattern = '^[^\\\\]',   register = { cr = false } },\n  [\"'\"] = { action = 'closeopen', pair = \"''\", neigh_pattern = '^[^%a\\\\]', register = { cr = false } },\n  ['`'] = { action = 'closeopen', pair = '``',  neigh_pattern = '^[^\\\\]',   register = { cr = false } },\n}",
+      "expectedReturnType": "table"
+    }
+  ],
+  "functions": [
+    {
+      "name": "map",
+      "label": "Add Global Pair Mapping",
+      "description": "Register a global autopair mapping for a character in the given mode",
+      "whatItDoes": "Adds an autopair mapping globally (all buffers). Equivalent to calling MiniPairs.map(). Use this to add pairs like <> or $$ that aren't in the default config. Optionally supply a neigh_pattern (Lua pattern for cursor neighborhood) to control when the pair fires, and register_bs/register_cr to opt out of <BS>/<CR> recognition.",
+      "aliases": ["add pair", "register pair", "global pair"],
+      "isPopular": false,
+      "params": [
+        {
+          "name": "mode",
+          "type": "string",
+          "description": "Vim mode: 'i' (insert), 'c' (command), 't' (terminal)"
+        },
+        {
+          "name": "lhs",
+          "type": "string",
+          "description": "The character to map (e.g., '<', '$')"
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "description": "Pair action: 'open', 'close', or 'closeopen'"
+        },
+        {
+          "name": "pair",
+          "type": "string",
+          "description": "Two-character pair string (e.g., '<>', '$$')"
+        },
+        {
+          "name": "neigh_pattern",
+          "type": "string",
+          "optional": true,
+          "description": "Lua pattern matched against the two-character neighborhood around the cursor. \\r = line start, \\n = line end. E.g., '^[^%a]' = don't fire after a letter. Omit to use the plugin default (always fire)."
+        },
+        {
+          "name": "register_bs",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether <BS> should recognise this pair and delete both characters. Defaults to true."
+        },
+        {
+          "name": "register_cr",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether <CR> inside this pair should add an indented newline with closing char below. Defaults to true."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('mini.pairs').map($params.mode, $params.lhs, { action = $params.action, pair = $params.pair, neigh_pattern = $params.neigh_pattern, register = { bs = $params.register_bs, cr = $params.register_cr } })"
+    },
+    {
+      "name": "map_buf",
+      "label": "Add Buffer-Local Pair Mapping",
+      "description": "Register an autopair mapping for a character in the current buffer only",
+      "whatItDoes": "Adds an autopair mapping scoped to a single buffer. Useful in FileType autocmds to add language-specific pairs (e.g., $$ for LaTeX, | for Ruby blocks). Optionally supply neigh_pattern and register flags to fine-tune behavior.",
+      "aliases": ["buffer pair", "filetype pair", "local pair"],
+      "isPopular": false,
+      "params": [
+        {
+          "name": "mode",
+          "type": "string",
+          "description": "Vim mode: 'i' (insert), 'c' (command), 't' (terminal)"
+        },
+        {
+          "name": "lhs",
+          "type": "string",
+          "description": "The character to map (e.g., '$', '|')"
+        },
+        {
+          "name": "action",
+          "type": "string",
+          "description": "Pair action: 'open', 'close', or 'closeopen'"
+        },
+        {
+          "name": "pair",
+          "type": "string",
+          "description": "Two-character pair string (e.g., '$$', '||')"
+        },
+        {
+          "name": "neigh_pattern",
+          "type": "string",
+          "optional": true,
+          "description": "Lua pattern matched against the two-character neighborhood around the cursor. Omit to use the plugin default (always fire)."
+        },
+        {
+          "name": "register_bs",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether <BS> should recognise this pair and delete both characters. Defaults to true."
+        },
+        {
+          "name": "register_cr",
+          "type": "boolean",
+          "optional": true,
+          "description": "Whether <CR> inside this pair adds an indented newline. Defaults to true."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('mini.pairs').map_buf(0, $params.mode, $params.lhs, { action = $params.action, pair = $params.pair, neigh_pattern = $params.neigh_pattern, register = { bs = $params.register_bs, cr = $params.register_cr } })"
+    },
+    {
+      "name": "unmap",
+      "label": "Remove Global Pair Mapping",
+      "description": "Remove a previously registered global autopair mapping",
+      "whatItDoes": "Unregisters a global pair mapping added with MiniPairs.map(). Supply the exact pair string to ensure the pair is deregistered from <BS> and <CR> handlers.",
+      "aliases": ["remove pair", "delete pair", "unregister pair"],
+      "isPopular": false,
+      "params": [
+        {
+          "name": "mode",
+          "type": "string",
+          "description": "Vim mode the mapping is in: 'i', 'c', or 't'"
+        },
+        {
+          "name": "lhs",
+          "type": "string",
+          "description": "The character whose mapping to remove"
+        },
+        {
+          "name": "pair",
+          "type": "string",
+          "description": "The pair string to deregister (e.g., '()'). Supply '' to skip deregistration."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('mini.pairs').unmap($params.mode, $params.lhs, $params.pair)"
+    },
+    {
+      "name": "unmap_buf",
+      "label": "Remove Buffer-Local Pair Mapping",
+      "description": "Remove a buffer-local autopair mapping from the current buffer",
+      "whatItDoes": "Unregisters a buffer-local pair mapping added with MiniPairs.map_buf(). Only reverts map_buf() mappings — use inoremap <buffer> to revert global mappings on a per-buffer basis.",
+      "aliases": ["remove buffer pair", "delete local pair"],
+      "isPopular": false,
+      "params": [
+        {
+          "name": "mode",
+          "type": "string",
+          "description": "Vim mode the mapping is in: 'i', 'c', or 't'"
+        },
+        {
+          "name": "lhs",
+          "type": "string",
+          "description": "The character whose mapping to remove"
+        },
+        {
+          "name": "pair",
+          "type": "string",
+          "description": "The pair string to deregister. Supply '' to skip deregistration."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('mini.pairs').unmap_buf(0, $params.mode, $params.lhs, $params.pair)"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "add-angle-bracket-pair",
+      "baseFunctionName": "map",
+      "label": "Add <> Angle Bracket Pair",
+      "shortDescription": "Register < as an open pair mapping for angle brackets, guarded against comparisons",
+      "whatItDoes": "Adds < > as an autopair in Insert mode. The neigh_pattern '^[^%a<>]' prevents firing when < is preceded by a letter or another angle bracket, avoiding interference with comparison operators and generics.",
+      "aliases": ["angle brackets", "html pair", "generic pair"],
+      "isPopular": false,
+      "defaults": {
+        "mode":          { "kind": "scalar", "value": "i" },
+        "lhs":           { "kind": "scalar", "value": "<" },
+        "action":        { "kind": "scalar", "value": "open" },
+        "pair":          { "kind": "scalar", "value": "<>" },
+        "neigh_pattern": { "kind": "scalar", "value": "^[^%a<>]" },
+        "register_bs":   { "kind": "scalar", "value": true },
+        "register_cr":   { "kind": "scalar", "value": false }
+      }
+    },
+    {
+      "key": "add-dollar-pair",
+      "baseFunctionName": "map_buf",
+      "label": "Add $$ LaTeX Pair (Buffer-Local)",
+      "shortDescription": "Register $ as a closeopen pair for LaTeX math in the current buffer",
+      "whatItDoes": "Adds $$ as a buffer-local autopair for LaTeX math mode. register_cr is false because <CR> inside $$ should not insert an indented newline — math mode is typically inline. Typically used inside a FileType autocmd for tex files.",
+      "aliases": ["latex pair", "math pair", "dollar pair"],
+      "isPopular": false,
+      "defaults": {
+        "mode":        { "kind": "scalar", "value": "i" },
+        "lhs":         { "kind": "scalar", "value": "$" },
+        "action":      { "kind": "scalar", "value": "closeopen" },
+        "pair":        { "kind": "scalar", "value": "$$" },
+        "register_bs": { "kind": "scalar", "value": true },
+        "register_cr": { "kind": "scalar", "value": false }
+      }
+    }
+  ],
+  "events": [],
+  "exCommands": []
+}

@@ -1,0 +1,9 @@
+{
+  "id": "tokyonight",
+  "pluginName": "tokyonight.nvim",
+  "pluginRepo": "https://github.com/folke/tokyonight.nvim",
+  "version": "1.0.0",
+  "description": "Color scheme plugin: Tokyo Night Moon",
+  "options": [],
+  "functions": []
+}

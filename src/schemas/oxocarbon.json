@@ -1,0 +1,36 @@
+{
+  "id": "oxocarbon",
+  "pluginName": "oxocarbon.nvim",
+  "pluginRepo": "https://github.com/nyoom-engineering/oxocarbon.nvim",
+  "version": "1.0.0",
+  "description": "IBM Carbon-inspired colorscheme. This plugin is a pure colorscheme with no setup API.",
+  "author": "nyoom-engineering",
+  "stars": 1300,
+  "category": "ui",
+  "tagline": "Clean Carbon-inspired palette with dark and light variants",
+  "tags": ["colorscheme", "theme", "both", "oxocarbon", "oxocarbon-dark", "oxocarbon-light", "#161616", "#78a9ff", "#ee5396"],
+  "options": [
+    {
+      "key": "variant",
+      "label": "Variant / Flavor",
+      "description": "Dark or light background before applying the oxocarbon colorscheme.",
+      "type": "select",
+      "default": "dark",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "light", "label": "Light" }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "apply",
+      "description": "Apply this colorscheme.",
+      "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Background style (dark or light); defaults to dark." }],
+      "returns": "void",
+      "luaCall": "local v = $params.variant or 'dark'; vim.o.background = v; vim.cmd('colorscheme oxocarbon')"
+    }
+  ],
+  "exCommands": [],
+  "events": []
+}

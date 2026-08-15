@@ -1,0 +1,31 @@
+{
+  "id": "vscode-nvim",
+  "pluginName": "vscode.nvim",
+  "pluginRepo": "https://github.com/Mofiqul/vscode.nvim",
+  "version": "1.0.0",
+  "description": "VS Code-like theme for Neovim with dark and light styles and highlight override support.",
+  "author": "Mofiqul",
+  "stars": 3200,
+  "category": "ui",
+  "tagline": "VS Code-inspired palette with dark and light modes",
+  "tags": ["colorscheme", "theme", "both", "dark", "light", "#1f1f1f", "#569cd6", "#f44747"],
+  "setup": {
+    "requirePath": "vscode",
+    "setupFunction": "setup",
+    "optionMapping": "table",
+    "preSetup": "if vim.o.background ~= 'dark' and vim.o.background ~= 'light' then vim.o.background = 'dark' end"
+  },
+  "options": [
+    { "key": "style", "label": "Variant / Flavor", "type": "select", "group": "Appearance", "default": "dark", "options": [{ "value": "dark", "label": "Dark" }, { "value": "light", "label": "Light" }] },
+    { "key": "transparent", "label": "Transparent Background", "type": "boolean", "group": "Appearance", "default": false },
+    { "key": "italic_comments", "label": "Italic Comments", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "underline_links", "label": "Underline Links", "type": "boolean", "group": "Styles", "default": true },
+    { "key": "disable_nvimtree_bg", "label": "Disable NvimTree Background", "type": "boolean", "group": "Integrations", "default": true },
+    { "key": "terminal_colors", "label": "Set Terminal Colors", "type": "boolean", "group": "Appearance", "default": true },
+    { "key": "color_overrides", "label": "Color Overrides", "type": "lua", "group": "Advanced", "default": "{}", "expectedReturnType": "table" },
+    { "key": "group_overrides", "label": "Group Overrides", "type": "lua", "group": "Advanced", "default": "{}", "expectedReturnType": "table" }
+  ],
+  "functions": [{ "name": "apply", "description": "Apply vscode colorscheme.", "params": [{ "name": "variant", "type": "string", "optional": true, "description": "Style name (dark/light) or full colorscheme name; defaults to dark." }], "returns": "void", "luaCall": "local v = $params.variant or 'dark'; local styleToBackground = { dark = 'dark', light = 'light' }; local background = styleToBackground[v]; if background ~= nil then vim.o.background = background; vim.cmd('colorscheme vscode') else vim.cmd('colorscheme ' .. v) end" }],
+  "exCommands": [],
+  "events": []
+}

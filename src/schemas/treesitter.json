@@ -1,0 +1,122 @@
+{
+  "id": "nvim-treesitter",
+  "pluginName": "nvim-treesitter",
+  "pluginRepo": "https://github.com/nvim-treesitter/nvim-treesitter",
+  "version": "1.0.0",
+  "description": "Treesitter parser installer and query distribution for Neovim 0.12+. Vinela enables core FileType highlighting; install and update parsers explicitly with :TSInstall and :TSUpdate.",
+  "author": "nvim-treesitter",
+  "stars": 10800,
+  "category": "syntax",
+  "tags": ["treesitter", "highlighting", "syntax"],
+  "tagline": "Parser management and core syntax highlighting for Neovim 0.12+",
+  "pack": {
+    "version": { "mode": "ref", "value": "main" }
+  },
+  "options": [
+    {
+      "key": "highlight.enable",
+      "label": "Enable Highlighting",
+      "description": "Enable treesitter-based syntax highlighting via vim.treesitter.start on FileType. Missing or incompatible parsers are skipped without error. Neovim 0.12 provides core incremental selection mappings (:help treesitter-incremental-selection).",
+      "type": "boolean",
+      "group": "Highlight",
+      "default": true
+    },
+    {
+      "key": "highlight.disable",
+      "label": "Disable Highlighting For",
+      "description": "Parser language names (after vim.treesitter.language.get_lang resolution) to skip for treesitter highlighting.",
+      "type": "array",
+      "group": "Highlight",
+      "default": [],
+      "items": {
+        "itemType": "string"
+      },
+      "visibleWhen": {
+        "key": "highlight.enable",
+        "equals": true
+      }
+    }
+  ],
+  "functions": [
+    {
+      "name": "install_parser",
+      "label": "Install Parser",
+      "description": "Install a treesitter parser for a specific language",
+      "whatItDoes": "Runs :TSInstall asynchronously to download and install a Treesitter parser for the given language. Already-installed parsers are a no-op. Check :TSLog or :checkhealth nvim-treesitter for failures.",
+      "isPopular": false,
+      "aliases": ["install language", "add parser", "ts install"],
+      "params": [
+        {
+          "name": "language",
+          "type": "string",
+          "description": "Language name to install parser for (e.g., 'lua', 'python')"
+        }
+      ],
+      "returns": "void",
+      "luaCall": "vim.cmd('TSInstall ' .. $params.language)"
+    },
+    {
+      "name": "update_parsers",
+      "label": "Update All Parsers",
+      "description": "Update all installed treesitter parsers",
+      "whatItDoes": "Runs :TSUpdate asynchronously to refresh installed Treesitter parsers and queries to the current main-branch revisions. Run after updating nvim-treesitter, then restart or reopen affected buffers.",
+      "isPopular": false,
+      "aliases": ["update parsers", "ts update", "refresh parsers"],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('TSUpdate')"
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "TSInstall",
+      "description": "Asynchronously install one or more Treesitter parsers by language name. Already-installed parsers are a no-op.",
+      "template": ":TSInstall {language}",
+      "example": ":TSInstall python typescript",
+      "sourceDoc": ":help :TSInstall",
+      "params": [
+        {
+          "name": "language",
+          "placeholder": "lua",
+          "description": "Parser language(s) to install."
+        }
+      ]
+    },
+    {
+      "name": "TSUpdate",
+      "description": "Asynchronously update installed Treesitter parsers and queries. Specify languages to update specific parsers, or omit to update all installed parsers. Run after updating nvim-treesitter.",
+      "template": ":TSUpdate",
+      "example": ":TSUpdate lua python",
+      "sourceDoc": ":help :TSUpdate"
+    },
+    {
+      "name": "TSUninstall",
+      "description": "Delete one or more Treesitter parsers by language name.",
+      "template": ":TSUninstall {language}",
+      "example": ":TSUninstall python",
+      "sourceDoc": ":help :TSUninstall",
+      "params": [
+        {
+          "name": "language",
+          "placeholder": "lua",
+          "description": "Parser language(s) to uninstall."
+        }
+      ]
+    },
+    {
+      "name": "TSLog",
+      "description": "Open the nvim-treesitter log buffer for install/update diagnostics.",
+      "template": ":TSLog",
+      "example": ":TSLog",
+      "sourceDoc": ":help :TSLog"
+    }
+  ],
+  "setup": {
+    "requirePath": "nvim-treesitter",
+    "render": {
+      "kind": "lua-template",
+      "template": "local config = {{config}}\nif config.highlight and config.highlight.enable then\n  local highlight_disable = {}\n  for _, lang in ipairs(config.highlight.disable or {}) do\n    highlight_disable[lang] = true\n  end\n  local augroup = vim.api.nvim_create_augroup('VinelaNvimTreesitterHighlight', { clear = true })\n  vim.api.nvim_create_autocmd('FileType', {\n    group = augroup,\n    pattern = '*',\n    callback = function(args)\n      local lang_ok, lang = pcall(vim.treesitter.language.get_lang, vim.bo[args.buf].filetype)\n      if not lang_ok or not lang or highlight_disable[lang] then\n        return\n      end\n      pcall(vim.treesitter.start, args.buf, lang)\n    end,\n  })\nend"
+    }
+  }
+}

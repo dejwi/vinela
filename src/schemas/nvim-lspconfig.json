@@ -1,0 +1,81 @@
+{
+  "id": "nvim-lspconfig",
+  "pluginName": "nvim-lspconfig",
+  "pluginRepo": "https://github.com/neovim/nvim-lspconfig",
+  "version": "1.0.0",
+  "description": "Provides default configurations for 100+ language servers. Required for easy LSP setup — tells Neovim how to start each server, which filetypes it handles, and how to detect project roots. In Neovim 0.11+, nvim-lspconfig simply places config files in your runtimepath under lsp/<server>.lua. These are automatically loaded when you call vim.lsp.enable(). No require('lspconfig').setup() call is needed — just install the plugin and enable your servers.",
+  "author": "neovim",
+  "stars": 11000,
+  "category": "lsp",
+  "tags": ["lsp", "language-server", "config", "completion", "diagnostics"],
+  "tagline": "Default configurations for 100+ language servers",
+  "capabilities": [
+    {
+      "kind": "lsp-server-enabler",
+      "api": "vim.lsp.enable",
+      "minNvimVersion": "0.11"
+    }
+  ],
+  "dependencies": [],
+  "options": [],
+  "functions": [],
+  "exCommands": [
+    {
+      "name": "LspInfo",
+      "description": "Shows info about active and configured LSP servers for the current buffer.",
+      "template": ":LspInfo",
+      "example": ":LspInfo",
+      "sourceDoc": ":help :LspInfo",
+      "label": "LSP Info",
+      "shortDescription": "Show active LSP server info",
+      "whatItDoes": "Opens a floating window showing which language servers are running, their status, and which buffers they are attached to.",
+      "isPopular": true,
+      "aliases": ["lsp status", "server info"]
+    },
+    {
+      "name": "LspStart",
+      "description": "Manually start a language server for the current buffer.",
+      "template": ":LspStart {server_name}",
+      "example": ":LspStart lua_ls",
+      "sourceDoc": ":help :LspStart",
+      "label": "Start LSP Server",
+      "shortDescription": "Manually start a language server",
+      "params": [
+        {
+          "name": "server_name",
+          "placeholder": "lua_ls",
+          "description": "Name of the language server to start"
+        }
+      ],
+      "aliases": ["start server"]
+    },
+    {
+      "name": "LspStop",
+      "description": "Stop a running language server.",
+      "template": ":LspStop {server_name}",
+      "example": ":LspStop lua_ls",
+      "sourceDoc": ":help :LspStop",
+      "label": "Stop LSP Server",
+      "shortDescription": "Stop a running language server",
+      "params": [
+        {
+          "name": "server_name",
+          "placeholder": "lua_ls",
+          "description": "Name of the language server to stop"
+        }
+      ],
+      "aliases": ["stop server"]
+    },
+    {
+      "name": "LspRestart",
+      "description": "Restart the language server for the current buffer. Useful when LSP gets stuck or after config changes.",
+      "template": ":LspRestart",
+      "example": ":LspRestart",
+      "sourceDoc": ":help :LspRestart",
+      "label": "Restart LSP Server",
+      "shortDescription": "Restart the language server",
+      "isPopular": true,
+      "aliases": ["restart server", "lsp reset"]
+    }
+  ]
+}

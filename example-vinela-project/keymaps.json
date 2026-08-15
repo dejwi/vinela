@@ -1,0 +1,2098 @@
+{
+  "version": 1,
+  "keymaps": [
+    {
+      "id": "35d0f12e-9d00-45ce-910e-5083022b1ba3",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>ww",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":write",
+          "selectedActionKey": "write",
+          "paramValues": {}
+        }
+      },
+      "description": "save file",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "1bf59fcb-5a8e-439e-a2d1-9984e5cdf72e",
+      "modes": [
+        "n",
+        "x",
+        "v"
+      ],
+      "keySequence": "<leader>y",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "\"+y",
+          "selectedActionKey": "yank-clipboard",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "a7e9c01e-d5a8-4020-a36c-6e40dfa29d92",
+      "modes": [
+        "x",
+        "v"
+      ],
+      "keySequence": "<leader>d",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "\"+d",
+          "selectedActionKey": "cut-clipboard",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "7a36748c-ff51-4c2e-818f-42ca41f9134a",
+      "modes": [
+        "v"
+      ],
+      "keySequence": "J",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": ":m '>+1<CR>gv=gv",
+          "selectedActionKey": "move-line-down-visual",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "a870360b-b470-4598-b74e-275a71521f83",
+      "modes": [
+        "v"
+      ],
+      "keySequence": "K",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": ":m '<-2<CR>gv=gv",
+          "selectedActionKey": "move-line-up-visual",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "bbd0dbc8-bf8f-4eb1-a344-ba62e8fdeeb3",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<C-d>",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "<C-d>zz",
+          "selectedActionKey": "scroll-down-centered",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "ab7af0d6-b57c-4d66-ad39-3cabc1acd904",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<C-u>",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "<C-u>zz",
+          "selectedActionKey": "scroll-up-centered",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "7ea11dd1-401b-4958-9a04-f976e736b154",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<C-e>",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-keys",
+          "actionType": "keys",
+          "action": "<C-e>j",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "scroll one line down",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "50273f55-e9f4-4e31-9857-9d14cff91b51",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<C-y>",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-keys",
+          "actionType": "keys",
+          "action": "<C-y>k",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "scroll line up",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "ce5fd673-a164-46e1-a083-0c89f12076ac",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "n",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "nzzzv",
+          "selectedActionKey": "search-next-centered",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "7814cb3f-bd44-4f59-885d-5fcc19a4c713",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "N",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "Nzzzv",
+          "selectedActionKey": "search-prev-centered",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "1a840577-47c1-446f-8b42-74f27033ebc8",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<C-k>",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-command",
+          "actionType": "command",
+          "action": ":cnext<CR>zz",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "next item in qlist centered",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "54d0780c-57d9-4b0f-9274-e2fde3812e5d",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<C-j>",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-command",
+          "actionType": "command",
+          "action": ":cprev<CR>zz",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "prev item in qlist centered",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "707e779c-2a77-41d7-83f5-b495e8893a07",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>k",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-command",
+          "actionType": "command",
+          "action": ":lnext<CR>zz",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "next local location centered",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "e3faa8cc-3656-4ebe-8bb8-33ba4b9b937f",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>j",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-command",
+          "actionType": "command",
+          "action": ":lprev<CR>zz",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "prev local location centered",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "9d04ef8e-4bcd-4afd-a6d3-5db76e45db64",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>nh",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":nohlsearch",
+          "selectedActionKey": "search-clear-highlight",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "54795afa-06f0-43ad-abf1-fadbc3a01f21",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>1",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "1gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "1"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "83c413a9-b9fc-4ae4-8614-8761497b2524",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>2",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "2gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "2"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "8511d3e1-be8c-4dbf-ac50-964103c8037e",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>3",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "3gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "3"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "bb029277-9abb-48eb-a1f7-0670673d39fd",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>4",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "4gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "4"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "26a77a46-66f7-476c-a600-92c3f6eb436b",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>5",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "5gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "5"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "cdc9a427-c62b-4960-8715-3f330803ca82",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>6",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "6gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "6"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "84c0ac9c-722e-4b8d-9cee-1e43665620cd",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>7",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "7gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "7"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "1b3608e4-36e6-4928-8c72-c6ae200404f0",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>8",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "8gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "8"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "2bca59b9-3df4-461e-98b6-577c7cc5753b",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>9",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "9gt",
+          "selectedActionKey": "go-to-tab",
+          "paramValues": {
+            "number": "9"
+          }
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "5839eb94-ce60-4686-94ef-f7534496a412",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>to",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":tabnew",
+          "selectedActionKey": "new-tab",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "9c1e0667-3d20-436e-830c-331f3dde1cf6",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>tx",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":tabclose",
+          "selectedActionKey": "close-tab",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "ffcda3d4-4aa4-414e-8968-4dc85903346d",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>tn",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "gt",
+          "selectedActionKey": "next-tab",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "105afb89-c4f1-4745-a304-1b5dead8e350",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>tp",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "gT",
+          "selectedActionKey": "prev-tab",
+          "paramValues": {}
+        }
+      },
+      "description": "go to previous tab",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "6a9d61c6-5cbe-4728-b20a-dc89824651d5",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>tf",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":tabnew %",
+          "selectedActionKey": "open-buffer-in-tab",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "c81ac26d-01c7-44a4-ac39-3e4eee4332f4",
+      "modes": [
+        "n",
+        "v",
+        "i"
+      ],
+      "keySequence": "<D-z>",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "keys",
+          "action": "u",
+          "selectedActionKey": "undo",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "30569490-93ac-4622-96f5-899a5f11ec8d",
+      "modes": [
+        "n",
+        "v",
+        "x"
+      ],
+      "keySequence": "u",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-keys",
+          "actionType": "keys",
+          "action": "<nop>",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "disable undo for u",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "32025ae7-00f4-4371-810a-786671492d84",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>xp",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":let @+ = expand(\"%:p\")",
+          "selectedActionKey": "copy-file-path",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "e691a0f8-5228-424f-9947-f6554cdc996c",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>xo",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":e <C-r>+",
+          "selectedActionKey": "open-file-from-clipboard",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "e382c7c8-a6b9-4ae2-908f-b707b20b0053",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>v",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":edit $MYVIMRC",
+          "selectedActionKey": "edit-vimrc",
+          "paramValues": {}
+        }
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "24a4c1f9-d0df-4a62-8a9d-562f88588621",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>wr",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:auto-session:restore_session",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "auto-session",
+          "functionName": "restore_session"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "session_name",
+              "type": "string",
+              "optional": true,
+              "description": "Optional session name to restore. If omitted, restores the session for the current working directory."
+            }
+          ],
+          "returns": "void",
+          "luaCall": "require('auto-session').restore_session($params.session_name)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Restore session for cwd",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "e154bed9-5be8-4b34-87f9-e72f22df06b5",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>ws",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:auto-session:save_session",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "auto-session",
+          "functionName": "save_session"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "session_name",
+              "type": "string",
+              "optional": true,
+              "description": "Optional custom session name. If omitted, saves for the current working directory."
+            }
+          ],
+          "returns": "void",
+          "luaCall": "require('auto-session').save_session($params.session_name)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Save session",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "02e70ef7-ad14-4413-8d78-7aec292ae45d",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>sm",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:vim-maximizer:toggle",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "vim-maximizer",
+          "functionName": "toggle"
+        },
+        "signature": {
+          "params": [],
+          "returns": "void",
+          "luaCall": "vim.cmd('MaximizerToggle')"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Maximize/minimize a split",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "2a2697da-4f0f-43fe-ad34-dc14230f1768",
+      "modes": [
+        "n",
+        "v"
+      ],
+      "keySequence": "<leader>ca",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "core:lsp_buf_code_action",
+        "functionSource": {
+          "type": "core",
+          "functionName": "lsp_buf_code_action"
+        },
+        "signature": {
+          "params": [],
+          "returns": "void",
+          "luaCall": "vim.lsp.buf.code_action()"
+        },
+        "paramDefaults": {}
+      },
+      "description": "",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "5db1e8f5-ed4a-4cb2-b12e-893f7ec04684",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>rn",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "core:lsp_buf_rename",
+        "functionSource": {
+          "type": "core",
+          "functionName": "lsp_buf_rename"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "new_name",
+              "type": "any",
+              "optional": true,
+              "description": "New name for the symbol (optional; prompts if omitted)."
+            }
+          ],
+          "returns": "void",
+          "luaCall": "vim.lsp.buf.rename($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Smart rename",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "24becd13-2e33-4144-b9f0-30cfd69fa1c6",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>d",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":lua vim.diagnostic.open_float()",
+          "selectedActionKey": "diagnostic-open-float",
+          "paramValues": {}
+        }
+      },
+      "description": "Show line diagnostics",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "ddb7e363-2f57-4a61-8c20-582f83f96266",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>rs",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "custom-command",
+          "actionType": "command",
+          "action": ":LspRestart<CR>",
+          "selectedActionKey": "",
+          "paramValues": {}
+        }
+      },
+      "description": "Restart LSP",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "b9ebfde9-36d1-466f-a344-ab73a0a356e4",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>lf",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "core:lsp_buf_format",
+        "functionSource": {
+          "type": "core",
+          "functionName": "lsp_buf_format"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "opts",
+              "type": "any",
+              "optional": true,
+              "description": "Options table (async, filter, bufnr, range, etc.)."
+            }
+          ],
+          "returns": "void",
+          "luaCall": "vim.lsp.buf.format($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Format code vim",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "77916e8d-949f-418b-84a6-50ed38ab4ce7",
+      "modes": [
+        "n",
+        "v"
+      ],
+      "keySequence": "<leader>ll",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:formatter-nvim:format",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "formatter-nvim",
+          "functionName": "format"
+        },
+        "signature": {
+          "params": [],
+          "returns": "void",
+          "luaCall": "vim.cmd('Format')"
+        },
+        "paramDefaults": {}
+      },
+      "description": "format file",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "7078bcb8-11a6-4925-ade5-9ec7e6aa60ff",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader><Space>",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_smart",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_smart"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "finders",
+              "type": "table",
+              "optional": true,
+              "description": "Lua array of finder names, e.g. { 'files', 'recent', 'buffers' }"
+            },
+            {
+              "name": "filter",
+              "type": "any",
+              "optional": true
+            },
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.smart($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Smart find files",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "2cca35b8-9679-4fa8-bdf1-25d6a5216eb6",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>g",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_git_files",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_git_files"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "cwd",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "untracked",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "submodules",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.git_files($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Find git files",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "6366ce89-3a83-471a-988e-cb0e4e5c7cf1",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>ff",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_files",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_files"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "cwd",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "hidden",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "ignored",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "dirs",
+              "type": "table",
+              "optional": true,
+              "description": "Lua array of directory paths, e.g. { '/path/a', '/path/b' }"
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.files($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Find files",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "30df10be-f495-4f3a-a3a3-a60955c3df03",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>h",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_help",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_help"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "lang",
+              "type": "table",
+              "optional": true,
+              "description": "Lua array of help-tag languages, e.g. { 'en' }"
+            },
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.help($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Help pages",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "e7b80d07-0788-46e4-9577-eb0840f0f8a2",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>e",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:explorer_open",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "explorer_open"
+        },
+        "signature": {
+          "params": [],
+          "returns": "void",
+          "luaCall": "Snacks.explorer()"
+        },
+        "paramDefaults": {}
+      },
+      "description": "File explorer",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "f0801993-eed9-4df1-b122-11dea8f7555d",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>wh",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_keymaps",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_keymaps"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "global",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "local",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "modes",
+              "type": "table",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.keymaps($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Keymaps",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "9b7cd873-94ac-437f-8a23-5c7a59cc592e",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>qf",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_qflist",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_qflist"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.qflist($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Quickfix list",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "b9fb55aa-150e-4c5d-83b8-1143522d9de0",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>u",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_undo",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_undo"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.undo($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Undo list",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "ae90de77-18aa-4579-a8a8-7ab9bbf23cfe",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>sd",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_diagnostics",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_diagnostics"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "cwd",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "severity",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.diagnostics($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Diagnostics",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "b8d4b14d-4374-4627-956b-b63623626ce9",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>sD",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_diagnostics_buffer",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_diagnostics_buffer"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.diagnostics_buffer($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Buffer Diagnostics",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "b3f6080e-1b72-49d4-bf76-028d529dae26",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>spm",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_marks",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_marks"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "global",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "local",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.marks($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Marks",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "dbeec1ec-c5b5-43fb-ae58-d06ef872b191",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>,",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_buffers",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_buffers"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "current",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "modified",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.buffers($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Buffers",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "f7274db8-8c24-4669-9b41-cfd842aaa208",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>/",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_grep",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_grep"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "cwd",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "pattern",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "regex",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "hidden",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.grep($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Grep",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "e6409e30-9dcc-46c2-a2c4-e402f0eae9ab",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>lg",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:lazygit_open",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "lazygit_open"
+        },
+        "signature": {
+          "params": [],
+          "returns": "void",
+          "luaCall": "Snacks.lazygit()"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Lazygit",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "eb5136af-657a-4202-97df-5bd584d181ea",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "gd",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_lsp_definitions",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_lsp_definitions"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.lsp_definitions($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Go to definition",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "9fbe8b31-cc98-4b1d-aa37-1ea2ca1a92f9",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "ge",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":tab split | lua vim.lsp.buf.definition()",
+          "selectedActionKey": "goto-definition-new-tab",
+          "paramValues": {}
+        }
+      },
+      "description": "Go to definition in new tab",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "99341de8-c310-44a0-9390-98c9c24006a7",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "gD",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_lsp_declarations",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_lsp_declarations"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.lsp_declarations($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Go to declaration",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "5f9084c5-3775-407a-9ad6-4b744643ef70",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "gr",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_lsp_references",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_lsp_references"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "include_current",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "include_declaration",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.lsp_references($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "References",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "871decba-91bc-436f-bfc4-def36939daf4",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "gI",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_lsp_implementations",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_lsp_implementations"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.lsp_implementations($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Go to Implementation",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "ad831f13-6d79-4763-afc4-141b1e109e9f",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "gy",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:snacks-nvim:picker_lsp_type_definitions",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "snacks-nvim",
+          "functionName": "picker_lsp_type_definitions"
+        },
+        "signature": {
+          "params": [
+            {
+              "name": "layout.preset",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "win.input.wo.wrap",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "matcher.fuzzy",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "opts",
+              "type": "table",
+              "optional": true
+            }
+          ],
+          "returns": "void",
+          "luaCall": "Snacks.picker.lsp_type_definitions($params)"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Go to type definition",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "aaf2dc91-da5b-4fd8-ae6c-11675b0d6f84",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "s",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:substitute-nvim:operator",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "substitute-nvim",
+          "functionName": "operator"
+        },
+        "signature": {
+          "params": [],
+          "returns": "void",
+          "luaCall": "require('substitute').operator()"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Substitute with motion",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "0b4cc727-53f3-428a-9cc7-5f6494cb435c",
+      "modes": [
+        "x"
+      ],
+      "keySequence": "s",
+      "action": {
+        "actionType": "run-function",
+        "selectedFunctionKey": "plugin:substitute-nvim:visual",
+        "functionSource": {
+          "type": "plugin",
+          "pluginId": "substitute-nvim",
+          "functionName": "visual"
+        },
+        "signature": {
+          "params": [],
+          "returns": "void",
+          "luaCall": "require('substitute').visual()"
+        },
+        "paramDefaults": {}
+      },
+      "description": "Substitute in visual mode",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    },
+    {
+      "id": "10d2a87a-9c23-4ecb-9a59-0eefde874fe8",
+      "modes": [
+        "n"
+      ],
+      "keySequence": "<leader>ld",
+      "action": {
+        "actionType": "run-action",
+        "config": {
+          "mode": "catalog",
+          "actionType": "command",
+          "action": ":CodeDiff --inline",
+          "selectedActionKey": "codediff-nvim:cmd:CodeDiff",
+          "paramValues": {
+            "layout": "--inline"
+          }
+        }
+      },
+      "description": "Open git diff",
+      "silent": true,
+      "noremap": true,
+      "expr": false,
+      "enabled": true
+    }
+  ]
+}

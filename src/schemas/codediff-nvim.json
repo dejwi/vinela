@@ -1,0 +1,941 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dejwi/vinela/main/schema/plugin-schema.schema.json",
+  "id": "codediff-nvim",
+  "pluginName": "codediff.nvim",
+  "pluginRepo": "https://github.com/esmuellert/codediff.nvim",
+  "version": "1.0.0",
+  "description": "A Neovim plugin that provides VSCode-style diff rendering with two-tier highlighting, supporting side-by-side and inline layouts.",
+  "category": "git",
+  "tags": [
+    "diff",
+    "git",
+    "ui",
+    "neovim",
+    "vscode-style"
+  ],
+  "tagline": "VSCode-style side-by-side and inline diff rendering for Neovim",
+  "setup": {
+    "requirePath": "codediff",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "diff.layout",
+      "label": "Layout",
+      "description": "Open diffs in two synchronized panes or one inline unified pane.",
+      "group": "Diff",
+      "type": "select",
+      "options": [
+        {
+          "value": "side-by-side",
+          "label": "Side by side"
+        },
+        {
+          "value": "inline",
+          "label": "Inline"
+        }
+      ],
+      "default": "side-by-side"
+    },
+    {
+      "key": "diff.filler_text",
+      "label": "Filler Text",
+      "description": "Text pattern repeated on alignment rows. Use an empty string for blank rows.",
+      "group": "Diff",
+      "type": "string",
+      "default": "\u2571"
+    },
+    {
+      "key": "diff.ignore_trim_whitespace",
+      "label": "Ignore Trim Whitespace",
+      "description": "Ignore leading and trailing whitespace changes.",
+      "group": "Diff",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "diff.jump_to_first_change",
+      "label": "Jump To First Change",
+      "description": "Scroll to the first hunk when opening a diff.",
+      "group": "Diff",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "diff.disable_inlay_hints",
+      "label": "Disable Inlay Hints",
+      "description": "Disable inlay hints in diff windows for a cleaner view.",
+      "group": "Diff",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "diff.max_computation_time_ms",
+      "label": "Max Computation Time ms",
+      "description": "Maximum diff computation time in milliseconds.",
+      "group": "Diff",
+      "type": "number",
+      "default": 5000,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "highlights.line_insert",
+      "label": "Line Insert",
+      "description": "Neovim highlight group name or color used for inserted lines.",
+      "group": "Highlights",
+      "type": "string",
+      "default": "DiffAdd"
+    },
+    {
+      "key": "highlights.line_delete",
+      "label": "Line Delete",
+      "description": "Neovim highlight group name or color used for deleted lines.",
+      "group": "Highlights",
+      "type": "string",
+      "default": "DiffDelete"
+    },
+    {
+      "key": "highlights.char_insert",
+      "label": "Char Insert",
+      "description": "Optional highlight group name or color for inserted characters. When omitted, CodeDiff derives it from the line highlight.",
+      "group": "Highlights",
+      "type": "string"
+    },
+    {
+      "key": "highlights.char_delete",
+      "label": "Char Delete",
+      "description": "Optional highlight group name or color for deleted characters. When omitted, CodeDiff derives it from the line highlight.",
+      "group": "Highlights",
+      "type": "string"
+    },
+    {
+      "key": "highlights.char_brightness",
+      "label": "Char Brightness",
+      "description": "Optional brightness multiplier used when character highlights are derived automatically.",
+      "group": "Highlights",
+      "type": "number"
+    },
+    {
+      "key": "explorer.position",
+      "label": "Position",
+      "description": "Place the changed-file explorer at the left or bottom.",
+      "group": "Explorer",
+      "type": "select",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "key": "explorer.hidden",
+      "label": "Hidden",
+      "description": "Start explorer sessions with the explorer panel hidden.",
+      "group": "Explorer",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "explorer.width",
+      "label": "Width",
+      "description": "Explorer width in columns when positioned on the left.",
+      "group": "Explorer",
+      "type": "number",
+      "default": 40,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "explorer.height",
+      "label": "Height",
+      "description": "Explorer height in lines when positioned at the bottom.",
+      "group": "Explorer",
+      "type": "number",
+      "default": 15,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "explorer.auto_refresh",
+      "label": "Auto Refresh",
+      "description": "Refresh the changed-file list on focus and Git index changes.",
+      "group": "Explorer",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "explorer.view_mode",
+      "label": "View Mode",
+      "description": "Show changed files as a flat list or directory tree.",
+      "group": "Explorer",
+      "type": "select",
+      "options": [
+        {
+          "value": "list",
+          "label": "List"
+        },
+        {
+          "value": "tree",
+          "label": "Tree"
+        }
+      ],
+      "default": "list"
+    },
+    {
+      "key": "explorer.initial_focus",
+      "label": "Initial Focus",
+      "description": "Window focused when an explorer diff session opens.",
+      "group": "Explorer",
+      "type": "select",
+      "options": [
+        {
+          "value": "explorer",
+          "label": "Explorer"
+        },
+        {
+          "value": "original",
+          "label": "Original"
+        },
+        {
+          "value": "modified",
+          "label": "Modified"
+        }
+      ],
+      "default": "explorer"
+    },
+    {
+      "key": "explorer.untracked",
+      "label": "Untracked",
+      "description": "Control how Git scans and displays untracked files.",
+      "group": "Explorer",
+      "type": "select",
+      "options": [
+        {
+          "value": "all",
+          "label": "All"
+        },
+        {
+          "value": "normal",
+          "label": "Collapse directories"
+        },
+        {
+          "value": "no",
+          "label": "Do not scan"
+        }
+      ],
+      "default": "all"
+    },
+    {
+      "key": "explorer.focus_on_select",
+      "label": "Focus On Select",
+      "description": "Focus the modified pane after selecting a file.",
+      "group": "Explorer",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "explorer.auto_open_on_cursor",
+      "label": "Auto Open On Cursor",
+      "description": "Open the explorer file under the cursor while navigating.",
+      "group": "Explorer",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "history.position",
+      "label": "Position",
+      "description": "Place the commit history panel at the left or bottom.",
+      "group": "History",
+      "type": "select",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "key": "history.width",
+      "label": "Width",
+      "description": "History width in columns when positioned on the left.",
+      "group": "History",
+      "type": "number",
+      "default": 40,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "history.height",
+      "label": "Height",
+      "description": "History height in lines when positioned at the bottom.",
+      "group": "History",
+      "type": "number",
+      "default": 15,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "history.initial_focus",
+      "label": "Initial Focus",
+      "description": "Window focused when a history diff session opens.",
+      "group": "History",
+      "type": "select",
+      "options": [
+        {
+          "value": "history",
+          "label": "History"
+        },
+        {
+          "value": "original",
+          "label": "Original"
+        },
+        {
+          "value": "modified",
+          "label": "Modified"
+        }
+      ],
+      "default": "history"
+    },
+    {
+      "key": "history.view_mode",
+      "label": "View Mode",
+      "description": "Show files under commits as a flat list or directory tree.",
+      "group": "History",
+      "type": "select",
+      "options": [
+        {
+          "value": "list",
+          "label": "List"
+        },
+        {
+          "value": "tree",
+          "label": "Tree"
+        }
+      ],
+      "default": "list"
+    },
+    {
+      "key": "history.date_format",
+      "label": "Date Format",
+      "description": "Git date format such as %ar, %ai, %ad, or a strftime format.",
+      "group": "History",
+      "type": "string",
+      "default": "%ar"
+    },
+    {
+      "key": "diff.hide_merge_artifacts",
+      "label": "Hide Merge Artifacts",
+      "description": "Hide common temporary merge-tool files from comparisons.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "diff.original_position",
+      "label": "Original Position",
+      "description": "Pane used for the original or old content.",
+      "group": "Advanced Diff",
+      "type": "select",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "key": "diff.cycle_next_hunk",
+      "label": "Cycle Next Hunk",
+      "description": "Wrap hunk navigation at the first and last hunk.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "diff.cycle_next_file",
+      "label": "Cycle Next File",
+      "description": "Wrap file navigation at the first and last file.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "diff.cycle_hunks_across_files",
+      "label": "Cycle Hunks Across Files",
+      "description": "Continue hunk navigation into adjacent files in explorer and history modes.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "diff.highlight_added_deleted_files",
+      "label": "Highlight Added Deleted Files",
+      "description": "Tint the full contents of added, untracked, and deleted files.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "diff.highlight_priority",
+      "label": "Highlight Priority",
+      "description": "Priority of line-level diff highlights.",
+      "group": "Advanced Diff",
+      "type": "number",
+      "default": 100,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "diff.compute_moves",
+      "label": "Compute Moves",
+      "description": "Detect and annotate blocks of code moved within a file.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "diff.compact",
+      "label": "Compact",
+      "description": "Open diffs with unchanged regions folded.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "diff.compact_context_lines",
+      "label": "Compact Context Lines",
+      "description": "Number of unchanged context lines shown around hunks in compact mode.",
+      "group": "Advanced Diff",
+      "type": "number",
+      "default": 3,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "diff.compact_sync_folds",
+      "label": "Compact Sync Folds",
+      "description": "Synchronize fold opening and closing across diff panes.",
+      "group": "Advanced Diff",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "diff.conflict_ours_position",
+      "label": "Conflict Ours Position",
+      "description": "Pane used for the current or ours side in conflict views.",
+      "group": "Conflict View",
+      "type": "select",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "right"
+    },
+    {
+      "key": "diff.conflict_result_position",
+      "label": "Conflict Result Position",
+      "description": "Place the editable result below the diff or between its panes.",
+      "group": "Conflict View",
+      "type": "select",
+      "options": [
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "key": "diff.conflict_result_height",
+      "label": "Conflict Result Height",
+      "description": "Result pane height as a percentage in the bottom conflict layout.",
+      "group": "Conflict View",
+      "type": "number",
+      "default": 30
+    },
+    {
+      "key": "diff.conflict_result_width_ratio",
+      "label": "Conflict Result Width Ratio",
+      "description": "Relative widths of the left, center result, and right panes.",
+      "group": "Conflict View",
+      "type": "array",
+      "items": {
+        "itemType": "number"
+      },
+      "default": [
+        1,
+        1,
+        1
+      ],
+      "validation": {
+        "minItems": 3,
+        "maxItems": 3
+      }
+    },
+    {
+      "key": "highlights.conflict_sign",
+      "label": "Conflict Sign",
+      "description": "Optional highlight group name or color for unresolved conflict signs.",
+      "group": "Conflict View",
+      "type": "string"
+    },
+    {
+      "key": "highlights.conflict_sign_resolved",
+      "label": "Conflict Sign Resolved",
+      "description": "Optional highlight group name or color for resolved conflict signs.",
+      "group": "Conflict View",
+      "type": "string"
+    },
+    {
+      "key": "highlights.conflict_sign_accepted",
+      "label": "Conflict Sign Accepted",
+      "description": "Optional highlight group name or color for accepted conflict sides.",
+      "group": "Conflict View",
+      "type": "string"
+    },
+    {
+      "key": "highlights.conflict_sign_rejected",
+      "label": "Conflict Sign Rejected",
+      "description": "Optional highlight group name or color for rejected conflict sides.",
+      "group": "Conflict View",
+      "type": "string"
+    },
+    {
+      "key": "explorer.indent_markers",
+      "label": "Indent markers",
+      "description": "Show directory indent markers in tree view.",
+      "group": "Advanced Explorer",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "explorer.icons.folder_closed",
+      "label": "Folder Closed",
+      "description": "Icon used for collapsed folders in tree view.",
+      "group": "Advanced Explorer",
+      "type": "string",
+      "default": "\ue5ff"
+    },
+    {
+      "key": "explorer.icons.folder_open",
+      "label": "Folder Open",
+      "description": "Icon used for expanded folders in tree view.",
+      "group": "Advanced Explorer",
+      "type": "string",
+      "default": "\ue5fe"
+    },
+    {
+      "key": "explorer.file_filter.ignore",
+      "label": "Ignore",
+      "description": "Glob and Git pathspec patterns hidden from the explorer.",
+      "group": "Advanced Explorer",
+      "type": "array",
+      "items": {
+        "itemType": "string"
+      },
+      "default": [
+        ".git/**",
+        ".jj/**"
+      ]
+    },
+    {
+      "key": "explorer.flatten_dirs",
+      "label": "Flatten Dirs",
+      "description": "Collapse single-child directory chains in tree view.",
+      "group": "Advanced Explorer",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "explorer.status_right_margin",
+      "label": "Status Right Margin",
+      "description": "Trailing cells between the status symbol and explorer edge.",
+      "group": "Advanced Explorer",
+      "type": "number",
+      "default": 1,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "explorer.line_stats.enabled",
+      "label": "Enabled",
+      "description": "Fetch and display Git insertion and deletion counts.",
+      "group": "Explorer Statistics",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "explorer.line_stats.count_untracked",
+      "label": "Count Untracked",
+      "description": "Count lines in untracked files as insertions.",
+      "group": "Explorer Statistics",
+      "type": "boolean",
+      "default": false
+    },
+    {
+      "key": "explorer.line_stats.max_untracked_bytes",
+      "label": "Max Untracked Bytes",
+      "description": "Maximum untracked file size in bytes for line counting.",
+      "group": "Explorer Statistics",
+      "type": "number",
+      "default": 1048576,
+      "validation": {
+        "integer": true
+      }
+    },
+    {
+      "key": "explorer.ellipsis",
+      "label": "Ellipsis",
+      "description": "Text appended to truncated explorer regions.",
+      "group": "Advanced Explorer",
+      "type": "string",
+      "default": "\u2026"
+    },
+    {
+      "key": "explorer.visible_groups.staged",
+      "label": "Staged",
+      "description": "Show staged changes in the explorer.",
+      "group": "Advanced Explorer",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "explorer.visible_groups.unstaged",
+      "label": "Unstaged",
+      "description": "Show unstaged changes in the explorer.",
+      "group": "Advanced Explorer",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "explorer.visible_groups.conflicts",
+      "label": "Conflicts",
+      "description": "Show conflicted files in the explorer.",
+      "group": "Advanced Explorer",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "key": "explorer.formatters.file",
+      "label": "File",
+      "description": "Optional Lua function(ctx) that returns the complete file-row layout.",
+      "group": "Explorer Formatters",
+      "type": "lua",
+      "inputPlaceholder": "function(ctx) return require('codediff.ui.explorer.formatters').file(ctx) end"
+    },
+    {
+      "key": "explorer.formatters.folder",
+      "label": "Folder",
+      "description": "Optional Lua function(ctx) that returns the complete folder-row layout.",
+      "group": "Explorer Formatters",
+      "type": "lua",
+      "inputPlaceholder": "function(ctx) return require('codediff.ui.explorer.formatters').folder(ctx) end"
+    },
+    {
+      "key": "explorer.formatters.group",
+      "label": "Group",
+      "description": "Optional Lua function(ctx) that returns the complete group-row layout.",
+      "group": "Explorer Formatters",
+      "type": "lua",
+      "inputPlaceholder": "function(ctx) return require('codediff.ui.explorer.formatters').group(ctx) end"
+    },
+    { "key": "keymaps.view.quit", "label": "Quit", "type": "keysequence", "default": "q" },
+    { "key": "keymaps.view.toggle_explorer", "label": "Toggle Explorer", "type": "keysequence", "default": "<leader>b" },
+    { "key": "keymaps.view.focus_explorer", "label": "Focus Explorer", "type": "keysequence", "default": "<leader>e" },
+    { "key": "keymaps.view.next_hunk", "label": "Next Hunk", "type": "keysequence", "default": "]c" },
+    { "key": "keymaps.view.prev_hunk", "label": "Prev Hunk", "type": "keysequence", "default": "[c" },
+    { "key": "keymaps.view.next_file", "label": "Next File", "type": "keysequence", "default": "]f" },
+    { "key": "keymaps.view.prev_file", "label": "Prev File", "type": "keysequence", "default": "[f" },
+    { "key": "keymaps.view.diff_get", "label": "Diff Get", "type": "keysequence", "default": "do" },
+    { "key": "keymaps.view.diff_put", "label": "Diff Put", "type": "keysequence", "default": "dp" },
+    { "key": "keymaps.view.open_in_prev_tab", "label": "Open In Prev Tab", "type": "keysequence", "default": "gf" },
+    { "key": "keymaps.view.close_on_open_in_prev_tab", "label": "Close On Open In Prev Tab", "type": "boolean", "default": false },
+    { "key": "keymaps.view.toggle_stage", "label": "Toggle Stage", "type": "keysequence", "default": "-" },
+    { "key": "keymaps.view.toggle_staged_view", "label": "Toggle Staged View", "type": "keysequence", "default": "gS" },
+    { "key": "keymaps.view.stage_hunk", "label": "Stage Hunk", "type": "keysequence", "default": "<leader>hs" },
+    { "key": "keymaps.view.unstage_hunk", "label": "Unstage Hunk", "type": "keysequence", "default": "<leader>hu" },
+    { "key": "keymaps.view.discard_hunk", "label": "Discard Hunk", "type": "keysequence", "default": "<leader>hr" },
+    { "key": "keymaps.view.hunk_textobject", "label": "Hunk Textobject", "type": "keysequence", "default": "ih" },
+    { "key": "keymaps.view.align_move", "label": "Align Move", "type": "keysequence", "default": "gm" },
+    { "key": "keymaps.view.toggle_layout", "label": "Toggle Layout", "type": "keysequence", "default": "t" },
+    { "key": "keymaps.view.toggle_compact", "label": "Toggle Compact", "type": "keysequence", "default": "gc" },
+    { "key": "keymaps.view.show_help", "label": "Show Help", "type": "keysequence", "default": "g?" },
+    { "key": "keymaps.explorer.select", "label": "Select", "type": "keysequence", "default": "<CR>" },
+    { "key": "keymaps.explorer.hover", "label": "Hover", "type": "keysequence", "default": "K" },
+    { "key": "keymaps.explorer.refresh", "label": "Refresh", "type": "keysequence", "default": "R" },
+    { "key": "keymaps.explorer.toggle_view_mode", "label": "Toggle View Mode", "type": "keysequence", "default": "i" },
+    { "key": "keymaps.explorer.stage_all", "label": "Stage All", "type": "keysequence", "default": "S" },
+    { "key": "keymaps.explorer.unstage_all", "label": "Unstage All", "type": "keysequence", "default": "U" },
+    { "key": "keymaps.explorer.restore", "label": "Restore", "type": "keysequence", "default": "X" },
+    { "key": "keymaps.explorer.toggle_changes", "label": "Toggle Changes", "type": "keysequence", "default": "gu" },
+    { "key": "keymaps.explorer.toggle_staged", "label": "Toggle Staged", "type": "keysequence", "default": "gs" },
+    { "key": "keymaps.explorer.fold_open", "label": "Fold Open", "type": "keysequence", "default": "zo" },
+    { "key": "keymaps.explorer.fold_open_recursive", "label": "Fold Open Recursive", "type": "keysequence", "default": "zO" },
+    { "key": "keymaps.explorer.fold_close", "label": "Fold Close", "type": "keysequence", "default": "zc" },
+    { "key": "keymaps.explorer.fold_close_recursive", "label": "Fold Close Recursive", "type": "keysequence", "default": "zC" },
+    { "key": "keymaps.explorer.fold_toggle", "label": "Fold Toggle", "type": "keysequence", "default": "za" },
+    { "key": "keymaps.explorer.fold_toggle_recursive", "label": "Fold Toggle Recursive", "type": "keysequence", "default": "zA" },
+    { "key": "keymaps.explorer.fold_open_all", "label": "Fold Open All", "type": "keysequence", "default": "zR" },
+    { "key": "keymaps.explorer.fold_close_all", "label": "Fold Close All", "type": "keysequence", "default": "zM" },
+    { "key": "keymaps.history.select", "label": "Select", "type": "keysequence", "default": "<CR>" },
+    { "key": "keymaps.history.toggle_view_mode", "label": "Toggle View Mode", "type": "keysequence", "default": "i" },
+    { "key": "keymaps.history.refresh", "label": "Refresh", "type": "keysequence", "default": "R" },
+    { "key": "keymaps.history.fold_open", "label": "Fold Open", "type": "keysequence", "default": "zo" },
+    { "key": "keymaps.history.fold_open_recursive", "label": "Fold Open Recursive", "type": "keysequence", "default": "zO" },
+    { "key": "keymaps.history.fold_close", "label": "Fold Close", "type": "keysequence", "default": "zc" },
+    { "key": "keymaps.history.fold_close_recursive", "label": "Fold Close Recursive", "type": "keysequence", "default": "zC" },
+    { "key": "keymaps.history.fold_toggle", "label": "Fold Toggle", "type": "keysequence", "default": "za" },
+    { "key": "keymaps.history.fold_toggle_recursive", "label": "Fold Toggle Recursive", "type": "keysequence", "default": "zA" },
+    { "key": "keymaps.history.fold_open_all", "label": "Fold Open All", "type": "keysequence", "default": "zR" },
+    { "key": "keymaps.history.fold_close_all", "label": "Fold Close All", "type": "keysequence", "default": "zM" },
+    { "key": "keymaps.conflict.accept_incoming", "label": "Accept Incoming", "type": "keysequence", "default": "<leader>ct" },
+    { "key": "keymaps.conflict.accept_current", "label": "Accept Current", "type": "keysequence", "default": "<leader>co" },
+    { "key": "keymaps.conflict.accept_both", "label": "Accept Both", "type": "keysequence", "default": "<leader>cb" },
+    { "key": "keymaps.conflict.discard", "label": "Discard", "type": "keysequence", "default": "<leader>cx" },
+    { "key": "keymaps.conflict.accept_all_incoming", "label": "Accept All Incoming", "type": "keysequence", "default": "<leader>cT" },
+    { "key": "keymaps.conflict.accept_all_current", "label": "Accept All Current", "type": "keysequence", "default": "<leader>cO" },
+    { "key": "keymaps.conflict.accept_all_both", "label": "Accept All Both", "type": "keysequence", "default": "<leader>cB" },
+    { "key": "keymaps.conflict.discard_all", "label": "Discard All", "type": "keysequence", "default": "<leader>cX" },
+    { "key": "keymaps.conflict.next_conflict", "label": "Next Conflict", "type": "keysequence", "default": "]x" },
+    { "key": "keymaps.conflict.prev_conflict", "label": "Prev Conflict", "type": "keysequence", "default": "[x" },
+    { "key": "keymaps.conflict.diffget_incoming", "label": "Diffget Incoming", "type": "keysequence", "default": "2do" },
+    { "key": "keymaps.conflict.diffget_current", "label": "Diffget Current", "type": "keysequence", "default": "3do" }
+  ],
+  "functions": [
+    {
+      "name": "next_hunk",
+      "label": "Next hunk",
+      "description": "Navigate to the next hunk in the current diff view.",
+      "params": [],
+      "returns": "boolean",
+      "luaCall": "require('codediff').next_hunk()",
+      "category": "navigation",
+      "sourceDoc": "lua/codediff/init.lua"
+    },
+    {
+      "name": "prev_hunk",
+      "label": "Previous hunk",
+      "description": "Navigate to the previous hunk in the current diff view.",
+      "params": [],
+      "returns": "boolean",
+      "luaCall": "require('codediff').prev_hunk()",
+      "category": "navigation",
+      "sourceDoc": "lua/codediff/init.lua"
+    },
+    {
+      "name": "next_file",
+      "label": "Next file",
+      "description": "Navigate to the next file in explorer or history mode, or the next commit in single-file history.",
+      "params": [],
+      "returns": "boolean",
+      "luaCall": "require('codediff').next_file()",
+      "category": "navigation",
+      "sourceDoc": "lua/codediff/init.lua"
+    },
+    {
+      "name": "prev_file",
+      "label": "Previous file",
+      "description": "Navigate to the previous file in explorer or history mode, or the previous commit in single-file history.",
+      "params": [],
+      "returns": "boolean",
+      "luaCall": "require('codediff').prev_file()",
+      "category": "navigation",
+      "sourceDoc": "lua/codediff/init.lua"
+    }
+  ],
+  "events": [
+    "CodeDiffOpen",
+    "CodeDiffClose",
+    "CodeDiffFileSelect"
+  ],
+  "exCommands": [
+    {
+      "name": "CodeDiff",
+      "label": "Open CodeDiff",
+      "description": "Open the CodeDiff UI for Git changes, revisions, files, directories, history, merge conflicts, or library installation.",
+      "template": ":{range}CodeDiff {layout} {exit_on_close} {repo} {staged} {subcommand} {arg1} {arg2} {reverse} {base} {pathspec}",
+      "example": ":CodeDiff main... -- packages/ui",
+      "sourceDoc": ":help codediff-commands",
+      "params": [
+        {
+          "name": "range",
+          "label": "Selected line range",
+          "placeholder": "Visual selection range",
+          "description": "Prefix with '<,'> so history is limited to the current visual selection. Use with the history subcommand.",
+          "type": "boolean",
+          "optional": true,
+          "tier": "advanced",
+          "group": "History",
+          "emit": { "kind": "flag", "token": "'<,'>" }
+        },
+        {
+          "name": "layout",
+          "label": "Layout",
+          "placeholder": "Use configured layout",
+          "description": "Override the configured diff layout for this invocation.",
+          "type": "select",
+          "optional": true,
+          "tier": "advanced",
+          "group": "Layout",
+          "allowedValues": ["--inline", "--side-by-side"],
+          "allowedValueDescriptions": { "--inline": "Inline (single pane)", "--side-by-side": "Side by side (two panes)" }
+        },
+        {
+          "name": "exit_on_close",
+          "label": "Exit Neovim on close",
+          "placeholder": "Disabled",
+          "description": "Exit Neovim when the CodeDiff session closes; intended for external diff and merge tools.",
+          "type": "boolean",
+          "optional": true,
+          "tier": "advanced",
+          "group": "Layout",
+          "emit": { "kind": "flag", "token": "--exit-on-close" }
+        },
+        {
+          "name": "repo",
+          "label": "Repository",
+          "placeholder": "/path/to/repository",
+          "description": "Operate on the repository containing this directory. Emits --repo; upstream also accepts -C.",
+          "type": "directory-path",
+          "optional": true,
+          "tier": "advanced",
+          "group": "Repository",
+          "escape": "ex-argument",
+          "emit": { "kind": "option", "prefix": "--repo" }
+        },
+        {
+          "name": "staged",
+          "label": "Staged changes only",
+          "placeholder": "Disabled",
+          "description": "Compare the Git index with HEAD or the supplied revision. Emits --staged; upstream also accepts --cached.",
+          "type": "boolean",
+          "optional": true,
+          "tier": "advanced",
+          "group": "Repository",
+          "emit": { "kind": "flag", "token": "--staged" }
+        },
+        {
+          "name": "subcommand",
+          "label": "Mode",
+          "placeholder": "No subcommand",
+          "description": "Choose a CodeDiff mode, or omit it to open repository changes.",
+          "type": "select",
+          "optional": true,
+          "tier": "basic",
+          "group": "General",
+          "allowedValues": ["", "file", "dir", "history", "merge", "install", "install!"],
+          "allowedValueDescriptions": { "": "No subcommand (open changes)", "file": "Compare the current file with revisions or compare two files", "dir": "Compare two directories", "history": "Browse commit history", "merge": "Resolve conflicts in a file", "install": "Install or update the native diff library", "install!": "Force reinstall the native diff library" }
+        },
+        {
+          "name": "arg1",
+          "label": "First argument",
+          "placeholder": "HEAD or /path/to/first",
+          "description": "First revision, file, directory, history range, or merge target, depending on the selected mode.",
+          "type": "string",
+          "optional": true,
+          "tier": "basic",
+          "group": "General",
+          "escape": "ex-argument"
+        },
+        {
+          "name": "arg2",
+          "label": "Second argument",
+          "placeholder": "HEAD or /path/to/second",
+          "description": "Second revision, file, directory, or history file filter, depending on the selected mode.",
+          "type": "string",
+          "optional": true,
+          "tier": "basic",
+          "group": "General",
+          "escape": "ex-argument"
+        },
+        {
+          "name": "reverse",
+          "label": "Oldest commits first",
+          "placeholder": "Disabled",
+          "description": "Show history in chronological order. Emits --reverse; upstream also accepts -r.",
+          "type": "boolean",
+          "optional": true,
+          "tier": "advanced",
+          "group": "History",
+          "emit": { "kind": "flag", "token": "--reverse" }
+        },
+        {
+          "name": "base",
+          "label": "History base revision",
+          "placeholder": "HEAD or WORKING",
+          "description": "Compare every history commit with this fixed revision instead of its parent. Emits --base; upstream also accepts -b.",
+          "type": "string",
+          "optional": true,
+          "tier": "advanced",
+          "group": "History",
+          "escape": "ex-argument",
+          "emit": { "kind": "option", "prefix": "--base" }
+        },
+        {
+          "name": "pathspec",
+          "label": "Pathspecs",
+          "placeholder": "src packages/ui",
+          "description": "Git pathspec tokens relative to the repository root. Enter multiple escaped tokens as one free-text value.",
+          "type": "string",
+          "optional": true,
+          "tier": "basic",
+          "group": "General",
+          "emit": { "kind": "option", "prefix": "--" }
+        }
+      ],
+      "category": "git",
+      "isPopular": true,
+      "aliases": ["diff", "git diff", "vscode-style diff", "-C", "--cached", "-r", "-b"]
+    }
+  ],
+  "exCommandTemplates": [
+    { "key": "open-changes", "baseCommandName": "CodeDiff", "label": "Open Changes", "shortDescription": "Open changed files in the current repository.", "defaults": {}, "example": ":CodeDiff" },
+    { "key": "open-staged", "baseCommandName": "CodeDiff", "label": "Open Staged Changes", "shortDescription": "Show only changes staged in the Git index.", "defaults": { "staged": true }, "example": ":CodeDiff --staged" },
+    { "key": "open-inline", "baseCommandName": "CodeDiff", "label": "Open Changes Inline", "shortDescription": "Open changes using the inline diff layout.", "defaults": { "layout": "--inline" }, "example": ":CodeDiff --inline" },
+    { "key": "compare-head", "baseCommandName": "CodeDiff", "label": "Compare with HEAD", "shortDescription": "Compare repository changes against HEAD.", "defaults": { "arg1": "HEAD" }, "example": ":CodeDiff HEAD" },
+    { "key": "current-file-vs-head", "baseCommandName": "CodeDiff", "label": "Compare Current File with HEAD", "shortDescription": "Compare the current file with its HEAD revision.", "defaults": { "subcommand": "file", "arg1": "HEAD" }, "example": ":CodeDiff file HEAD" },
+    { "key": "compare-two-files", "baseCommandName": "CodeDiff", "label": "Compare Two Files", "shortDescription": "Compare two files from the filesystem.", "defaults": { "subcommand": "file" }, "example": ":CodeDiff file /tmp/old.lua /tmp/new.lua" },
+    { "key": "compare-two-directories", "baseCommandName": "CodeDiff", "label": "Compare Two Directories", "shortDescription": "Compare the contents of two directories.", "defaults": { "subcommand": "dir" }, "example": ":CodeDiff dir /tmp/project-before /tmp/project-after" },
+    { "key": "history", "baseCommandName": "CodeDiff", "label": "Open History", "shortDescription": "Browse repository commit history.", "defaults": { "subcommand": "history" }, "example": ":CodeDiff history" },
+    { "key": "selected-lines-history", "baseCommandName": "CodeDiff", "label": "Selected Lines History", "shortDescription": "Show commits that changed the selected line range.", "defaults": { "subcommand": "history", "range": true }, "example": ":'<,'>CodeDiff history" },
+    { "key": "merge", "baseCommandName": "CodeDiff", "label": "Resolve Merge Conflict", "shortDescription": "Open conflict resolution for a file.", "defaults": { "subcommand": "merge" }, "example": ":CodeDiff merge src/main.ts" },
+    { "key": "install", "baseCommandName": "CodeDiff", "label": "Install Diff Library", "shortDescription": "Install or update CodeDiff’s native diff library.", "defaults": { "subcommand": "install" }, "example": ":CodeDiff install" },
+    { "key": "force-reinstall", "baseCommandName": "CodeDiff", "label": "Reinstall Diff Library", "shortDescription": "Force reinstall CodeDiff’s native diff library.", "defaults": { "subcommand": "install!" }, "example": ":CodeDiff install!" }
+  ]
+}

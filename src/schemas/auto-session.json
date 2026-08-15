@@ -1,0 +1,789 @@
+{
+  "id": "auto-session",
+  "pluginName": "auto-session",
+  "pluginRepo": "https://github.com/rmagatti/auto-session",
+  "version": "1.1.0",
+  "description": "Automatically saves and restores your Neovim session per working directory, so you can pick up exactly where you left off.",
+  "author": "rmagatti",
+  "stars": 3600,
+  "category": "utility",
+  "tags": [
+    "session",
+    "workflow",
+    "persistence",
+    "restore",
+    "workspace"
+  ],
+  "tagline": "Automatic per-directory session save and restore for Neovim",
+  "setup": {
+    "requirePath": "auto-session",
+    "setupFunction": "setup",
+    "optionMapping": "table"
+  },
+  "options": [
+    {
+      "key": "enabled",
+      "label": "Enable auto-session",
+      "description": "Master switch — enables or disables all automatic session saving and restoring.",
+      "type": "boolean",
+      "group": "General",
+      "default": true
+    },
+    {
+      "key": "auto_save",
+      "label": "Auto Save on Exit",
+      "description": "Automatically save the current session when you quit Neovim. The session is saved for the current working directory.",
+      "type": "boolean",
+      "group": "General",
+      "default": true
+    },
+    {
+      "key": "auto_restore",
+      "label": "Auto Restore on Start",
+      "description": "Automatically restore the session for the current working directory when Neovim starts with no file arguments.",
+      "type": "boolean",
+      "group": "General",
+      "default": true
+    },
+    {
+      "key": "auto_create",
+      "label": "Auto Create New Sessions",
+      "description": "Create a new session file if one doesn't already exist for the current working directory. Disable this to only restore existing sessions, never creating new ones automatically.",
+      "type": "boolean",
+      "group": "General",
+      "default": true
+    },
+    {
+      "key": "log_level",
+      "label": "Log Level",
+      "description": "Controls how much detail auto-session writes to its log. Use 'debug' when troubleshooting session issues.",
+      "type": "select",
+      "group": "General",
+      "default": "error",
+      "options": [
+        {
+          "value": "debug",
+          "label": "Debug (most verbose)"
+        },
+        {
+          "value": "info",
+          "label": "Info"
+        },
+        {
+          "value": "warn",
+          "label": "Warn"
+        },
+        {
+          "value": "error",
+          "label": "Error (default, least verbose)"
+        }
+      ]
+    },
+    {
+      "key": "root_dir",
+      "label": "Session Storage Directory",
+      "description": "Directory where session files are stored. Defaults to Neovim's data directory (typically ~/.local/share/nvim/sessions/ on Linux). Leave empty to use the default.",
+      "type": "string",
+      "group": "General"
+    },
+    {
+      "key": "auto_restore_last_session",
+      "label": "Restore Last Session as Fallback",
+      "description": "When no session exists for the current working directory on startup, fall back to loading the most recently saved session from any directory.",
+      "type": "boolean",
+      "group": "Session Behavior",
+      "default": false
+    },
+    {
+      "key": "cwd_change_handling",
+      "label": "Track Directory Changes",
+      "description": "When you change directories with :cd inside Neovim, automatically save the current session and restore the session for the new directory. Cannot be used together with Single Session Mode.",
+      "type": "boolean",
+      "group": "Session Behavior",
+      "default": false
+    },
+    {
+      "key": "single_session_mode",
+      "label": "Single Session Mode",
+      "description": "Maintain one unified session regardless of which directory you're in. Prevents auto-session from creating separate sessions per directory. Incompatible with Track Directory Changes.",
+      "type": "boolean",
+      "group": "Session Behavior",
+      "default": false
+    },
+    {
+      "key": "show_auto_restore_notif",
+      "label": "Show Restore Notification",
+      "description": "Display a notification message when a session is automatically restored on startup.",
+      "type": "boolean",
+      "group": "Session Behavior",
+      "default": false
+    },
+    {
+      "key": "continue_restore_on_error",
+      "label": "Continue Restore on Error",
+      "description": "Keep loading the session even if an error occurs during restoration (e.g., a missing file or plugin error). If disabled, any error will abort the restore.",
+      "type": "boolean",
+      "group": "Session Behavior",
+      "default": true
+    },
+    {
+      "key": "lazy_support",
+      "label": "Lazy.nvim Support",
+      "description": "Automatically detect if Lazy.nvim is in use and wait for it to finish loading before restoring the session. This ensures plugins are ready before files are opened. Does nothing if Lazy.nvim is not installed.",
+      "type": "boolean",
+      "group": "Session Behavior",
+      "default": true
+    },
+    {
+      "key": "legacy_cmds",
+      "label": "Define Legacy Commands",
+      "description": "Register the older-style session commands: SessionSave, SessionRestore, SessionDelete, SessionToggle, and Autosession. Keep enabled for compatibility with existing keymaps that use these names.",
+      "type": "boolean",
+      "group": "Session Behavior",
+      "default": true
+    },
+    {
+      "key": "suppressed_dirs",
+      "label": "Suppressed Directories",
+      "description": "Directories where auto-session will NOT save or restore sessions. Add your home directory, Downloads, and other broad directories here. Supports glob patterns: * matches within one level, ** matches across levels, ~ expands to home.",
+      "type": "array",
+      "group": "Filtering",
+      "default": [],
+      "items": {
+        "itemType": "string"
+      }
+    },
+    {
+      "key": "allowed_dirs",
+      "label": "Allowed Directories",
+      "description": "If set, auto-session will ONLY save or restore sessions in these directories. Leave empty to allow all directories (filtered only by Suppressed Directories). Supports glob patterns.",
+      "type": "array",
+      "group": "Filtering",
+      "default": [],
+      "items": {
+        "itemType": "string"
+      }
+    },
+    {
+      "key": "bypass_save_filetypes",
+      "label": "Bypass Save Filetypes",
+      "description": "If the only open buffer has one of these filetypes, skip auto-saving the session on exit. Useful to avoid saving a session that contains only a dashboard (e.g., 'alpha', 'dashboard', 'snacks_dashboard').",
+      "type": "array",
+      "group": "Filtering",
+      "default": [],
+      "items": {
+        "itemType": "string"
+      }
+    },
+    {
+      "key": "close_filetypes_on_save",
+      "label": "Close Before Saving (by Filetype)",
+      "description": "Buffers with these filetypes will be closed before saving a session. This prevents noisy buffers from being restored next time.",
+      "type": "array",
+      "group": "Filtering",
+      "default": [
+        "checkhealth"
+      ],
+      "items": {
+        "itemType": "string"
+      }
+    },
+    {
+      "key": "close_unsupported_windows",
+      "label": "Close Unsupported Windows",
+      "description": "Close windows that are not backed by a normal file (e.g., terminal windows, plugin panels) before saving the session. This avoids errors when restoring.",
+      "type": "boolean",
+      "group": "Filtering",
+      "default": true
+    },
+    {
+      "key": "git_use_branch_name",
+      "label": "Include Git Branch in Session Name",
+      "description": "Append the current git branch name to the session name. This gives you separate sessions per branch in each project directory — useful when branches have very different sets of open files.",
+      "type": "boolean",
+      "group": "Git",
+      "default": false
+    },
+    {
+      "key": "git_auto_restore_on_branch_change",
+      "label": "Auto-Restore on Branch Switch",
+      "description": "When you switch git branches, automatically save the current session and restore the session for the new branch. Requires 'Include Git Branch in Session Name' to be enabled.",
+      "type": "boolean",
+      "group": "Git",
+      "default": false,
+      "visibleWhen": {
+        "key": "git_use_branch_name",
+        "equals": true
+      }
+    },
+    {
+      "key": "session_lens.picker",
+      "label": "Session Picker",
+      "description": "Which picker UI to use for the session browser (:AutoSession search). Leave unset to auto-detect: the plugin checks for Telescope, Snacks, and Fzf-Lua in that order, falling back to vim.ui.select.",
+      "type": "select",
+      "group": "Session Picker",
+      "options": [
+        {
+          "value": "telescope",
+          "label": "Telescope"
+        },
+        {
+          "value": "snacks",
+          "label": "Snacks"
+        },
+        {
+          "value": "fzf",
+          "label": "Fzf-Lua"
+        },
+        {
+          "value": "select",
+          "label": "vim.ui.select (built-in)"
+        }
+      ]
+    },
+    {
+      "key": "session_lens.load_on_setup",
+      "label": "Register Telescope Extension on Setup",
+      "description": "If using Telescope, automatically register the session-lens extension when auto-session is set up. This allows you to open the picker with :Telescope session-lens. Only affects Telescope users.",
+      "type": "boolean",
+      "group": "Session Picker",
+      "default": true
+    },
+    {
+      "key": "session_lens.previewer",
+      "label": "Session Preview Mode",
+      "description": "How to display session information in the picker preview pane. 'Summary' shows a list of open files; 'Active Buffer' shows the content of the active buffer from the session.",
+      "type": "select",
+      "group": "Session Picker",
+      "default": "summary",
+      "options": [
+        {
+          "value": "summary",
+          "label": "Summary (list of open files)"
+        },
+        {
+          "value": "active_buffer",
+          "label": "Active Buffer (file contents)"
+        }
+      ]
+    },
+    {
+      "key": "session_lens.picker_opts",
+      "label": "Picker Options (Advanced)",
+      "description": "Free-form Lua table passed directly to the configured picker (Telescope, Snacks, Fzf-Lua) as additional options. Use this for theme overrides, layout settings, or any picker-specific configuration not covered above.",
+      "type": "lua",
+      "group": "Session Picker",
+      "inputPlaceholder": "{\n  -- Example for Telescope:\n  -- layout_strategy = 'vertical',\n  -- path_display = { 'shorten' },\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "session_lens.mappings.delete_session",
+      "label": "Delete Session Key (in Picker)",
+      "description": "Key to press in the session picker to delete the highlighted session. Format: { mode, key }, e.g. { 'i', '<C-d>' }.",
+      "type": "lua",
+      "group": "Session Picker",
+      "default": "{ \"i\", \"<C-d>\" }",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "session_lens.mappings.alternate_session",
+      "label": "Alternate Session Key (in Picker)",
+      "description": "Key to press in the session picker to switch to the previously used alternate session. Format: { mode, key }.",
+      "type": "lua",
+      "group": "Session Picker",
+      "default": "{ \"i\", \"<C-s>\" }",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "session_lens.mappings.copy_session",
+      "label": "Copy Session Key (in Picker)",
+      "description": "Key to press in the session picker to make a copy of the highlighted session. Format: { mode, key }.",
+      "type": "lua",
+      "group": "Session Picker",
+      "default": "{ \"i\", \"<C-y>\" }",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "session_lens.session_control.control_dir",
+      "label": "Session Control Directory",
+      "description": "Directory where the session control file (session_control.json) is stored. This file tracks alternate session history. Defaults to Neovim's data directory. Leave empty to use the default.",
+      "type": "string",
+      "group": "Session Picker"
+    },
+    {
+      "key": "session_lens.session_control.control_filename",
+      "label": "Session Control Filename",
+      "description": "Name of the JSON file used to track session history for the alternate-session feature.",
+      "type": "string",
+      "group": "Session Picker",
+      "default": "session_control.json"
+    },
+    {
+      "key": "pre_save_cmds",
+      "label": "Pre-Save Hooks",
+      "description": "Commands or Lua functions to run before saving a session. Each entry is a Vim command string or a Lua function. A function can return false to cancel the save. Example: close NERDTree before saving.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- \"tabdo NERDTreeClose\", -- close file trees before saving\n  -- function(session_name)\n  --   -- return false to cancel save\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "post_save_cmds",
+      "label": "Post-Save Hooks",
+      "description": "Commands or Lua functions to run after a session is successfully saved.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- function(session_name)\n  --   vim.notify(\"Session saved: \" .. session_name)\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "pre_restore_cmds",
+      "label": "Pre-Restore Hooks",
+      "description": "Commands or Lua functions to run before restoring a session. A function can return false to cancel the restore.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- function(session_name)\n  --   -- return false to cancel restore\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "post_restore_cmds",
+      "label": "Post-Restore Hooks",
+      "description": "Commands or Lua functions to run after a session is restored. Use this to reopen plugin panels like nvim-tree, refresh statuslines, etc.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- function()\n  --   -- e.g. reopen nvim-tree after session restore\n  --   -- require(\"nvim-tree.api\").tree.open()\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "no_restore_cmds",
+      "label": "No-Restore Hooks",
+      "description": "Commands or Lua functions to run when Neovim starts but no session is auto-restored (e.g., no session exists for this directory). Useful to open a dashboard or file explorer in that case.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- function(is_startup)\n  --   -- is_startup is true if this is initial nvim startup\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "pre_delete_cmds",
+      "label": "Pre-Delete Hooks",
+      "description": "Commands or Lua functions to run before a session is deleted. A function can return false to cancel the deletion.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- function(session_name)\n  --   -- return false to cancel delete\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "post_delete_cmds",
+      "label": "Post-Delete Hooks",
+      "description": "Commands or Lua functions to run after a session is successfully deleted.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- function(session_name)\n  --   vim.notify(\"Session deleted: \" .. session_name)\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "pre_cwd_changed_cmds",
+      "label": "Pre-CWD Change Hooks",
+      "description": "Commands or Lua functions to run before the working directory changes (only active when Track Directory Changes is enabled). Use this to close plugin panels before switching directories.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- \"tabdo NERDTreeClose\",\n}",
+      "expectedReturnType": "table",
+      "visibleWhen": {
+        "key": "cwd_change_handling",
+        "equals": true
+      }
+    },
+    {
+      "key": "post_cwd_changed_cmds",
+      "label": "Post-CWD Change Hooks",
+      "description": "Commands or Lua functions to run after the working directory changes and the new session is restored (only active when Track Directory Changes is enabled). Use this to refresh plugin state for the new directory.",
+      "type": "lua",
+      "group": "Hooks",
+      "inputPlaceholder": "{\n  -- function()\n  --   require(\"lualine\").refresh()\n  -- end,\n}",
+      "expectedReturnType": "table",
+      "visibleWhen": {
+        "key": "cwd_change_handling",
+        "equals": true
+      }
+    },
+    {
+      "key": "auto_delete_empty_sessions",
+      "label": "Auto-Delete Empty Sessions",
+      "description": "Automatically delete a session file if the only open buffers are unnamed or empty when auto-saving. This prevents accumulation of useless session files.",
+      "type": "boolean",
+      "group": "Advanced",
+      "default": true
+    },
+    {
+      "key": "purge_after_minutes",
+      "label": "Purge Old Sessions After (minutes)",
+      "description": "Automatically delete session files that haven't been accessed for longer than this many minutes. Leave unset to disable purging. Example: 14400 = 10 days. Requires Neovim 0.10 or newer. WARNING: setting this to a very small value will cause sessions to be purged immediately on startup.",
+      "type": "number",
+      "group": "Advanced",
+      "validation": {
+        "min": 1,
+        "integer": true
+      }
+    },
+    {
+      "key": "args_allow_single_directory",
+      "label": "Normal Behavior with Single Directory Argument",
+      "description": "When Neovim is launched with a single directory argument (e.g., nvim ~/projects/foo), follow the normal session save/restore logic for that directory.",
+      "type": "boolean",
+      "group": "Advanced",
+      "default": true
+    },
+    {
+      "key": "args_allow_files_auto_save",
+      "label": "Auto-Save When Launched with File Arguments",
+      "description": "Allow auto-session to save a session when Neovim was started with file arguments (e.g., nvim file.txt). By default this is disabled — auto-session does nothing when files are provided on the command line.",
+      "type": "boolean",
+      "group": "Advanced",
+      "default": false
+    },
+    {
+      "key": "lsp_stop_on_restore",
+      "label": "Stop LSP on Restore",
+      "description": "Stop all running language server processes before restoring a session, then let them restart naturally. This can help avoid duplicate LSP clients after restoration. Not triggered on the initial auto-restore at startup.",
+      "type": "boolean",
+      "group": "Advanced",
+      "default": false
+    },
+    {
+      "key": "custom_session_tag",
+      "label": "Custom Session Tag (Lua Function)",
+      "description": "Lua function called with the current session name that returns an additional string tag to append to the session filename. Useful for creating project-variant sessions beyond git branches.",
+      "type": "lua",
+      "group": "Advanced",
+      "default": "function(session_name)\n  return nil\nend",
+      "inputPlaceholder": "function(session_name)\n  -- return a string to append to the session name, or nil\n  return nil\nend",
+      "expectedReturnType": "string"
+    },
+    {
+      "key": "restore_error_handler",
+      "label": "Restore Error Handler (Lua Function)",
+      "description": "Lua function called when an error occurs during session restoration. Receives the error message string. Return true to disable auto-save after the error, or false/nil to keep auto-save active. By default, fold/help errors are ignored and other errors disable auto-save.",
+      "type": "lua",
+      "group": "Advanced",
+      "default": "function(error_msg)\n  return false\nend",
+      "inputPlaceholder": "function(error_msg)\n  -- return true to disable auto_save after this error\n  -- return false or nil to keep auto_save enabled\n  return false\nend",
+      "expectedReturnType": "boolean"
+    },
+    {
+      "key": "save_extra_cmds",
+      "label": "Save Extra Data Hooks",
+      "description": "Commands or Lua functions that return additional data to save alongside the session. Each function receives the session name and should return a string, table, or nil. The returned data is passed to Restore Extra Data hooks when the session is loaded.",
+      "type": "lua",
+      "group": "Advanced",
+      "inputPlaceholder": "{\n  -- function(session_name)\n  --   return vim.fn.json_encode({ my_data = \"value\" })\n  -- end,\n}",
+      "expectedReturnType": "table"
+    },
+    {
+      "key": "preserve_buffer_on_restore",
+      "label": "Preserve Buffer on Restore (Lua Function)",
+      "description": "Lua function called for each open buffer when restoring a session. Return true to keep the buffer open; return false/nil to close it. Receives the buffer number as argument.",
+      "type": "lua",
+      "group": "Advanced",
+      "default": "function(bufnr)\n  return false\nend",
+      "inputPlaceholder": "function(bufnr)\n  -- return true to keep this buffer, false/nil to close it\n  return false\nend",
+      "expectedReturnType": "boolean"
+    },
+    {
+      "key": "save_extra_data",
+      "label": "Save Extra Data (Lua Function)",
+      "description": "Single Lua function called when saving a session. Return a JSON-encodable string or table with any extra data you want saved alongside the session. This data is passed back to 'Restore Extra Data' when the session is loaded.",
+      "type": "lua",
+      "group": "Advanced",
+      "default": "function(session_name)\nend",
+      "inputPlaceholder": "function(session_name)\n  -- return a string or nil\n  -- return vim.fn.json_encode({ my_data = \"value\" })\nend",
+      "expectedReturnType": "string"
+    },
+    {
+      "key": "restore_extra_data",
+      "label": "Restore Extra Data (Lua Function)",
+      "description": "Lua function called when restoring a session that has extra saved data. Receives the session name and the extra data string previously returned by 'Save Extra Data'.",
+      "type": "lua",
+      "group": "Advanced",
+      "default": "function(session_name, extra_data)\nend",
+      "inputPlaceholder": "function(session_name, extra_data)\n  -- local json = vim.fn.json_decode(extra_data)\n  -- restore your extra data here\nend",
+      "expectedReturnType": "void"
+    }
+  ],
+  "functions": [
+    {
+      "name": "save_session",
+      "label": "Save Session",
+      "description": "Save the current session for the working directory, or with a custom name",
+      "whatItDoes": "Saves your currently open buffers, windows, and layout as a session. If a name is provided, creates a named session that can be manually restored later. Named sessions are not auto-restored.",
+      "isPopular": true,
+      "aliases": [
+        "save session",
+        "session save",
+        "autosession save"
+      ],
+      "params": [
+        {
+          "name": "session_name",
+          "type": "string",
+          "optional": true,
+          "description": "Optional custom session name. If omitted, saves for the current working directory."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('auto-session').save_session($params.session_name)"
+    },
+    {
+      "name": "restore_session",
+      "label": "Restore Session",
+      "description": "Restore a session for the current working directory, or by name",
+      "whatItDoes": "Loads a previously saved session, reopening all the buffers, windows, and splits that were open at save time. If a name is provided, restores that specific named session instead of the cwd session.",
+      "isPopular": true,
+      "aliases": [
+        "restore session",
+        "load session",
+        "open session"
+      ],
+      "params": [
+        {
+          "name": "session_name",
+          "type": "string",
+          "optional": true,
+          "description": "Optional session name to restore. If omitted, restores the session for the current working directory."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('auto-session').restore_session($params.session_name)"
+    },
+    {
+      "name": "delete_session",
+      "label": "Delete Session",
+      "description": "Delete the session for the current working directory, or by name",
+      "whatItDoes": "Permanently removes a session file. If a name is provided, deletes that named session. If omitted, deletes the session for the current working directory.",
+      "isPopular": false,
+      "aliases": [
+        "delete session",
+        "remove session"
+      ],
+      "params": [
+        {
+          "name": "session_name",
+          "type": "string",
+          "optional": true,
+          "description": "Optional session name to delete. If omitted, deletes the session for the current working directory."
+        }
+      ],
+      "returns": "void",
+      "luaCall": "require('auto-session').delete_session($params.session_name)"
+    },
+    {
+      "name": "open_session_picker",
+      "label": "Open Session Picker",
+      "description": "Open the session browser to search, load, or delete sessions",
+      "whatItDoes": "Launches the configured session picker (Telescope, Snacks, Fzf-Lua, or vim.ui.select) to interactively browse all saved sessions. Press Enter to load, Ctrl+D to delete, Ctrl+S to alternate.",
+      "isPopular": true,
+      "aliases": [
+        "session picker",
+        "browse sessions",
+        "search sessions",
+        "telescope sessions"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('AutoSession search')"
+    },
+    {
+      "name": "toggle_autosave",
+      "label": "Toggle Autosave",
+      "description": "Toggle automatic session saving on or off for the current Neovim instance",
+      "whatItDoes": "Switches auto-save between enabled and disabled without changing your config. Useful when you want to make temporary changes without saving them to the session.",
+      "isPopular": false,
+      "aliases": [
+        "toggle session autosave",
+        "disable autosave",
+        "enable autosave"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('AutoSession toggle')"
+    },
+    {
+      "name": "purge_orphaned_sessions",
+      "label": "Purge Orphaned Sessions",
+      "description": "Remove all session files whose working directory no longer exists",
+      "whatItDoes": "Scans all saved sessions and deletes any whose associated directory has been removed from disk. Keeps the session list clean as projects are deleted or moved.",
+      "isPopular": false,
+      "aliases": [
+        "clean sessions",
+        "purge sessions",
+        "remove orphaned sessions"
+      ],
+      "params": [],
+      "returns": "void",
+      "luaCall": "vim.cmd('AutoSession purgeOrphaned')"
+    },
+    {
+      "name": "current_session_name",
+      "label": "Get Current Session Name",
+      "description": "Return the name of the currently active session (useful in statuslines)",
+      "whatItDoes": "Returns a string with the current session name. Pass true to get only the last directory component (shorter, useful for statuslines like lualine).",
+      "isPopular": false,
+      "aliases": [
+        "session name",
+        "current session"
+      ],
+      "params": [
+        {
+          "name": "shorten",
+          "type": "boolean",
+          "optional": true,
+          "description": "If true, return only the last directory component instead of the full session name."
+        }
+      ],
+      "returns": "string",
+      "luaCall": "require('auto-session.lib').current_session_name($params.shorten)"
+    }
+  ],
+  "functionTemplates": [
+    {
+      "key": "save-session-cwd",
+      "baseFunctionName": "save_session",
+      "label": "Save Current Session",
+      "shortDescription": "Save the session for the current working directory",
+      "whatItDoes": "Saves the session for whatever directory you're currently working in, with no extra options.",
+      "isPopular": true,
+      "defaults": {}
+    },
+    {
+      "key": "restore-session-cwd",
+      "baseFunctionName": "restore_session",
+      "label": "Restore Current Session",
+      "shortDescription": "Restore the session for the current working directory",
+      "whatItDoes": "Restores the session for the current working directory, reopening all previously open files and windows.",
+      "isPopular": true,
+      "defaults": {}
+    }
+  ],
+  "events": [],
+  "exCommands": [
+    {
+      "name": "AutoSessionSave",
+      "description": "Save a session for the current working directory, or with a custom name. Invoked as :AutoSession save [name].",
+      "template": ":AutoSession save {name}",
+      "example": ":AutoSession save my_project",
+      "sourceDoc": ":help auto-session",
+      "params": [
+        {
+          "name": "name",
+          "placeholder": "my_session (optional)",
+          "description": "Optional custom session name. If omitted, saves for the current working directory."
+        }
+      ]
+    },
+    {
+      "name": "AutoSessionRestore",
+      "description": "Restore a session for the current working directory, or by name. Invoked as :AutoSession restore [name].",
+      "template": ":AutoSession restore {name}",
+      "example": ":AutoSession restore my_project",
+      "sourceDoc": ":help auto-session",
+      "params": [
+        {
+          "name": "name",
+          "placeholder": "my_session (optional)",
+          "description": "Optional session name to restore. If omitted, restores the session for the current working directory."
+        }
+      ]
+    },
+    {
+      "name": "AutoSessionDelete",
+      "description": "Delete the session for the current working directory, or by name. Invoked as :AutoSession delete [name].",
+      "template": ":AutoSession delete {name}",
+      "example": ":AutoSession delete my_project",
+      "sourceDoc": ":help auto-session",
+      "params": [
+        {
+          "name": "name",
+          "placeholder": "my_session (optional)",
+          "description": "Optional session name to delete. If omitted, deletes the session for the current working directory."
+        }
+      ]
+    },
+    {
+      "name": "AutoSessionSearch",
+      "description": "Open the session picker (Telescope, Snacks, Fzf-Lua, or vim.ui.select) to browse and load sessions. Invoked as :AutoSession search.",
+      "template": ":AutoSession search",
+      "example": ":AutoSession search",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "AutoSessionEnable",
+      "description": "Enable automatic session saving for the current Neovim session. Invoked as :AutoSession enable.",
+      "template": ":AutoSession enable",
+      "example": ":AutoSession enable",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "AutoSessionDisable",
+      "description": "Disable automatic session saving for the current Neovim session (does not affect restore). Invoked as :AutoSession disable.",
+      "template": ":AutoSession disable",
+      "example": ":AutoSession disable",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "AutoSessionToggle",
+      "description": "Toggle automatic session saving on or off for the current Neovim instance. Invoked as :AutoSession toggle.",
+      "template": ":AutoSession toggle",
+      "example": ":AutoSession toggle",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "AutoSessionPurgeOrphaned",
+      "description": "Remove all session files whose working directory no longer exists on disk. Invoked as :AutoSession purgeOrphaned.",
+      "template": ":AutoSession purgeOrphaned",
+      "example": ":AutoSession purgeOrphaned",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "AutoSessionDeletePicker",
+      "description": "Open a picker to interactively select a session to delete. Invoked as :AutoSession deletePicker.",
+      "template": ":AutoSession deletePicker",
+      "example": ":AutoSession deletePicker",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "SessionSave",
+      "description": "Legacy command: save the session for the current working directory. Requires legacy_cmds to be enabled (default: true).",
+      "template": ":SessionSave",
+      "example": ":SessionSave",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "SessionRestore",
+      "description": "Legacy command: restore the session for the current working directory. Requires legacy_cmds to be enabled (default: true).",
+      "template": ":SessionRestore",
+      "example": ":SessionRestore",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "SessionDelete",
+      "description": "Legacy command: delete the session for the current working directory. Requires legacy_cmds to be enabled (default: true).",
+      "template": ":SessionDelete",
+      "example": ":SessionDelete",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "SessionToggle",
+      "description": "Legacy command: toggle automatic session saving on or off. Requires legacy_cmds to be enabled (default: true).",
+      "template": ":SessionToggle",
+      "example": ":SessionToggle",
+      "sourceDoc": ":help auto-session"
+    },
+    {
+      "name": "Autosession",
+      "description": "Legacy command alias for the AutoSession family. Requires legacy_cmds to be enabled (default: true). Subcommands: search, delete.",
+      "template": ":Autosession search",
+      "example": ":Autosession search",
+      "sourceDoc": ":help auto-session"
+    }
+  ]
+}
