@@ -1,0 +1,121 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Full gate. Platform release jobs depend on this passing; they do not re-run it.
+  quality-gate:
+    name: Lint, typecheck, tests
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - name: Install LuaJIT syntax checker
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luajit
+      - run: bun install --frozen-lockfile
+      - name: Validate updater config
+        run: bun run updates:validate-config
+      - name: Verify tag matches app version
+        run: |
+          tag_version="${GITHUB_REF_NAME#v}"
+          pkg_version="$(bun -e "console.log(JSON.parse(await Bun.file('package.json').text()).version)")"
+          if [ "${tag_version}" != "${pkg_version}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} does not match package.json version ${pkg_version}." >&2
+            echo "Run 'bun run version:bump <version>' and commit before tagging." >&2
+            exit 1
+          fi
+          bun run version:bump --check
+      - run: bun run lint
+      - run: bun run typecheck
+      - name: Full test suite
+        env:
+          VINELA_LUA_SYNTAX_CHECKER: luajit
+        run: bun run test
+
+  release:
+    name: Build ${{ matrix.label }}
+    needs: quality-gate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macOS needs both app (updater .app.tar.gz payload) and dmg (first install).
+          # Linux/Windows reuse their installer as the updater payload.
+          - platform: macos-latest
+            label: macos-universal
+            tauri_args: '--target universal-apple-darwin --bundles app,dmg'
+          - platform: ubuntu-22.04
+            label: linux-x86_64
+            tauri_args: '--bundles appimage,deb'
+          - platform: windows-latest
+            label: windows-x86_64
+            tauri_args: '--bundles nsis'
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+      - name: Install Linux dependencies
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf
+      - name: Install universal macOS Rust targets
+        if: matrix.platform == 'macos-latest'
+        run: |
+          rustup target add aarch64-apple-darwin
+          rustup target add x86_64-apple-darwin
+      - name: Configure ad-hoc macOS signing
+        if: matrix.platform == 'macos-latest'
+        # Ad-hoc signing only, no notarization: users must right-click > Open on
+        # first launch. Swap for a Developer ID identity + notarization secrets
+        # to remove the Gatekeeper prompt.
+        run: echo "APPLE_SIGNING_IDENTITY=-" >> "$GITHUB_ENV"
+      - run: bun install --frozen-lockfile
+      - name: Require updater signing secrets
+        shell: bash
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY}" ]; then
+            echo "TAURI_SIGNING_PRIVATE_KEY secret is required: updater artifacts cannot be signed." >&2
+            exit 1
+          fi
+          if [ -z "${TAURI_SIGNING_PRIVATE_KEY_PASSWORD}" ]; then
+            echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD secret is required: the signing key is password-protected." >&2
+            exit 1
+          fi
+      - name: Build and upload release assets
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'vinela ${{ github.ref_name }}'
+          releaseBody: 'See the assets below to download and install this version.'
+          releaseDraft: true
+          prerelease: false
+          includeUpdaterJson: true
+          args: '--config src-tauri/tauri.updater.json --ci ${{ matrix.tauri_args }}'

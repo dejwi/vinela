@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "bundle": {
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDI1QUFDREVFMTIzQzFCQ0YKUldUUEd6d1M3czJxSlExLy9iYVJOcXpEM1JrZ2Q3OTU3VVFOWXRXTnVpQzZ4eU1XNEdEYlB5MVEK",
+      "endpoints": [
+        "https://github.com/dejwi/vinela/releases/latest/download/latest.json"
+      ]
+    }
+  }
+}

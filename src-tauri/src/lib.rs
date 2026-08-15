@@ -8,9 +8,19 @@ use tauri_plugin_fs::FsExt;
 const CHECK_FOR_UPDATES_EVENT: &str = "app://check-for-updates";
 const CHECK_FOR_UPDATES_MENU_ID: &str = "check_for_updates";
 
+/// Build the app menu. `updater_enabled` gates the "Check for Updates…" item:
+/// builds without committed updater config never register the updater plugin,
+/// so the menu entry would only ever surface a "plugin not found" error.
 #[cfg(desktop)]
-fn build_app_menu<R: tauri::Runtime>(app: &tauri::App<R>) -> tauri::Result<Menu<R>> {
+fn build_app_menu<R: tauri::Runtime>(
+    app: &tauri::App<R>,
+    updater_enabled: bool,
+) -> tauri::Result<Menu<R>> {
     let menu = Menu::default(app.handle())?;
+
+    if !updater_enabled {
+        return Ok(menu);
+    }
 
     let Some(help_submenu) = menu
         .get(HELP_SUBMENU_ID)
@@ -1149,10 +1159,10 @@ pub fn run() {
     let updater_enabled = context.config().plugins.0.contains_key("updater");
 
     let builder = tauri::Builder::default()
-        .setup(|app| {
+        .setup(move |app| {
             #[cfg(desktop)]
             {
-                let menu = build_app_menu(app)?;
+                let menu = build_app_menu(app, updater_enabled)?;
                 app.set_menu(menu)?;
             }
 

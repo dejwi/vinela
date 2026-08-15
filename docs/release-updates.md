@@ -1,50 +1,49 @@
-# Automatic updates release notes
+# Releases and automatic updates
 
-This repository includes a frontend/native scaffold for automatic updates. The **public** updater path remains blocked until the approved release identity inputs are available.
+## How it fits together
 
-## Still gated before public enablement
+| Piece | Where |
+|-------|-------|
+| Frontend update service/store/toast flow | `src/features/updates/` |
+| Native **Help → Check for Updates…** menu item | `src-tauri/src/lib.rs` |
+| Updater endpoint + public key + `createUpdaterArtifacts` | `src-tauri/tauri.updater.json` |
+| Release pipeline | `.github/workflows/release.yml` |
+| Preflight validator | `scripts/validate-updater-config.ts` (`bun run updates:validate-config`) |
 
-- Final GitHub `owner/repo`
-- Final Tauri updater public key committed for public builds
-- Confirmation that the matching private key is stored in CI secrets
-- Final first-release identity tuple (`productName`, bundle identifier, endpoint, key)
+**`src-tauri/tauri.conf.json` stays updater-free on purpose.** `bundle.createUpdaterArtifacts` makes Tauri demand a signing key at bundle time, which would break `bun run build` for anyone without the private key. CI overlays `tauri.updater.json` via `--config` instead, and the validator fails if updater keys leak back into the base config.
 
-Do **not** commit placeholder updater endpoints or placeholder public keys to `src-tauri/tauri.conf.json`.
+The Rust side registers `tauri_plugin_updater` only when the merged config contains a `plugins.updater` key. Builds without the overlay (local dev, contributor builds) therefore have no updater plugin — and `build_app_menu` hides the **Check for Updates…** item in that case, so the menu never surfaces a "plugin not found" error. The startup check still runs but fails silently.
 
-## Safe scaffold now in repo
+## One-time setup
 
-- Frontend update service/store/notification flow under `src/features/updates/`
-- Native **Check for Updates…** menu event wiring
-- Shared Tauri runtime detection helper
-- `scripts/validate-updater-config.ts` placeholder/preflight validator
-- Rust updater plugin initialization and `updater:default` permission for packaged builds
+1. **Signing keypair** — `bunx tauri signer generate -w ~/.tauri/vinela.key`. The public key goes into `src-tauri/tauri.updater.json`; the private key never enters the repo. **Always set a non-empty password**: GitHub rejects empty secret values, and a password-less key fails to sign non-interactively in CI.
+2. **Repository secrets** (Settings → Secrets and variables → Actions):
+   - `TAURI_SIGNING_PRIVATE_KEY` — full contents of `~/.tauri/vinela.key`
+   - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` — the key password
+3. Back up the private key **and its password** somewhere durable. Losing either means every already-installed copy stops accepting updates and users must reinstall by hand.
 
-## Still intentionally not enabled for public releases
-
-- Committed `plugins.updater.pubkey` / `plugins.updater.endpoints` in `src-tauri/tauri.conf.json`
-- Committed `bundle.createUpdaterArtifacts` in `src-tauri/tauri.conf.json`
-- Public GitHub release workflow
-
----
-
-### Public licensing preflight
-
-1. `LICENSE` must match the pinned AGPL digest `0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0`.
-2. `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json` must all declare `AGPL-3.0-only` and `https://github.com/dejwi/vinela`.
-3. Every public installer/application bundle must contain `LICENSE` and `NOTICE`; inspect each produced macOS, Linux, and Windows artifact before publication.
-4. The release is blocked until a separate audit covers the licenses/notices of bundled npm, Rust, generated, and static-asset dependencies. Do not represent root `NOTICE` as that audit.
-5. Before publication, create/verify `https://github.com/dejwi/vinela`, then update the local remote with `git remote set-url origin git@github.com:dejwi/vinela.git`; `.git/config` is local state and is not part of this diff.
-
-## Preflight validator
-
-Run:
+## Cutting a release
 
 ```bash
+bun run version:bump <patch|minor|major|VERSION>
 bun run updates:validate-config
+git commit -am "release: v0.1.23"
+git tag v0.1.23
+git push origin main --tags
 ```
 
-Behavior:
+The tag push runs `.github/workflows/release.yml`:
 
-- Fails if blocked placeholder tokens appear in `src-tauri/tauri.conf.json`
-- Passes when updater config is still absent
-- Once public updater config exists, also requires non-empty committed public key, HTTPS endpoint, and `/releases/latest/download/latest.json` path
+1. **quality-gate** — validator, tag/version match, lint, typecheck, full Vitest suite with LuaJIT syntax checking.
+2. **release** (matrix) — macOS universal (`app` + `dmg`), Linux x86_64 (`appimage` + `deb`), Windows x86_64 (`nsis`). Each job builds with the updater overlay, signs the updater payload, and uploads to a **draft** release. `includeUpdaterJson: true` produces `latest.json`.
+3. Publish the draft manually once the assets look right. The updater endpoint reads `releases/latest`, which ignores drafts, so nothing reaches users before you click Publish.
+
+## Code signing status
+
+macOS builds are ad-hoc signed (`APPLE_SIGNING_IDENTITY=-`) and **not notarized**; Windows builds are unsigned. Users see a Gatekeeper/SmartScreen warning on first launch — the workaround is documented in the README. Removing it needs an Apple Developer Program membership and a Windows code-signing certificate, plus the corresponding secrets wired into the release job.
+
+## Still open before the first public release
+
+- License/notice audit of bundled npm, Rust, generated, and static-asset dependencies. The root `NOTICE` is not that audit.
+- Verify every produced installer/bundle actually contains `LICENSE` and `NOTICE` on all three platforms.
+- No CI workflow runs on pull requests yet; only tag pushes are gated.

@@ -312,4 +312,11 @@ All planned features are implemented:
 - Parent failures use stable `Failed to create parent directory` wrapper → frontend `directory-creation-failed` (prefix-first, including permission denials under that prefix). Final-leaf policy and unrelated write failures → `write-failed`.
 - Residual threat boundary: portable path APIs detect observable same-user identity races but are not descriptor-/handle-relative atomic protection; full hardening is a separate cross-platform project.
 
-**Last Updated**: Aug 5, 2026. Pre-public cleanup removed temporary private updater tooling from the public snapshot; bundled Neovim docs/examples remain replaced by installed runtime docs; first-party licensing remains AGPL-3.0-only.
+### Public release and updater
+
+- Tag push `v*` runs `.github/workflows/release.yml`: quality gate (validator, tag/version match, lint, typecheck, full tests) then a macOS/Linux/Windows build matrix uploading to a **draft** GitHub release.
+- `src-tauri/tauri.conf.json` must stay updater-free; `plugins.updater` and `bundle.createUpdaterArtifacts` live only in the CI overlay `src-tauri/tauri.updater.json`, applied via `--config`. `bun run updates:validate-config` enforces both sides.
+- `tauri_plugin_updater` and the **Check for Updates…** menu item register only when the merged config declares `plugins.updater`, so contributor builds have no dead menu entry.
+- Runbook and remaining pre-release gaps: `docs/release-updates.md`.
+
+**Last Updated**: Aug 15, 2026. Public release pipeline and updater config landed (draft-release workflow, CI updater overlay, signing-key secrets); pre-public cleanup removed temporary private updater tooling; bundled Neovim docs/examples remain replaced by installed runtime docs; first-party licensing remains AGPL-3.0-only.
