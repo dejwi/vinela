@@ -11,7 +11,9 @@
 
 Configure plugins, options, keymaps and startup logic in a GUI. vinela generates a single readable `init.lua` and deploys it to your Neovim config directory.
 
-Want to look around before installing anything? The editor also runs in your browser at **[vinela.dev](https://vinela.dev)**, with an example project ready to load.
+### [Try it in your browser at vinela.dev](https://vinela.dev)
+
+No install. The same editor, with an example project ready to load.
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
 ![Tauri](https://img.shields.io/badge/Tauri-2.0-24C8DB)
