@@ -6,7 +6,9 @@ import { useProjectStore } from '@/features/projects/store'
 import { useTutorialStore } from '@/features/tutorial'
 import { loadTutorialProgress } from '@/features/tutorial/storage'
 import { Button } from '@/shared/components/ui/button'
+import { GithubIcon } from '@/shared/components/ui/github-icon'
 import { useScrollIndicators } from '@/shared/hooks/use-scroll-indicators'
+import { APP_REPO_URL } from '@/shared/lib/app-identity'
 import { isMemoryMode } from '@/shared/lib/storage'
 import { cn } from '@/shared/lib/utils'
 import vinelaLogoUrl from '../../../../assets/branding/vinela-logo-transparent-dark.svg'
@@ -101,6 +103,9 @@ export default function StartScreen() {
               <span className="text-[#f1f5f1]">inela</span>
             </h1>
           </div>
+          <p className="text-sm text-muted-foreground">
+            Build your Neovim config visually — no Lua required.
+          </p>
         </div>
 
         {/* Dev Mode Quick Start - fixed */}
@@ -191,6 +196,17 @@ export default function StartScreen() {
               Take the guided tour
             </button>
           )}
+          <a
+            href={APP_REPO_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <GithubIcon className="size-3.5" />
+            {inMemoryMode
+              ? 'Browser demo of vinela - open source on GitHub'
+              : 'Open source on GitHub'}
+          </a>
         </div>
       </div>
 

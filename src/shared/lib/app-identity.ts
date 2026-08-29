@@ -1,4 +1,5 @@
 export const APP_NAME = 'vinela'
+export const APP_REPO_URL = 'https://github.com/dejwi/vinela'
 export const APP_LOG_PREFIX = '[vinela]'
 export const PROJECT_BACKUP_DIR_NAME = '.vinela-backups'
 export const TUTORIAL_SENTINEL = '.vinela-tutorial'
