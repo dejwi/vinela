@@ -15,6 +15,10 @@ Configure plugins, options, keymaps and startup logic in a GUI. vinela generates
 ![Tauri](https://img.shields.io/badge/Tauri-2.0-24C8DB)
 ![Neovim](https://img.shields.io/badge/Neovim-0.12%2B-57A143)
 
+[![Try it in your browser at vinela.dev](https://img.shields.io/badge/Try_it_in_your_browser-vinela.dev-7C3AED?style=for-the-badge)](https://vinela.dev)
+
+**No install, no Neovim needed.** The full editor with an example project loaded — browse plugins, flip options, and read the `init.lua` it generates. Nothing is saved and nothing touches your machine; deploying to `~/.config/nvim` is the one part that needs the desktop app.
+
 <img src="screenshots/plugins.png" alt="vinela plugin manager" width="820" />
 
 </div>
