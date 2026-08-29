@@ -247,7 +247,7 @@ export default function PluginsPage(): React.JSX.Element {
 
   return (
     <ScrollArea className="h-full">
-      <div data-tutorial="plugins-page" className="p-6 space-y-6 max-w-5xl">
+      <div data-tutorial="plugins-page" className="p-6 space-y-6">
         {/* Header: title, search, import/export buttons */}
         <PluginsHeader
           searchQuery={searchQuery}
@@ -314,7 +314,7 @@ export default function PluginsPage(): React.JSX.Element {
 
               {/* Plugin grid */}
               {filteredInstalledPlugins.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                   {filteredInstalledPlugins.map((p) => {
                     if (p.status === 'orphaned') {
                       return (
@@ -377,7 +377,7 @@ export default function PluginsPage(): React.JSX.Element {
 
               {/* Plugin grid */}
               {filteredBrowsePlugins.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
                   {filteredBrowsePlugins.map((p) => (
                     <PluginGridCard
                       key={p.schema.id}
