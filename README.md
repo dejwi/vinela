@@ -11,9 +11,17 @@
 
 Configure plugins, options, keymaps and startup logic in a GUI. vinela generates a single readable `init.lua` and deploys it to your Neovim config directory.
 
-### [Try it in your browser at vinela.dev](https://vinela.dev)
+### Download the desktop app
 
-No install. The same editor, with an example project ready to load.
+[![Download for macOS](https://img.shields.io/badge/Download-macOS-0f172a?style=for-the-badge&logo=apple&logoColor=white)](https://github.com/dejwi/vinela/releases/latest)
+[![Download for Windows](https://img.shields.io/badge/Download-Windows-0f172a?style=for-the-badge&logo=windowsxp&logoColor=white)](https://github.com/dejwi/vinela/releases/latest)
+[![Download for Linux](https://img.shields.io/badge/Download-Linux-0f172a?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/dejwi/vinela/releases/latest)
+
+macOS `.dmg` (universal) · Windows `.exe` installer · Linux `.AppImage` or `.deb`
+
+**macOS: the build is unsigned**, so Gatekeeper blocks it on first launch. [One command fixes it.](#macos-the-build-is-not-signed)
+
+Or [try the browser demo at vinela.dev](https://vinela.dev). Same editor, no install, but it is a **preview only**: projects live in that browser tab, and it cannot write files or deploy to Neovim. Use the desktop app for a real config.
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
 ![Tauri](https://img.shields.io/badge/Tauri-2.0-24C8DB)
@@ -136,9 +144,21 @@ If the contract can't express something your plugin needs, open an issue. The fi
 
 ## Install
 
-The generated config targets **Neovim 0.12+**.
+vinela is a desktop app for macOS, Linux and Windows. The generated config targets **Neovim 0.12+**.
 
-Prebuilt binaries are published on the [Releases](https://github.com/dejwi/vinela/releases) page. To build it yourself:
+Prebuilt binaries are published on the [Releases](https://github.com/dejwi/vinela/releases/latest) page:
+
+| Platform | File |
+|---|---|
+| macOS (Intel + Apple Silicon) | `vinela_<version>_universal.dmg` |
+| Windows | `vinela_<version>_x64-setup.exe` |
+| Linux | `vinela_<version>_amd64.AppImage` or `vinela_<version>_amd64.deb` |
+
+### Desktop vs. browser demo
+
+[vinela.dev](https://vinela.dev) runs the same editor with an example project ready to load, and it's the fastest way to see what the app does. It is a preview, not the product: projects are kept in browser storage, nothing is read from or written to your filesystem, and Deploy is unavailable. To keep a project as a folder you can commit, and to write `init.lua` into your Neovim config directory, use the desktop app.
+
+To build it yourself:
 
 ```bash
 bun install

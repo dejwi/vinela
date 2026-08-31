@@ -1,4 +1,4 @@
-import { Loader2, Play, Rocket, RotateCcw } from 'lucide-react'
+import { Download, Loader2, Play, Rocket, RotateCcw } from 'lucide-react'
 import { useProjectStore } from '@/features/projects/store'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
@@ -16,6 +16,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/shared/components/ui/tabs'
+import { APP_DOWNLOAD_URL } from '@/shared/lib/app-identity'
 import { isMemoryMode } from '@/shared/lib/storage'
 import {
   selectCanDeploy,
@@ -148,7 +149,10 @@ function getDialogTitle(dialogPhase: GenerationDialogPhase): string {
   return 'Generating...'
 }
 
-function getDialogDescription(dialogPhase: GenerationDialogPhase): string {
+function getDialogDescription(
+  dialogPhase: GenerationDialogPhase,
+  isMemory: boolean,
+): string {
   if (dialogPhase.type === 'pre-flight') {
     return 'Generate a working init.lua from your visual configuration.'
   }
@@ -172,9 +176,12 @@ function getDialogDescription(dialogPhase: GenerationDialogPhase): string {
     return `Generating graph ${p.current}/${p.total}: ${p.graphName}`
   if (p.type === 'validating-output') return 'Validating generated Lua output.'
   if (p.type === 'complete') {
-    return p.result.success
-      ? 'Review the generated code below. You can deploy it to your Neovim config directory.'
-      : 'There were errors that prevented generation. Review the issues below.'
+    if (!p.result.success) {
+      return 'There were errors that prevented generation. Review the issues below.'
+    }
+    return isMemory
+      ? 'Review the generated code below. Deploying to your Neovim config directory needs the desktop app.'
+      : 'Review the generated code below. You can deploy it to your Neovim config directory.'
   }
   return 'An unexpected error occurred.'
 }
@@ -328,9 +335,11 @@ function renderFooterActions(props: FooterActionProps): React.ReactNode {
             </Button>
           )}
           {isMemory && (
-            <Button disabled title="Deploy is not available in browser mode">
-              <Rocket className="w-4 h-4 mr-2" />
-              Deploy (Browser Mode)
+            <Button asChild>
+              <a href={APP_DOWNLOAD_URL} target="_blank" rel="noreferrer">
+                <Download className="w-4 h-4 mr-2" />
+                Download desktop app to deploy
+              </a>
             </Button>
           )}
         </>
@@ -416,7 +425,7 @@ export function GenerateDialog(): React.JSX.Element {
         <DialogHeader>
           <DialogTitle>{getDialogTitle(dialogPhase)}</DialogTitle>
           <DialogDescription>
-            {getDialogDescription(dialogPhase)}
+            {getDialogDescription(dialogPhase, isMemoryMode())}
           </DialogDescription>
         </DialogHeader>
 

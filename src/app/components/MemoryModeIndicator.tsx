@@ -1,11 +1,11 @@
+import { Download } from 'lucide-react'
 import { useProjectStore } from '@/features/projects/store'
-import { GithubIcon } from '@/shared/components/ui/github-icon'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip'
-import { APP_REPO_URL } from '@/shared/lib/app-identity'
+import { APP_DOWNLOAD_URL } from '@/shared/lib/app-identity'
 import { isMemoryMode } from '@/shared/lib/storage'
 
 export function MemoryModeIndicator(): React.ReactNode {
@@ -15,7 +15,7 @@ export function MemoryModeIndicator(): React.ReactNode {
   if (!isMemory && !isTutorialProject) return null
 
   return (
-    // Above the tutorial overlay (z-[9998]) so the demo/repo link stays
+    // Above the tutorial overlay (z-[9998]) so the download link stays
     // readable and clickable while the tutorial auto-runs on first visit.
     <div className="fixed bottom-3 right-3 z-[10000] flex items-center gap-2 pointer-events-none">
       {isTutorialProject && (
@@ -27,23 +27,19 @@ export function MemoryModeIndicator(): React.ReactNode {
         <Tooltip delayDuration={150}>
           <TooltipTrigger asChild>
             <a
-              href={APP_REPO_URL}
+              href={APP_DOWNLOAD_URL}
               target="_blank"
               rel="noreferrer"
-              aria-label="Demo of vinela — open the GitHub repository"
-              className="pointer-events-auto group flex items-center gap-2 rounded-full border border-border bg-background/95 px-4 py-2 text-sm backdrop-blur-sm transition-colors hover:border-foreground/40"
+              className="pointer-events-auto flex items-center gap-1.5 rounded-full bg-[#55d98a] px-4 py-2 text-sm font-medium text-black transition-opacity hover:opacity-90"
             >
-              <span className="text-muted-foreground">Demo of</span>
-              <span className="flex items-center gap-1.5 font-medium text-foreground group-hover:underline underline-offset-2">
-                <GithubIcon className="size-4" />
-                vinela
-              </span>
+              <Download className="size-4" />
+              Get the desktop app
             </a>
           </TooltipTrigger>
           {/* Above the tutorial overlay, like the badge itself. */}
           <TooltipContent side="top" align="end" className="z-[10001] max-w-xs">
-            Browser demo - projects are saved in this browser only. Open the
-            GitHub repository.
+            Browser demo: projects are saved in this browser only, and deploying
+            to Neovim needs the desktop app.
           </TooltipContent>
         </Tooltip>
       )}

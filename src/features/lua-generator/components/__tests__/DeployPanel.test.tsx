@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { APP_DOWNLOAD_URL } from '@/shared/lib/app-identity'
 import type { DeployResult } from '../../types'
 import { DeployPanel } from '../DeployPanel'
 
@@ -19,6 +20,20 @@ describe('DeployPanel', () => {
     ).toBeInTheDocument()
     expect(screen.queryByText(/Deploy failed/)).not.toBeInTheDocument()
     expect(screen.queryByText(/output-file symlinks/)).not.toBeInTheDocument()
+  })
+
+  it('links to the desktop download for memory-mode failures', () => {
+    const result: DeployResult = {
+      success: false,
+      error: 'Deploy is not available in browser mode',
+      errorCode: 'memory-mode',
+    }
+
+    render(<DeployPanel deployResult={result} />)
+
+    expect(
+      screen.getByRole('link', { name: /download the desktop app/i }),
+    ).toHaveAttribute('href', APP_DOWNLOAD_URL)
   })
 
   it('shows directory-creation guidance for directory-creation-failed', () => {

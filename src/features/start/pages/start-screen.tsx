@@ -8,7 +8,7 @@ import { loadTutorialProgress } from '@/features/tutorial/storage'
 import { Button } from '@/shared/components/ui/button'
 import { GithubIcon } from '@/shared/components/ui/github-icon'
 import { useScrollIndicators } from '@/shared/hooks/use-scroll-indicators'
-import { APP_REPO_URL } from '@/shared/lib/app-identity'
+import { APP_DOWNLOAD_URL, APP_REPO_URL } from '@/shared/lib/app-identity'
 import { isMemoryMode } from '@/shared/lib/storage'
 import { cn } from '@/shared/lib/utils'
 import vinelaLogoUrl from '../../../../assets/branding/vinela-logo-transparent-dark.svg'
@@ -106,6 +106,20 @@ export default function StartScreen() {
           <p className="text-sm text-muted-foreground">
             Build your Neovim config visually — no Lua required.
           </p>
+          {inMemoryMode && (
+            <p className="text-xs text-muted-foreground">
+              Browser demo: projects live in this browser only.{' '}
+              <a
+                href={APP_DOWNLOAD_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="font-medium text-foreground underline underline-offset-2"
+              >
+                Download the desktop app
+              </a>{' '}
+              to keep projects on disk and deploy to your Neovim config.
+            </p>
+          )}
         </div>
 
         {/* Dev Mode Quick Start - fixed */}

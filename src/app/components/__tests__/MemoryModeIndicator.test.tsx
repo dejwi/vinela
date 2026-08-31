@@ -15,7 +15,7 @@ vi.mock('@/features/projects/store', () => ({
 import type { ProjectState } from '@/features/projects/store'
 import { useProjectStore } from '@/features/projects/store'
 import { TooltipProvider } from '@/shared/components/ui/tooltip'
-import { APP_REPO_URL } from '@/shared/lib/app-identity'
+import { APP_DOWNLOAD_URL } from '@/shared/lib/app-identity'
 import { isMemoryMode } from '@/shared/lib/storage'
 
 // The badge's tooltip requires a TooltipProvider, mounted app-wide in Providers.
@@ -43,13 +43,13 @@ describe('MemoryModeIndicator', () => {
     expect(container.firstChild).toBeNull()
   })
 
-  it('renders only the demo repo link when memory mode is true but not tutorial', () => {
+  it('renders only the download link when memory mode is true but not tutorial', () => {
     mockState(true, false)
 
     render(<MemoryModeIndicator />)
 
-    const link = screen.getByRole('link', { name: /demo of vinela/i })
-    expect(link).toHaveAttribute('href', APP_REPO_URL)
+    const link = screen.getByRole('link', { name: /get the desktop app/i })
+    expect(link).toHaveAttribute('href', APP_DOWNLOAD_URL)
     expect(link).toHaveAttribute('target', '_blank')
     expect(screen.queryByText('Tutorial')).not.toBeInTheDocument()
   })
@@ -61,7 +61,7 @@ describe('MemoryModeIndicator', () => {
 
     expect(screen.getByText('Tutorial')).toBeInTheDocument()
     expect(
-      screen.queryByRole('link', { name: /demo of vinela/i }),
+      screen.queryByRole('link', { name: /get the desktop app/i }),
     ).not.toBeInTheDocument()
   })
 
@@ -72,7 +72,7 @@ describe('MemoryModeIndicator', () => {
 
     expect(screen.getByText('Tutorial')).toBeInTheDocument()
     expect(
-      screen.getByRole('link', { name: /demo of vinela/i }),
+      screen.getByRole('link', { name: /get the desktop app/i }),
     ).toBeInTheDocument()
   })
 })

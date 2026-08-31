@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createHighlighter, type Highlighter } from 'shiki'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import { useTheme } from '@/shared/hooks/use-theme'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -37,6 +38,10 @@ function getHighlighter(): Promise<Highlighter> {
     highlighterPromise = createHighlighter({
       themes: ['github-dark', 'github-light'],
       langs: ['lua'],
+      // JS regex engine, not the default WASM one: WebAssembly needs
+      // 'wasm-unsafe-eval' in script-src, which the packaged app's CSP does
+      // not grant, so the WASM engine silently fails there.
+      engine: createJavaScriptRegexEngine(),
     })
   }
   return highlighterPromise

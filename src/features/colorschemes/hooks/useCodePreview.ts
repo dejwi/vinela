@@ -1,6 +1,7 @@
 import type { MutableRefObject } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { createHighlighter } from 'shiki'
+import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 import type { ColorSchemeColors } from '@/shared/types'
 
 interface UseCodePreviewParams {
@@ -30,6 +31,8 @@ function getHighlighter() {
     highlighterPromise = createHighlighter({
       themes: ['github-dark', 'github-light'],
       langs: ['vim', 'lua'],
+      // See useLuaPreview: the WASM engine is blocked by the packaged app's CSP.
+      engine: createJavaScriptRegexEngine(),
     })
   }
   return highlighterPromise

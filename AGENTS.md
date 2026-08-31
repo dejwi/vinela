@@ -286,6 +286,7 @@ All planned features are implemented:
 - **Biome lint is fail-closed on warnings** — `bun run lint` runs `biome check --error-on-warnings .`; do not weaken rules globally to silence findings
 - **Cognitive-complexity suppressions** must be function-local `biome-ignore` comments with a concrete rationale; no file- or rule-level disables
 - **Neovim 0.12 baseline**: generated configuration targets `MIN_SUPPORTED_NEOVIM_VERSION = '0.12.0'`; pre-flight captures a request-scoped target snapshot and emits a non-blocking warning when the locally detected binary is older or undetected (suppressed in memory mode)
+- **Syntax highlighting must not need WASM**: the packaged app's CSP grants no `'wasm-unsafe-eval'`, so shiki highlighters pass `createJavaScriptRegexEngine()`. The default WASM engine compiles fine in `bun run dev` but is blocked in release builds, where previews silently fall back to unhighlighted text.
 
 ### Graph System
 - Plugin management uses `vim.pack` (native Neovim)
@@ -319,4 +320,6 @@ All planned features are implemented:
 - `tauri_plugin_updater` and the **Check for Updates…** menu item register only when the merged config declares `plugins.updater`, so contributor builds have no dead menu entry.
 - Runbook and remaining pre-release gaps: `docs/release-updates.md`.
 
-**Last Updated**: Aug 15, 2026. Public release pipeline and updater config landed (draft-release workflow, CI updater overlay, signing-key secrets); pre-public cleanup removed temporary private updater tooling; bundled Neovim docs/examples remain replaced by installed runtime docs; first-party licensing remains AGPL-3.0-only.
+**Last Updated**: Aug 31, 2026. README leads with desktop downloads and browser-demo caveats; browser-mode UI points at the releases page instead of a dead Deploy button; shiki now uses the JS regex engine so previews highlight under the packaged CSP.
+
+Previous: Aug 15, 2026. Public release pipeline and updater config landed (draft-release workflow, CI updater overlay, signing-key secrets); pre-public cleanup removed temporary private updater tooling; bundled Neovim docs/examples remain replaced by installed runtime docs; first-party licensing remains AGPL-3.0-only.

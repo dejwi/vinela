@@ -1,4 +1,5 @@
 import { Archive, CheckCircle2, FileCode, XCircle } from 'lucide-react'
+import { APP_DOWNLOAD_URL } from '@/shared/lib/app-identity'
 import type { DeployResult } from '../types'
 
 interface DeployPanelProps {
@@ -83,8 +84,16 @@ export function DeployPanel({
           )}
         {deployResult.errorCode === 'memory-mode' && (
           <p className="text-xs text-muted-foreground mt-2">
-            Deploy is not available in browser mode. Use the desktop app to
-            deploy.
+            Deploy is not available in browser mode.{' '}
+            <a
+              href={APP_DOWNLOAD_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="underline underline-offset-2 hover:text-foreground"
+            >
+              Download the desktop app
+            </a>{' '}
+            to write init.lua to your Neovim config directory.
           </p>
         )}
       </div>
