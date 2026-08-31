@@ -103,9 +103,6 @@ export default function StartScreen() {
               <span className="text-[#f1f5f1]">inela</span>
             </h1>
           </div>
-          <p className="text-sm text-muted-foreground">
-            Build your Neovim config visually — no Lua required.
-          </p>
           {inMemoryMode && (
             <p className="text-xs text-muted-foreground">
               Browser demo: projects live in this browser only.{' '}
