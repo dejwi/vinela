@@ -158,7 +158,7 @@ function TutorialPausedOverlay({
             </Button>
           )}
           <Button variant="ghost" size="sm" onClick={onSkip}>
-            Skip Tutorial
+            Exit tutorial
           </Button>
         </div>
       </div>

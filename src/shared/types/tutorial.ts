@@ -102,9 +102,6 @@ export interface TutorialProgress {
 
 /**
  * Runtime tutorial state (not persisted). Discriminated union on `status`.
- *
- * NOTE: skipButtonEnabled is NOT here — it's derived from the
- * useSkipButtonTimer hook in the UI layer (Phase 2).
  */
 export type TutorialRuntimeState =
   | { readonly status: 'idle' }

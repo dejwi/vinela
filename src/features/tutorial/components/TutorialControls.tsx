@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import type React from 'react'
 import { Button } from '@/shared/components/ui/button'
 
@@ -8,10 +9,6 @@ interface TutorialControlsProps {
   readonly totalSteps: number
   /** Whether the "Previous" button should be shown */
   readonly allowBack: boolean
-  /** Whether the skip button is enabled (from useSkipButtonTimer) */
-  readonly skipEnabled: boolean
-  /** Remaining seconds for skip timer display */
-  readonly skipRemainingSeconds: number
   /** Whether the advance condition is met (enables Next button for click-target steps) */
   readonly canAdvance: boolean
   /** Advance condition type (affects Next button label and disabled state) */
@@ -30,9 +27,9 @@ interface TutorialControlsProps {
 }
 
 /**
- * Tutorial navigation controls: Previous, Skip, and Next/Finish buttons.
+ * Tutorial navigation controls: Previous, Exit tutorial, and Next/Finish buttons.
  *
- * - Skip button is disabled for the first 5 seconds (controlled by useSkipButtonTimer).
+ * - Exit button always available (no delay) and skips the entire tutorial.
  * - Next button is disabled for click-target steps until the condition is met.
  *   Shows a countdown ("Click target (20s)" → "Click target (19s)" → … → "Continue").
  * - Previous button is hidden on the first step or when allowBack is false.
@@ -46,8 +43,6 @@ export function TutorialControls(
     currentStepIndex,
     totalSteps,
     allowBack,
-    skipEnabled,
-    skipRemainingSeconds,
     canAdvance,
     advanceType,
     fallbackRemainingSeconds,
@@ -96,14 +91,18 @@ export function TutorialControls(
           )}
         </div>
         <div className="flex items-center gap-2">
+          {/* Filled + bordered so it reads as a real button in both themes:
+              `secondary` carries dark mode, the border carries light mode
+              (where secondary is nearly the popover background). */}
           <Button
-            variant="ghost"
+            variant="secondary"
             size="sm"
-            disabled={!skipEnabled}
             onClick={onSkip}
-            className="text-muted-foreground"
+            className="border border-border font-semibold"
+            data-testid="tutorial-exit-button"
           >
-            {skipEnabled ? 'Skip Tutorial' : `Skip (${skipRemainingSeconds}s)`}
+            <X />
+            Exit tutorial
           </Button>
           <Button
             size="sm"

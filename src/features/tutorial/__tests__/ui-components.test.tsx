@@ -1,7 +1,7 @@
 /**
  * Phase 2 UI Component Tests
  *
- * Tests for: useSkipButtonTimer, TutorialOverlay, TutorialControls, TutorialTooltip
+ * Tests for: TutorialOverlay, TutorialControls, TutorialTooltip
  *
  * @vitest-environment jsdom
  */
@@ -24,7 +24,6 @@ import { TutorialControls } from '../components/TutorialControls'
 import { TutorialOverlay } from '../components/TutorialOverlay'
 import { TutorialTooltip } from '../components/TutorialTooltip'
 import { useClickTargetFallbackTimer } from '../hooks/useClickTargetFallbackTimer'
-import { useSkipButtonTimer } from '../hooks/useSkipButtonTimer'
 
 // ── useClickTargetFallbackTimer ───────────────────────────────────────────────
 
@@ -103,59 +102,6 @@ describe('useClickTargetFallbackTimer', () => {
   })
 })
 
-// ── useSkipButtonTimer ────────────────────────────────────────────────────────
-
-describe('useSkipButtonTimer', () => {
-  beforeEach(() => {
-    vi.useFakeTimers()
-  })
-
-  afterEach(() => {
-    vi.useRealTimers()
-  })
-
-  it('starts disabled with 5 seconds remaining when active', () => {
-    const { result } = renderHook(() => useSkipButtonTimer(true))
-
-    expect(result.current.isEnabled).toBe(false)
-    expect(result.current.remainingSeconds).toBe(5)
-  })
-
-  it('enables after 5 seconds', async () => {
-    const { result } = renderHook(() => useSkipButtonTimer(true))
-
-    expect(result.current.isEnabled).toBe(false)
-
-    // Advance past the 5-second threshold
-    await act(async () => {
-      vi.advanceTimersByTime(5000)
-    })
-
-    expect(result.current.isEnabled).toBe(true)
-  })
-
-  it('resets when isActive changes to false', async () => {
-    const { result, rerender } = renderHook(
-      ({ active }: { active: boolean }) => useSkipButtonTimer(active),
-      { initialProps: { active: true } },
-    )
-
-    // Advance 3 seconds (still counting down)
-    await act(async () => {
-      vi.advanceTimersByTime(3000)
-    })
-
-    expect(result.current.isEnabled).toBe(false)
-    expect(result.current.remainingSeconds).toBeLessThan(5)
-
-    // Deactivate — should reset
-    rerender({ active: false })
-
-    expect(result.current.isEnabled).toBe(false)
-    expect(result.current.remainingSeconds).toBe(5)
-  })
-})
-
 // ── TutorialOverlay ───────────────────────────────────────────────────────────
 
 describe('TutorialOverlay', () => {
@@ -228,7 +174,7 @@ describe('TutorialOverlay', () => {
     fireEvent.click(screen.getByRole('button', { name: /retry/i }))
     expect(onRetry).toHaveBeenCalledOnce()
 
-    fireEvent.click(screen.getByRole('button', { name: /skip tutorial/i }))
+    fireEvent.click(screen.getByRole('button', { name: /exit tutorial/i }))
     expect(onSkip).toHaveBeenCalledOnce()
   })
 
@@ -295,7 +241,7 @@ describe('TutorialOverlay', () => {
     expect(onRetrySetupAction).toHaveBeenCalledOnce()
 
     // Skip Tutorial button should still be present
-    fireEvent.click(screen.getByRole('button', { name: /skip tutorial/i }))
+    fireEvent.click(screen.getByRole('button', { name: /exit tutorial/i }))
     expect(onSkip).toHaveBeenCalledOnce()
   })
 
@@ -330,8 +276,6 @@ describe('TutorialControls', () => {
     currentStepIndex: 1,
     totalSteps: 5,
     allowBack: true,
-    skipEnabled: true,
-    skipRemainingSeconds: 0,
     canAdvance: true,
     advanceType: 'click-next' as const,
     onNext: vi.fn(),
@@ -343,13 +287,13 @@ describe('TutorialControls', () => {
     vi.clearAllMocks()
   })
 
-  it('renders Continue and Skip buttons', () => {
+  it('renders Continue and Exit tutorial buttons', () => {
     render(<TutorialControls {...baseProps} />)
     expect(
       screen.getByRole('button', { name: /continue/i }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('button', { name: /skip tutorial/i }),
+      screen.getByRole('button', { name: /exit tutorial/i }),
     ).toBeInTheDocument()
   })
 
@@ -367,16 +311,12 @@ describe('TutorialControls', () => {
     ).not.toBeInTheDocument()
   })
 
-  it('disables Skip button when skipEnabled is false', () => {
-    render(
-      <TutorialControls
-        {...baseProps}
-        skipEnabled={false}
-        skipRemainingSeconds={3}
-      />,
-    )
-    const skipButton = screen.getByRole('button', { name: /skip \(3s\)/i })
-    expect(skipButton).toBeDisabled()
+  it('exits the whole tutorial immediately on the first step', () => {
+    render(<TutorialControls {...baseProps} currentStepIndex={0} />)
+    const exitButton = screen.getByRole('button', { name: /exit tutorial/i })
+    expect(exitButton).toBeEnabled()
+    fireEvent.click(exitButton)
+    expect(baseProps.onSkip).toHaveBeenCalledOnce()
   })
 
   it('disables Next button for click-target steps when canAdvance is false', () => {
@@ -448,7 +388,7 @@ describe('TutorialControls', () => {
   it('calls onSkip when Skip button is clicked', () => {
     const onSkip = vi.fn()
     render(<TutorialControls {...baseProps} onSkip={onSkip} />)
-    fireEvent.click(screen.getByRole('button', { name: /skip tutorial/i }))
+    fireEvent.click(screen.getByRole('button', { name: /exit tutorial/i }))
     expect(onSkip).toHaveBeenCalledOnce()
   })
 

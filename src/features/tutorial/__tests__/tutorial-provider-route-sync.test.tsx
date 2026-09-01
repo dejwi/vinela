@@ -32,13 +32,6 @@ vi.mock('../hooks/useTutorialTarget', () => ({
   })),
 }))
 
-vi.mock('../hooks/useSkipButtonTimer', () => ({
-  useSkipButtonTimer: vi.fn(() => ({
-    isEnabled: true,
-    remainingSeconds: 0,
-  })),
-}))
-
 vi.mock('../hooks/useClickTargetFallbackTimer', () => ({
   useClickTargetFallbackTimer: vi.fn(() => ({
     fallbackElapsed: false,

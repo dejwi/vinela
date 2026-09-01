@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { runSetupAction } from '@/features/tutorial/data/setup-actions'
 import { TUTORIAL_STEPS } from '@/features/tutorial/data/steps'
 import { useClickTargetFallbackTimer } from '@/features/tutorial/hooks/useClickTargetFallbackTimer'
-import { useSkipButtonTimer } from '@/features/tutorial/hooks/useSkipButtonTimer'
 import { useTutorialTarget } from '@/features/tutorial/hooks/useTutorialTarget'
 import { useTutorialStore } from '@/features/tutorial/store'
 import {
@@ -54,12 +53,6 @@ export function TutorialProvider({
     runtimeState.status === 'active' || runtimeState.status === 'paused'
       ? (TUTORIAL_STEPS[runtimeState.currentStepIndex] ?? null)
       : null
-
-  // Skip button timer (sole source of truth)
-  const { isEnabled: skipEnabled, remainingSeconds: skipRemaining } =
-    useSkipButtonTimer(
-      runtimeState.status === 'active' || runtimeState.status === 'paused',
-    )
 
   // Click-target fallback timer: enables Next after 20s even if target not clicked
   const isClickTargetStep =
@@ -352,14 +345,14 @@ export function TutorialProvider({
     if (runtimeState.status !== 'active') return
 
     const handler = (e: KeyboardEvent): void => {
-      if (e.key === 'Escape' && skipEnabled) {
+      if (e.key === 'Escape') {
         void useTutorialStore.getState().skipTutorial()
       }
     }
 
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [runtimeState.status, skipEnabled])
+  }, [runtimeState.status])
 
   // Calculate tooltip position with collision-aware placement fallback.
   // Uses useState so it can be updated reactively when floating surfaces
@@ -615,8 +608,6 @@ export function TutorialProvider({
               currentStepIndex={runtimeState.currentStepIndex}
               totalSteps={TUTORIAL_STEPS.length}
               allowBack={currentStep.allowBack !== false}
-              skipEnabled={skipEnabled}
-              skipRemainingSeconds={skipRemaining}
               canAdvance={canAdvance}
               advanceType={currentStep.advanceCondition.type}
               fallbackRemainingSeconds={

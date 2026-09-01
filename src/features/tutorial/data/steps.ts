@@ -13,7 +13,7 @@ export const TUTORIAL_STEPS: readonly TutorialStepDefinition[] = [
     title: 'Welcome to vinela!',
     content:
       "Let's take a quick tour of the app. You'll learn how to configure " +
-      'Neovim with plugins, keymaps, and options — no Lua knowledge required.',
+      'Neovim with plugins, keymaps, and options - no Lua knowledge required.',
     hint: 'You can replay this tutorial anytime from Settings.',
     target: null,
     tooltipPlacement: 'center',
