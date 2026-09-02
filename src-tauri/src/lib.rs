@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 use std::ffi::OsString;
 use std::path::{Component, Path, PathBuf};
+#[cfg(all(desktop, not(target_os = "windows")))]
 use tauri::menu::{Menu, MenuItem, PredefinedMenuItem, HELP_SUBMENU_ID};
 use tauri::Emitter;
 use tauri_plugin_fs::FsExt;
@@ -11,7 +12,7 @@ const CHECK_FOR_UPDATES_MENU_ID: &str = "check_for_updates";
 /// Build the app menu. `updater_enabled` gates the "Check for Updates…" item:
 /// builds without committed updater config never register the updater plugin,
 /// so the menu entry would only ever surface a "plugin not found" error.
-#[cfg(desktop)]
+#[cfg(all(desktop, not(target_os = "windows")))]
 fn build_app_menu<R: tauri::Runtime>(
     app: &tauri::App<R>,
     updater_enabled: bool,
@@ -1159,11 +1160,11 @@ pub fn run() {
     let updater_enabled = context.config().plugins.0.contains_key("updater");
 
     let builder = tauri::Builder::default()
-        .setup(move |app| {
-            #[cfg(desktop)]
+        .setup(move |_app| {
+            #[cfg(all(desktop, not(target_os = "windows")))]
             {
-                let menu = build_app_menu(app, updater_enabled)?;
-                app.set_menu(menu)?;
+                let menu = build_app_menu(_app, updater_enabled)?;
+                _app.set_menu(menu)?;
             }
 
             Ok(())

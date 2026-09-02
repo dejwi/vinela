@@ -5,14 +5,14 @@
 | Piece | Where |
 |-------|-------|
 | Frontend update service/store/toast flow | `src/features/updates/` |
-| Native **Help → Check for Updates…** menu item | `src-tauri/src/lib.rs` |
+| Native **Help → Check for Updates…** menu item (macOS/Linux) | `src-tauri/src/lib.rs` |
 | Updater endpoint + public key + `createUpdaterArtifacts` | `src-tauri/tauri.updater.json` |
 | Release pipeline | `.github/workflows/release.yml` |
 | Preflight validator | `scripts/validate-updater-config.ts` (`bun run updates:validate-config`) |
 
 **`src-tauri/tauri.conf.json` stays updater-free on purpose.** `bundle.createUpdaterArtifacts` makes Tauri demand a signing key at bundle time, which would break `bun run build` for anyone without the private key. CI overlays `tauri.updater.json` via `--config` instead, and the validator fails if updater keys leak back into the base config.
 
-The Rust side registers `tauri_plugin_updater` only when the merged config contains a `plugins.updater` key. Builds without the overlay (local dev, contributor builds) therefore have no updater plugin — and `build_app_menu` hides the **Check for Updates…** item in that case, so the menu never surfaces a "plugin not found" error. The startup check still runs but fails silently.
+The Rust side registers `tauri_plugin_updater` only when the merged config contains a `plugins.updater` key. Builds without the overlay (local dev, contributor builds) therefore have no updater plugin, and `build_app_menu` hides the **Check for Updates…** item in that case, so the menu never surfaces a "plugin not found" error. Windows does not create a native menu bar; automatic startup checks still run on every platform and fail silently when the plugin is unavailable.
 
 ## One-time setup
 

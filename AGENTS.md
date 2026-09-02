@@ -317,7 +317,7 @@ All planned features are implemented:
 
 - Tag push `v*` runs `.github/workflows/release.yml`: quality gate (validator, tag/version match, lint, typecheck, full tests) then a macOS/Linux/Windows build matrix uploading to a **draft** GitHub release.
 - `src-tauri/tauri.conf.json` must stay updater-free; `plugins.updater` and `bundle.createUpdaterArtifacts` live only in the CI overlay `src-tauri/tauri.updater.json`, applied via `--config`. `bun run updates:validate-config` enforces both sides.
-- `tauri_plugin_updater` and the **Check for Updates…** menu item register only when the merged config declares `plugins.updater`, so contributor builds have no dead menu entry.
+- `tauri_plugin_updater` registers only when the merged config declares `plugins.updater`. The native **Check for Updates…** menu item follows that gate on macOS/Linux; Windows intentionally has no native menu bar.
 - Runbook and remaining pre-release gaps: `docs/release-updates.md`.
 
 **Last Updated**: Aug 31, 2026. README leads with desktop downloads and browser-demo caveats; browser-mode UI points at the releases page instead of a dead Deploy button; shiki now uses the JS regex engine so previews highlight under the packaged CSP.
