@@ -1,6 +1,6 @@
 [package]
 name = "vinela"
-version = "0.2.0"
+version = "0.2.1"
 description = "Visual Neovim configuration manager"
 authors = ["Vinela contributors"]
 license = "AGPL-3.0-only"
