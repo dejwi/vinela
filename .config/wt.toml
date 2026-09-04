@@ -1,2 +1,5 @@
-[post-start]
+[[post-start]]
 copy = "wt step copy-ignored --require-include"
+
+[[post-start]]
+install = "bun install"
