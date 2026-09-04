@@ -49,6 +49,11 @@ vi.mock('@/features/keymaps/storage', () => ({
   loadKeymaps: vi.fn(),
 }))
 
+vi.mock('@/features/profiles/storage', () => ({
+  loadProjectProfiles: vi.fn().mockResolvedValue([]),
+  loadProjectProfileOverrides: vi.fn().mockResolvedValue({}),
+}))
+
 vi.mock('@/features/lsp/storage', () => ({
   loadProjectLspConfig: vi.fn(),
 }))

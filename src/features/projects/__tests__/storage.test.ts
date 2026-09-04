@@ -9,6 +9,7 @@ const mockWriteProjectFile = vi.fn()
 const mockEnsureProjectDir = vi.fn()
 const mockListFolder = vi.fn()
 const mockProjectFileExists = vi.fn()
+const mockEnsureProjectProfilesSetup = vi.fn()
 
 vi.mock('@/shared/lib/storage-api', () => ({
   folderExists: (...args: unknown[]) => mockFolderExists(...args),
@@ -22,10 +23,16 @@ vi.mock('@/shared/lib/storage-api', () => ({
   isDevMode: vi.fn(),
 }))
 
+vi.mock('@/features/profiles/storage', () => ({
+  ensureProjectProfilesSetup: (...args: unknown[]) =>
+    mockEnsureProjectProfilesSetup(...args),
+}))
+
 describe('project storage service', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     vi.resetModules()
+    mockEnsureProjectProfilesSetup.mockResolvedValue(undefined)
   })
 
   it('opens a root-layout project successfully', async () => {
@@ -51,6 +58,9 @@ describe('project storage service', () => {
     expect(mockReadProjectFile).toHaveBeenCalledWith(
       '/projects/my-neovim-config',
       PROJECT_PATHS.PROJECT_JSON,
+    )
+    expect(mockEnsureProjectProfilesSetup).toHaveBeenCalledWith(
+      '/projects/my-neovim-config',
     )
   })
 
@@ -107,6 +117,7 @@ describe('project storage service', () => {
       PROJECT_PATHS.PROJECT_JSON,
       expect.objectContaining({ name: 'New Project' }),
     )
+    expect(mockEnsureProjectProfilesSetup).toHaveBeenCalledWith('/projects/new')
   })
 
   it('returns already_exists when a root project marker is present', async () => {
@@ -150,6 +161,7 @@ describe('project storage service', () => {
       'graphs/aa33917f-fd5e-46bb-85f7-e3922b26cc10.json',
       'keymaps.json',
       'lsp-servers.json',
+      'profiles.json',
       'neovim-options.json',
       'plugins.json',
       'schemas/tokyonight.json',
@@ -164,6 +176,28 @@ describe('project storage service', () => {
         description: 'Customized example',
       }),
     )
+    expect(mockEnsureProjectProfilesSetup).toHaveBeenCalledWith(
+      '/memory/projects/my-example',
+    )
+  })
+
+  it('maps profile setup failures to existing errors', async () => {
+    mockFolderExists.mockResolvedValue(true)
+    mockIsValidProject.mockResolvedValue(true)
+    mockReadProjectFile.mockResolvedValue({})
+    mockEnsureProjectProfilesSetup.mockRejectedValue(new Error('profiles'))
+    const { openProject, createProject } = await import('../storage')
+    await expect(openProject('/projects/open')).resolves.toMatchObject({
+      error: 'read_error',
+    })
+    mockIsValidProject.mockResolvedValue(false)
+    mockFolderExists.mockResolvedValue(false)
+    mockEnsureProjectDir.mockResolvedValue(undefined)
+    await expect(
+      createProject('/projects/create', 'Create'),
+    ).resolves.toMatchObject({
+      error: 'write_error',
+    })
   })
 
   it('rejects an existing project without writing an example', async () => {

@@ -1,6 +1,48 @@
 import { describe, expect, it } from 'vitest'
 // Import internal helpers (exported for testing)
-import { normalizeManualAction, normalizeRunFunctionSignature } from './storage'
+import {
+  normalizeKeymapsFile,
+  normalizeManualAction,
+  normalizeRunFunctionSignature,
+} from './storage'
+
+describe('profile ID normalization', () => {
+  it('normalizes malformed profiles, removes duplicates, and retains unknown IDs', () => {
+    const action = { actionType: 'code-block', code: 'print(1)' }
+    const base = { id: 'keymap', modes: ['n'], keySequence: 'x', action }
+    expect(
+      normalizeKeymapsFile({
+        keymaps: [
+          base,
+          {
+            ...base,
+            id: 'two',
+            profileIds: ['known', '', 'unknown', 'known', 1],
+          },
+        ],
+      }).keymaps.map((keymap) => keymap.profileIds),
+    ).toEqual([[], ['known', 'unknown']])
+  })
+
+  it('preserves boolean enabled overrides and omits malformed values', () => {
+    const action = { actionType: 'code-block', code: 'print(1)' }
+    const base = { modes: ['n'], keySequence: 'x', action }
+    const keymaps = normalizeKeymapsFile({
+      keymaps: [
+        { ...base, id: 'true', enabledOverride: true },
+        { ...base, id: 'false', enabledOverride: false },
+        { ...base, id: 'missing' },
+        { ...base, id: 'malformed', enabledOverride: 'false' },
+      ],
+    }).keymaps
+    expect(keymaps.map((keymap) => keymap.enabledOverride)).toEqual([
+      true,
+      false,
+      undefined,
+      undefined,
+    ])
+  })
+})
 
 describe('normalizeManualAction', () => {
   // ── run-action round-trip ──────────────────────────────

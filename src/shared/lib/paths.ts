@@ -47,6 +47,9 @@ export const PROJECT_PATHS = {
 
   /** Manual keymaps file */
   KEYMAPS: 'keymaps.json',
+  GITIGNORE: '.gitignore',
+  PROFILES: 'profiles.json',
+  PROFILES_LOCAL: 'profiles.local.json',
   /** LSP server configuration file */
   LSP_SERVERS: 'lsp-servers.json',
 } as const

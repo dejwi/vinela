@@ -24,6 +24,7 @@ import type {
   Graph,
   GraphDisableState,
   PluginSchema,
+  ProjectProfile,
   ResolvedSchema,
 } from '@/shared/types'
 import { createDefaultActionConfig } from '@/shared/types'
@@ -65,6 +66,8 @@ export interface OrchestratorFixture {
   resolvedSchemas?: ResolvedSchema[]
   options?: NeovimOptionsFixture | null
   keymaps?: ProjectKeymap[]
+  profiles?: ProjectProfile[]
+  profileOverrides?: Record<string, boolean>
   lsp?: { enabledServers: string[] }
   colorscheme?: {
     activeScheme: string | null
@@ -143,6 +146,9 @@ export async function setupOrchestratorMocks(
     '@/features/settings/storage/neovim-options'
   )
   const { loadKeymaps } = await import('@/features/keymaps/storage')
+  const { loadProjectProfiles, loadProjectProfileOverrides } = await import(
+    '@/features/profiles/storage'
+  )
   const { loadProjectLspConfig } = await import('@/features/lsp/storage')
   const { loadColorSchemePreferences } = await import(
     '@/features/colorschemes/storage'
@@ -181,6 +187,12 @@ export async function setupOrchestratorMocks(
   // Keymaps
   ;(loadKeymaps as ReturnType<typeof vi.fn>).mockResolvedValue(
     fixture.keymaps ?? [],
+  )
+  ;(loadProjectProfiles as ReturnType<typeof vi.fn>).mockResolvedValue(
+    fixture.profiles ?? [],
+  )
+  ;(loadProjectProfileOverrides as ReturnType<typeof vi.fn>).mockResolvedValue(
+    fixture.profileOverrides ?? {},
   )
 
   // LSP

@@ -14,6 +14,7 @@ import type {
   ProjectColorSchemesFile,
   ProjectLspConfig,
   ProjectNeovimOptionsFile,
+  ProjectProfilesFile,
 } from '@/shared/types'
 
 export interface ProjectFixture {
@@ -57,6 +58,10 @@ export async function createTempProject(
     PROJECT_PATHS.PROJECT_JSON,
     fixture.project,
   )
+  await storage.writeProjectFile(projectPath, PROJECT_PATHS.PROFILES, {
+    version: 1,
+    profiles: [],
+  } satisfies ProjectProfilesFile)
 
   // Write graphs
   for (const graph of fixture.graphs) {
@@ -123,6 +128,7 @@ async function cleanupTempProject(projectPath: string): Promise<void> {
       PROJECT_PATHS.NEOVIM_OPTIONS,
       PROJECT_PATHS.KEYMAPS,
       PROJECT_PATHS.LSP_SERVERS,
+      PROJECT_PATHS.PROFILES,
       'colorschemes.json',
       'plugins.json',
     ]

@@ -16,7 +16,12 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import type { ProjectKeymap } from '@/features/keymaps/types'
 import { DEFAULT_TEST_TARGET_NEOVIM } from '@/features/lua-generator/diagnostics'
+import {
+  loadProjectProfileOverrides,
+  loadProjectProfiles,
+} from '@/features/profiles/storage'
 import type { Graph } from '@/shared/types'
 import { createDefaultActionConfig } from '@/shared/types'
 import {
@@ -57,6 +62,11 @@ vi.mock('@/features/settings/storage/neovim-options', () => ({
 
 vi.mock('@/features/keymaps/storage', () => ({
   loadKeymaps: vi.fn(),
+}))
+
+vi.mock('@/features/profiles/storage', () => ({
+  loadProjectProfiles: vi.fn().mockResolvedValue([]),
+  loadProjectProfileOverrides: vi.fn().mockResolvedValue({}),
 }))
 
 vi.mock('@/features/lsp/storage', () => ({
@@ -107,6 +117,9 @@ async function setupStorageMocksManually(
     '@/features/settings/storage/neovim-options'
   )
   const { loadKeymaps } = await import('@/features/keymaps/storage')
+  const { loadProjectProfiles, loadProjectProfileOverrides } = await import(
+    '@/features/profiles/storage'
+  )
   const { loadProjectLspConfig } = await import('@/features/lsp/storage')
   const { loadColorSchemePreferences } = await import(
     '@/features/colorschemes/storage'
@@ -132,6 +145,8 @@ async function setupStorageMocksManually(
   vi.mocked(loadAllSchemas).mockResolvedValue([])
   vi.mocked(readNeovimOptions).mockResolvedValue(null)
   vi.mocked(loadKeymaps).mockResolvedValue([])
+  vi.mocked(loadProjectProfiles).mockResolvedValue([])
+  vi.mocked(loadProjectProfileOverrides).mockResolvedValue({})
   vi.mocked(loadProjectLspConfig).mockResolvedValue({ enabledServers: [] })
   vi.mocked(loadColorSchemePreferences).mockResolvedValue({
     success: true,
@@ -148,10 +163,52 @@ async function setupStorageMocksManually(
 describe('Orchestrator Hardened Tests', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.mocked(loadProjectProfiles).mockResolvedValue([])
+    vi.mocked(loadProjectProfileOverrides).mockResolvedValue({})
   })
 
   afterEach(() => {
     vi.restoreAllMocks()
+  })
+
+  it('warns and uses tracked defaults when local profile loading fails', async () => {
+    const keymap: ProjectKeymap = {
+      id: 'keymap',
+      modes: ['n'],
+      keySequence: '<leader>x',
+      description: '',
+      silent: true,
+      noremap: true,
+      expr: false,
+      enabled: true,
+      profileIds: ['profile'],
+      action: {
+        actionType: 'run-action',
+        config: {
+          mode: 'custom-command',
+          actionType: 'command',
+          action: 'write',
+          selectedActionKey: '',
+          paramValues: {},
+        },
+      },
+    }
+    await setupOrchestratorMocks({ graphs: [], keymaps: [keymap] })
+    vi.mocked(loadProjectProfiles).mockResolvedValue([
+      { id: 'profile', name: 'Profile', color: '#000000', defaultActive: true },
+    ])
+    vi.mocked(loadProjectProfileOverrides).mockRejectedValue(new Error('local'))
+    const result = await generateInitLuaOrchestrator(
+      PROJECT_PATH,
+      createMockOpts(),
+    )
+    expect(result.success).toBe(true)
+    expect(requireSuccessfulInitLua(result)).toContain('<leader>x')
+    expect(
+      result.diagnostics.some(
+        (diagnostic) => diagnostic.id === 'WARN_LOAD_PROFILES',
+      ),
+    ).toBe(true)
   })
 
   // ──────────────────────────────────────────────────────────────────────────

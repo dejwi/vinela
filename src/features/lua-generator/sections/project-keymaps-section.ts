@@ -9,11 +9,13 @@
  * to avoid shape drift between keymaps storage and generation.
  */
 
+import { resolveKeymapActivation } from '@/features/keymaps/profile-inclusion'
 import type {
   ManualKeymapAction,
   ManualRunActionConfig,
   ProjectKeymap,
 } from '@/features/keymaps/types'
+import { getActiveProfileIds } from '@/features/profiles/profile-state'
 import { findActionByKey } from '@/shared/data/neovim/action-catalog-entries'
 import { CALLABLE_REGISTRY_GLOBAL } from '@/shared/lib/app-identity'
 import type { TemplateValidationIssue } from '@/shared/lib/lua-template'
@@ -32,7 +34,7 @@ import {
 /**
  * Generate the project keymaps section.
  *
- * Emits vim.keymap.set() calls for enabled keymaps with proper
+ * Emits vim.keymap.set() calls for effectively active keymaps with proper
  * handling for all 6 action types.
  *
  * @param input - Keymaps configuration
@@ -42,12 +44,18 @@ export function generateProjectKeymapsSection(
   input: ProjectKeymapsSectionInput,
 ): SectionResult {
   const { keymaps, callableKeyByGraphId } = input
+  const profiles = input.profiles ?? []
+  const activeProfileIds = getActiveProfileIds(
+    profiles,
+    input.profileOverrides ?? {},
+  )
   const diagnostics: LegacyGenerationDiagnostic[] = []
 
-  // Filter to enabled keymaps only
-  const enabledKeymaps = keymaps.filter((k) => k.enabled)
+  const activeKeymaps = keymaps.filter(
+    (k) => resolveKeymapActivation(k, profiles, activeProfileIds).enabled,
+  )
 
-  if (enabledKeymaps.length === 0) {
+  if (activeKeymaps.length === 0) {
     return {
       id: 'project-keymaps',
       code: [],
@@ -56,7 +64,7 @@ export function generateProjectKeymapsSection(
   }
 
   // Sort keymaps deterministically: by key sequence, then by first mode
-  const sortedKeymaps = [...enabledKeymaps].sort((a, b) => {
+  const sortedKeymaps = [...activeKeymaps].sort((a, b) => {
     const keyCompare = a.keySequence.localeCompare(b.keySequence)
     if (keyCompare !== 0) return keyCompare
     const modeA = a.modes[0] ?? ''

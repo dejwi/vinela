@@ -2,6 +2,7 @@ import { ChevronDown } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { usePluginStore } from '@/features/plugins'
+import { useProjectProfilesStore } from '@/features/profiles'
 import { useTutorialStore } from '@/features/tutorial/store'
 import {
   validateRunActionForm,
@@ -290,6 +291,7 @@ export function KeymapEditorDialog({
 }: KeymapEditorDialogProps): React.JSX.Element {
   const { addManualKeymap, updateManualKeymap } = useKeymapStore()
   const schemas = usePluginStore((state) => state.schemas)
+  const profiles = useProjectProfilesStore((state) => state.profiles)
   const installedPlugins = usePluginStore((state) => state.installedPlugins)
 
   const enabledSchemas = useMemo(
@@ -323,6 +325,7 @@ export function KeymapEditorDialog({
   const [silent, setSilent] = useState(true)
   const [noremap, setNoremap] = useState(true)
   const [expr, setExpr] = useState(false)
+  const [profileIds, setProfileIds] = useState<string[]>([])
   const [isSaving, setIsSaving] = useState(false)
   const [advancedOpen, setAdvancedOpen] = useState(false)
 
@@ -345,6 +348,7 @@ export function KeymapEditorDialog({
       setSilent(editingKeymap.silent)
       setNoremap(editingKeymap.noremap)
       setExpr(editingKeymap.expr)
+      setProfileIds([...(editingKeymap.profileIds ?? [])])
       // Open advanced options if any non-default values
       setAdvancedOpen(
         !editingKeymap.silent || !editingKeymap.noremap || editingKeymap.expr,
@@ -359,6 +363,7 @@ export function KeymapEditorDialog({
       setSilent(true)
       setNoremap(true)
       setExpr(false)
+      setProfileIds([])
       setAdvancedOpen(false)
     }
   }, [editingKeymap, open])
@@ -404,6 +409,7 @@ export function KeymapEditorDialog({
           silent,
           noremap,
           expr,
+          profileIds: [...profileIds],
         })
       } else {
         await addManualKeymap({
@@ -414,6 +420,7 @@ export function KeymapEditorDialog({
           silent,
           noremap,
           expr,
+          profileIds: [...profileIds],
         })
       }
       onOpenChange(false)
@@ -450,6 +457,7 @@ export function KeymapEditorDialog({
             silent,
             noremap,
             expr,
+            profileIds: [...profileIds],
           })
         } else {
           await addManualKeymap({
@@ -460,6 +468,7 @@ export function KeymapEditorDialog({
             silent,
             noremap,
             expr,
+            profileIds: [...profileIds],
           })
         }
         onOpenChange(false)
@@ -479,6 +488,7 @@ export function KeymapEditorDialog({
       silent,
       noremap,
       expr,
+      profileIds,
       addManualKeymap,
       updateManualKeymap,
       onOpenChange,
@@ -518,6 +528,42 @@ export function KeymapEditorDialog({
             <p className="text-xs text-muted-foreground">
               A brief note to help you remember what this shortcut does
             </p>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium">Profiles</p>
+            {profiles.length === 0 ? (
+              <p className="text-xs text-muted-foreground">
+                No profiles yet. Create them with the Profiles button on the
+                Shortcuts page.
+              </p>
+            ) : (
+              <div className="flex flex-wrap gap-3">
+                {profiles.map((profile) => (
+                  <label
+                    key={profile.id}
+                    className="flex items-center gap-1.5 text-sm"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={profileIds.includes(profile.id)}
+                      onChange={() =>
+                        setProfileIds((ids) =>
+                          ids.includes(profile.id)
+                            ? ids.filter((id) => id !== profile.id)
+                            : [...ids, profile.id],
+                        )
+                      }
+                    />
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ backgroundColor: profile.color }}
+                    />
+                    {profile.name}
+                  </label>
+                ))}
+              </div>
+            )}
           </div>
 
           <Separator />

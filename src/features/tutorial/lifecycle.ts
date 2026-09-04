@@ -7,6 +7,8 @@
  *   2. Sentinel marker file check
  *   3. Unique per-run folder names with timestamp
  */
+
+import { ensureProjectProfilesSetup } from '@/features/profiles/storage'
 import { TUTORIAL_SENTINEL } from '@/shared/lib/app-identity'
 import { PROJECT_PATHS } from '@/shared/lib/paths'
 import { getProjectStorageBackend } from '@/shared/lib/storage'
@@ -49,6 +51,9 @@ async function removeMemoryProjectFiles(
     PROJECT_PATHS.PROJECT_JSON,
     PROJECT_PATHS.KEYMAPS,
     PROJECT_PATHS.NEOVIM_OPTIONS,
+    PROJECT_PATHS.PROFILES,
+    PROJECT_PATHS.PROFILES_LOCAL,
+    PROJECT_PATHS.GITIGNORE,
   ]
 
   for (const file of filesToRemove) {
@@ -135,6 +140,8 @@ export async function createTutorialProject(): Promise<string> {
     PROJECT_PATHS.NEOVIM_OPTIONS,
     seed.neovimOptions,
   )
+
+  await ensureProjectProfilesSetup(tutorialPath)
 
   return tutorialPath
 }

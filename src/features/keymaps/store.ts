@@ -1,7 +1,13 @@
 import { v4 as uuidv4 } from 'uuid'
 import { usePluginStore } from '@/features/plugins/store'
+import { getActiveProfileIds } from '@/features/profiles/profile-state'
+import { useProjectProfilesStore } from '@/features/profiles/store'
 import { createStore } from '@/shared/lib/store'
-import type { KeymapMode, StoreInitStatus } from '@/shared/types'
+import {
+  isInitReady,
+  type KeymapMode,
+  type StoreInitStatus,
+} from '@/shared/types'
 import {
   type KeymapValidationIssue,
   validateKeymapReferences,
@@ -46,6 +52,7 @@ interface KeymapState {
     silent: boolean
     noremap: boolean
     expr: boolean
+    profileIds: string[]
   }) => Promise<void>
 
   /** Update an existing manual keymap */
@@ -87,6 +94,7 @@ let initGeneration = 0
  * Unsubscribed when project is closed to prevent memory leaks.
  */
 let unsubscribePlugins: (() => void) | null = null
+let unsubscribeProfiles: (() => void) | null = null
 
 type PluginStoreState = ReturnType<typeof usePluginStore.getState>
 
@@ -94,6 +102,14 @@ interface PluginValidationSnapshot {
   installedPlugins: PluginStoreState['installedPlugins']
   schemas: PluginStoreState['schemas']
   initStatus: PluginStoreState['initStatus']['status']
+}
+
+type ProfileStoreState = ReturnType<typeof useProjectProfilesStore.getState>
+
+interface ProfileValidationSnapshot {
+  profiles: ProfileStoreState['profiles']
+  overrides: ProfileStoreState['overrides']
+  initStatus: ProfileStoreState['initStatus']
 }
 
 function getPluginValidationSnapshot(
@@ -117,9 +133,32 @@ function hasPluginValidationInputChanged(
   )
 }
 
-function clearPluginValidationSubscription(): void {
+function getProfileValidationSnapshot(
+  profileState: ProfileStoreState,
+): ProfileValidationSnapshot {
+  return {
+    profiles: profileState.profiles,
+    overrides: profileState.overrides,
+    initStatus: profileState.initStatus,
+  }
+}
+
+function hasProfileValidationInputChanged(
+  previous: ProfileValidationSnapshot,
+  current: ProfileValidationSnapshot,
+): boolean {
+  return (
+    previous.profiles !== current.profiles ||
+    previous.overrides !== current.overrides ||
+    previous.initStatus !== current.initStatus
+  )
+}
+
+function clearValidationSubscriptions(): void {
   unsubscribePlugins?.()
   unsubscribePlugins = null
+  unsubscribeProfiles?.()
+  unsubscribeProfiles = null
 }
 
 export const useKeymapStore = createStore<KeymapState>((set, get) => ({
@@ -133,10 +172,22 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
   validateKeymaps: () => {
     const state = get()
     const { installedPlugins, schemas } = usePluginStore.getState()
+    const profileState = useProjectProfilesStore.getState()
+    if (
+      state.projectPath === null ||
+      !isInitReady(profileState.initStatus, state.projectPath)
+    ) {
+      set((s) => {
+        s.validationIssues = []
+      })
+      return
+    }
     const issues = validateKeymapReferences(
       state.manualKeymaps,
       installedPlugins,
       schemas,
+      profileState.profiles,
+      getActiveProfileIds(profileState.profiles, profileState.overrides),
     )
     set((s) => {
       s.validationIssues = issues
@@ -163,9 +214,9 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
     initGeneration += 1
     const myGeneration = initGeneration
 
-    // Always clear the previous plugin subscription at init start.
+    // Always clear prior validation subscriptions at init start.
     // This prevents stale callbacks from a prior project/load attempt.
-    clearPluginValidationSubscription()
+    clearValidationSubscriptions()
 
     const doInit = async (): Promise<void> => {
       set((state) => {
@@ -212,6 +263,19 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
           },
         )
 
+        unsubscribeProfiles = useProjectProfilesStore.subscribe(
+          (profileState, previousProfileState) => {
+            if (
+              hasProfileValidationInputChanged(
+                getProfileValidationSnapshot(previousProfileState),
+                getProfileValidationSnapshot(profileState),
+              )
+            ) {
+              get().validateKeymaps()
+            }
+          },
+        )
+
         get().validateKeymaps()
       } catch (err) {
         // ── Staleness check on error path too ──
@@ -220,7 +284,7 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
         }
 
         // If this generation failed, ensure no prior subscriber remains active.
-        clearPluginValidationSubscription()
+        clearValidationSubscriptions()
 
         set((state) => {
           state.error =
@@ -239,7 +303,7 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
           myGeneration === initGeneration &&
           get().initStatus.status !== 'ready'
         ) {
-          clearPluginValidationSubscription()
+          clearValidationSubscriptions()
         }
 
         // ── Clear inflight only if this is still the current request ──
@@ -289,6 +353,7 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
       noremap: params.noremap,
       expr: params.expr,
       enabled: true,
+      profileIds: [...params.profileIds],
     }
 
     // Optimistic update
@@ -414,9 +479,7 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
     initGeneration += 1
     inflightInit = null
 
-    // Unsubscribe from plugin store to prevent memory leaks
-    unsubscribePlugins?.()
-    unsubscribePlugins = null
+    clearValidationSubscriptions()
 
     set((state) => {
       state.manualKeymaps = []
@@ -436,5 +499,5 @@ export const useKeymapStore = createStore<KeymapState>((set, get) => ({
 export function _resetKeymapStoreTestState(): void {
   inflightInit = null
   initGeneration = 0
-  clearPluginValidationSubscription()
+  clearValidationSubscriptions()
 }

@@ -45,10 +45,11 @@ type LoadOutcome<T> =
 | Schemas | `PluginSchema[]` | No |
 | Neovim Options | `ProjectNeovimOptionsFile \| null` | No |
 | Keymaps | `ProjectKeymap[]` | No |
+| Profiles | definitions plus local overrides | No |
 | LSP Config | `ProjectLspConfig` | No |
 | Colorscheme Prefs | `{ activeScheme, variantPreferences }` | No |
 
-Only graph loading failure is fatal. All other sources gracefully degrade to defaults.
+Only graph loading failure is fatal. All other sources gracefully degrade to defaults. A local profile-state read failure retains tracked definitions and applies their defaults.
 
 #### Phase 3: Pre-Generation Checks
 **File:** `orchestrator/pre-generation-checks.ts` (48 lines)
@@ -76,6 +77,7 @@ Generates 7 independent config sections sequentially (see [Sections](./sections.
 7. Project Keymaps (`vim.keymap.set()`)
 
 Each section returns a `SectionResult` with code lines and diagnostics.
+Unprofiled or unknown-only manual keymaps use `enabled`; keymaps with defined profile assignments use `enabledOverride` when present, otherwise active-profile OR state. Graph and schema keymaps are unaffected.
 
 #### Phase 6: Graph Generation
 **File:** `orchestrator/graph-generation.ts` (58 lines)

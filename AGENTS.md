@@ -218,6 +218,7 @@ All planned features are implemented:
 - **Action nodes** — 7 Neovim action types + plugin/builtin nodes
 - **Neovim options** — 67 options, presets, categories
 - **Keymaps** — Conflict detection, graph integration
+- **Profiles** — Tracked project definitions/defaults in `profiles.json`, checkout-local deviations in gitignored `profiles.local.json`; generic modules are consumer-independent
 - **Settings** — App preferences, per-project settings
 - **Neovim detection & backup** — Auto-detect Neovim, backup existing config before deploy
 - **Lua code generation** — 9-phase pipeline, pre-generation diagnostics, deploy to Neovim config, export standalone
@@ -279,6 +280,9 @@ All planned features are implemented:
 - **External authoring validator**: `skills/vinela-plugin-schema/` ships a public Node CLI plus committed generated validator snapshots. Application validation stays in `src/shared/lib/schema-validation.ts` and `src/features/lua-generator/utils/schema-shape-invariants.ts`. Never hand-edit generated validator modules. Regenerate/drift-check: `bun run schema:validator:build` / `bun run schema:validator:check`. Full contract: `docs/schema-validator-maintenance.md`
 - **Plugin command catalogs**: schemas provide typed Ex-command params, token emission, and command templates; those capabilities work identically for built-in, global, and project-local schemas. Schema authors must audit documented setup, keymaps, commands, exports, and events before structural validation. Command templates may provide a preset-specific usage example; omission inherits the base Ex-command example.
 
+### Profiles
+- Only manual keymaps currently accept profile assignments; unprofiled/unknown-only keymaps use `enabled`, defined assignments use `enabledOverride` when present or active-profile OR state otherwise. Rows can Override attached profiles, then reset to live profile control.
+
 ### Code Quality
 - Strong typing enforced (strict TypeScript, discriminated unions)
 - TypeScript-first architecture with Tauri plugins for I/O (`plugin-fs`, `plugin-shell`, `plugin-dialog`)
@@ -320,6 +324,10 @@ All planned features are implemented:
 - `tauri_plugin_updater` registers only when the merged config declares `plugins.updater`. The native **Check for Updates…** menu item follows that gate on macOS/Linux; Windows intentionally has no native menu bar.
 - Runbook and remaining pre-release gaps: `docs/release-updates.md`.
 
-**Last Updated**: Aug 31, 2026. README leads with desktop downloads and browser-demo caveats; browser-mode UI points at the releases page instead of a dead Deploy button; shiki now uses the JS regex engine so previews highlight under the packaged CSP.
+**Last Updated**: Sep 4, 2026. Profile-assigned manual keymaps follow active profiles by default; local overrides can replace then reset to profile control.
+
+Previous: Sep 3, 2026. Project profiles use tracked definitions/defaults and gitignored checkout-local overrides; manual keymaps use active-profile OR inclusion for conflicts and generation.
+
+Previous: Aug 31, 2026. README leads with desktop downloads and browser-demo caveats; browser-mode UI points at the releases page instead of a dead Deploy button; shiki now uses the JS regex engine so previews highlight under the packaged CSP.
 
 Previous: Aug 15, 2026. Public release pipeline and updater config landed (draft-release workflow, CI updater overlay, signing-key secrets); pre-public cleanup removed temporary private updater tooling; bundled Neovim docs/examples remain replaced by installed runtime docs; first-party licensing remains AGPL-3.0-only.

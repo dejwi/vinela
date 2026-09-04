@@ -55,12 +55,28 @@ function readBoolean(
   return typeof value === 'boolean' ? value : fallback
 }
 
+function readOptionalBoolean(
+  source: UnknownRecord,
+  key: string,
+): boolean | undefined {
+  const value = source[key]
+  return typeof value === 'boolean' ? value : undefined
+}
+
 function readStringArray(source: UnknownRecord, key: string): string[] {
   const value = source[key]
   if (!Array.isArray(value)) {
     return []
   }
   return value.filter((entry): entry is string => typeof entry === 'string')
+}
+
+function readProfileIds(source: UnknownRecord): string[] {
+  return [
+    ...new Set(
+      readStringArray(source, 'profileIds').filter((id) => id.length > 0),
+    ),
+  ]
 }
 
 function readActionScalarValue(
@@ -368,6 +384,7 @@ function normalizeProjectKeymap(raw: unknown): ProjectKeymap | null {
     return null
   }
 
+  const enabledOverride = readOptionalBoolean(raw, 'enabledOverride')
   return {
     id,
     modes,
@@ -378,6 +395,8 @@ function normalizeProjectKeymap(raw: unknown): ProjectKeymap | null {
     noremap: readBoolean(raw, 'noremap', true),
     expr: readBoolean(raw, 'expr', false),
     enabled: readBoolean(raw, 'enabled', true),
+    ...(enabledOverride !== undefined ? { enabledOverride } : {}),
+    profileIds: readProfileIds(raw),
   }
 }
 
@@ -452,4 +471,8 @@ export async function saveKeymaps(
 }
 
 /** @internal — exported for testing only */
-export { normalizeManualAction, normalizeRunFunctionSignature }
+export {
+  normalizeKeymapsFile,
+  normalizeManualAction,
+  normalizeRunFunctionSignature,
+}

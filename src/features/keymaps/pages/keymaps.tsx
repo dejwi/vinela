@@ -1,4 +1,4 @@
-import { AlertTriangle, Plus, X } from 'lucide-react'
+import { AlertTriangle, Plus, Settings2, X } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -6,6 +6,11 @@ import {
   isGraphManagerChangedEventForProject,
   useGraphManager,
 } from '@/features/graph-editor/hooks/useGraphManager'
+import {
+  getActiveProfileIds,
+  ProfileManagerDialog,
+  useProjectProfilesStore,
+} from '@/features/profiles'
 import { useProjectStore } from '@/features/projects/store'
 import {
   AlertDialog,
@@ -28,7 +33,7 @@ import {
 } from '@/shared/components/ui/select'
 import { TooltipProvider } from '@/shared/components/ui/tooltip'
 import { useNavigationIntentStore } from '@/shared/lib/navigation-intent'
-import type { KeymapMode } from '@/shared/types'
+import { isInitReady, type KeymapMode } from '@/shared/types'
 import { EmptyState } from '../components/EmptyState'
 import { KeymapEditorDialog } from '../components/KeymapEditorDialog'
 import { KeymapList } from '../components/KeymapList'
@@ -50,6 +55,7 @@ const DEFAULT_FILTERS: KeymapFilters = {
   modeFilter: 'all',
   sourceFilter: 'all',
   actionTypeFilter: 'all',
+  profileFilter: 'all',
 }
 
 const DEFAULT_SORT: KeymapSort = {
@@ -69,7 +75,16 @@ export default function KeymapsPage(): React.JSX.Element {
   )
   const deleteManualKeymap = useKeymapStore((state) => state.deleteManualKeymap)
   const toggleManualKeymap = useKeymapStore((state) => state.toggleManualKeymap)
+  const updateManualKeymap = useKeymapStore((state) => state.updateManualKeymap)
   const clearError = useKeymapStore((state) => state.clearError)
+  const profiles = useProjectProfilesStore((state) => state.profiles)
+  const overrides = useProjectProfilesStore((state) => state.overrides)
+  const profileInitStatus = useProjectProfilesStore((state) => state.initStatus)
+  const profileError = useProjectProfilesStore((state) => state.error)
+  const initializeProfiles = useProjectProfilesStore(
+    (state) => state.initializeProfiles,
+  )
+  const clearProfileError = useProjectProfilesStore((state) => state.clearError)
   const projectPath = project?.absolutePath ?? ''
 
   // Treat both 'idle' and 'loading' as loading states — idle means not yet started
@@ -86,6 +101,9 @@ export default function KeymapsPage(): React.JSX.Element {
   const [deletingKeymap, setDeletingKeymap] = useState<ProjectKeymap | null>(
     null,
   )
+  const [profileManagerOpen, setProfileManagerOpen] = useState(false)
+  const profilesReady = isInitReady(profileInitStatus, projectPath)
+  const activeProfileIds = getActiveProfileIds(profiles, overrides)
 
   // Build unified entries list
   const allEntries: KeymapEntry[] = useMemo(
@@ -106,13 +124,19 @@ export default function KeymapsPage(): React.JSX.Element {
   const filteredEntries = useFilteredKeymaps(allEntries, filters, sort)
 
   // Detect conflicts
-  const conflicts = useKeymapConflicts(allEntries)
+  const conflicts = useKeymapConflicts(
+    allEntries,
+    profiles,
+    activeProfileIds,
+    profilesReady,
+  )
 
   useEffect(() => {
     if (projectPath) {
       void loadAllKeymaps(projectPath)
+      void initializeProfiles(projectPath)
     }
-  }, [projectPath, loadAllKeymaps])
+  }, [projectPath, loadAllKeymaps, initializeProfiles])
 
   useEffect(() => {
     if (!projectPath) {
@@ -240,6 +264,13 @@ export default function KeymapsPage(): React.JSX.Element {
     [toggleManualKeymap],
   )
 
+  const handleEnabledOverrideChange = useCallback(
+    (keymapId: string, enabledOverride: boolean | undefined): void => {
+      void updateManualKeymap(keymapId, { enabledOverride })
+    },
+    [updateManualKeymap],
+  )
+
   const handleCreateClick = useCallback((): void => {
     setEditingKeymap(null)
     setEditorOpen(true)
@@ -261,14 +292,24 @@ export default function KeymapsPage(): React.JSX.Element {
                 Manage keyboard shortcuts for your Neovim configuration
               </p>
             </div>
-            <Button
-              onClick={handleCreateClick}
-              disabled={isLoading}
-              data-tutorial="keymaps-new-button"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              New Shortcut
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setProfileManagerOpen(true)}
+                disabled={!profilesReady}
+              >
+                <Settings2 className="mr-2 h-4 w-4" />
+                Profiles
+              </Button>
+              <Button
+                onClick={handleCreateClick}
+                disabled={isLoading}
+                data-tutorial="keymaps-new-button"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                New Shortcut
+              </Button>
+            </div>
           </div>
 
           {/* Filters row — disabled while loading */}
@@ -321,18 +362,48 @@ export default function KeymapsPage(): React.JSX.Element {
                 <SelectItem value="project">{SOURCE_LABELS.project}</SelectItem>
               </SelectContent>
             </Select>
+            {profiles.length > 0 && (
+              <Select
+                value={filters.profileFilter}
+                onValueChange={(v) =>
+                  setFilters((prev) => ({ ...prev, profileFilter: v }))
+                }
+              >
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder="Profile" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All profiles</SelectItem>
+                  <SelectItem value="none">No profile</SelectItem>
+                  {profiles.map((profile) => (
+                    <SelectItem key={profile.id} value={profile.id}>
+                      <span className="flex items-center gap-2">
+                        <span
+                          className="h-2 w-2 shrink-0 rounded-full"
+                          style={{ backgroundColor: profile.color }}
+                        />
+                        {profile.name.trim() || 'Unnamed profile'}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </header>
 
         {/* Main content */}
         <div className="flex-1 min-h-0 overflow-auto px-6 py-4">
           {/* Error banner */}
-          {error && (
+          {(error || profileError) && (
             <div className="mb-4 p-3 rounded-md bg-destructive/10 text-destructive text-sm flex items-center justify-between">
-              <span>{error}</span>
+              <span>{error ?? profileError}</span>
               <button
                 type="button"
-                onClick={clearError}
+                onClick={() => {
+                  clearError()
+                  clearProfileError()
+                }}
                 className="p-1 hover:bg-destructive/20 rounded"
                 aria-label="Dismiss error"
               >
@@ -359,6 +430,8 @@ export default function KeymapsPage(): React.JSX.Element {
               onEdit={handleEdit}
               onDeleteRequest={handleDeleteRequest}
               onToggle={handleToggle}
+              onEnabledOverrideChange={handleEnabledOverrideChange}
+              profilesReady={profilesReady}
               onNavigateToNode={handleNavigateToNode}
               onNavigateToGraph={handleNavigateToGraph}
               getRunCustomActionTargetStatus={getRunCustomActionTargetStatus}
@@ -391,6 +464,11 @@ export default function KeymapsPage(): React.JSX.Element {
           onOpenChange={setEditorOpen}
           editingKeymap={editingKeymap}
           projectPath={project.absolutePath}
+        />
+        <ProfileManagerDialog
+          open={profileManagerOpen}
+          onOpenChange={setProfileManagerOpen}
+          projectPath={projectPath}
         />
 
         {/* Delete confirmation dialog */}

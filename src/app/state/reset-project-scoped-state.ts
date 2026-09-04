@@ -3,6 +3,7 @@ import { useKeymapStore } from '@/features/keymaps/store'
 import { useLspStore } from '@/features/lsp/store'
 import { useGenerationStore } from '@/features/lua-generator/store'
 import { usePluginStore } from '@/features/plugins/store'
+import { useProjectProfilesStore } from '@/features/profiles'
 
 /**
  * Eagerly initialize all project-scoped stores when a project is opened.
@@ -17,6 +18,7 @@ import { usePluginStore } from '@/features/plugins/store'
 export function initializeProjectScopedState(projectPath: string): void {
   void usePluginStore.getState().initializePlugins(projectPath)
   void useKeymapStore.getState().loadAllKeymaps(projectPath)
+  void useProjectProfilesStore.getState().initializeProfiles(projectPath)
   void useLspStore.getState().loadFromProject(projectPath)
 }
 
@@ -29,6 +31,7 @@ export function initializeProjectScopedState(projectPath: string): void {
 export function resetProjectScopedState(): void {
   useGraphEditorStore.getState().resetForProjectClose()
   useKeymapStore.getState().resetForProjectClose()
+  useProjectProfilesStore.getState().resetForProjectClose()
   usePluginStore.getState().resetForProjectClose()
   useLspStore.getState().resetForProjectClose()
   useGenerationStore.getState().resetForProjectClose()

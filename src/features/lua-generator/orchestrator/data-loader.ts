@@ -15,6 +15,10 @@ import {
   loadAllSchemas,
   loadInstalledPlugins,
 } from '@/features/plugins/storage'
+import {
+  loadProjectProfileOverrides,
+  loadProjectProfiles,
+} from '@/features/profiles/storage'
 import { readNeovimOptions } from '@/features/settings/storage/neovim-options'
 import { PROJECT_PATHS } from '@/shared/lib/paths'
 import { readProjectFile } from '@/shared/lib/storage-api'
@@ -26,6 +30,7 @@ import type {
   Project,
   ProjectLspConfig,
   ProjectNeovimOptionsFile,
+  ProjectProfile,
 } from '@/shared/types'
 
 // ============================================
@@ -44,11 +49,16 @@ export interface ProjectData {
   schemas: PluginSchema[]
   options: ProjectNeovimOptionsFile | null
   keymaps: ProjectKeymap[]
+  profiles: LoadedProjectProfiles
   lspConfig: ProjectLspConfig
   colorschemePrefs: {
     activeScheme: string | null
     variantPreferences: Record<string, string>
   }
+}
+export interface LoadedProjectProfiles {
+  profiles: ProjectProfile[]
+  overrides: Record<string, boolean>
 }
 
 export interface DataLoadResult {
@@ -57,6 +67,7 @@ export interface DataLoadResult {
   schemas: LoadOutcome<PluginSchema[]>
   options: LoadOutcome<ProjectNeovimOptionsFile | null>
   keymaps: LoadOutcome<ProjectKeymap[]>
+  profiles: LoadOutcome<LoadedProjectProfiles>
   lspConfig: LoadOutcome<ProjectLspConfig>
   colorschemePrefs: LoadOutcome<{
     activeScheme: string | null
@@ -91,6 +102,7 @@ export async function loadProjectData(
     schemasResult,
     optionsResult,
     keymapsResult,
+    profilesResult,
     lspConfigResult,
     colorschemeResult,
     projectMetaResult,
@@ -100,6 +112,7 @@ export async function loadProjectData(
     loadSchemasSafe(projectPath),
     loadOptionsSafe(projectPath),
     loadKeymapsSafe(projectPath),
+    loadProjectProfilesSafe(projectPath),
     loadLspConfigSafe(projectPath),
     loadColorschemePrefsSafe(projectPath),
     loadProjectMetaSafe(projectPath),
@@ -116,9 +129,39 @@ export async function loadProjectData(
     schemas: schemasResult,
     options: optionsResult,
     keymaps: keymapsResult,
+    profiles: profilesResult,
     lspConfig: lspConfigResult,
     colorschemePrefs: colorschemeResult,
     projectMeta: projectMetaResult,
+  }
+}
+
+async function loadProjectProfilesSafe(
+  projectPath: string,
+): Promise<LoadOutcome<LoadedProjectProfiles>> {
+  try {
+    const profiles = await loadProjectProfiles(projectPath)
+    try {
+      return {
+        status: 'success',
+        data: {
+          profiles,
+          overrides: await loadProjectProfileOverrides(projectPath),
+        },
+      }
+    } catch (error) {
+      return {
+        status: 'error',
+        error: error instanceof Error ? error.message : String(error),
+        data: { profiles, overrides: {} },
+      }
+    }
+  } catch (error) {
+    return {
+      status: 'error',
+      error: error instanceof Error ? error.message : String(error),
+      data: { profiles: [], overrides: {} },
+    }
   }
 }
 
@@ -344,6 +387,11 @@ function createCancelledResult(): DataLoadResult {
     schemas: cancelledOutcome,
     options: cancelledNullOutcome,
     keymaps: cancelledOutcome,
+    profiles: {
+      status: 'error',
+      error: 'Loading cancelled',
+      data: { profiles: [], overrides: {} },
+    },
     lspConfig: cancelledLspOutcome,
     colorschemePrefs: cancelledColorschemeOutcome,
     projectMeta: cancelledNullOutcome,
@@ -398,6 +446,8 @@ export function collectLoadErrors(
   if (result.keymaps.status === 'error') {
     errors.push({ source: 'keymaps', error: result.keymaps.error })
   }
+  if (result.profiles.status === 'error')
+    errors.push({ source: 'profiles', error: result.profiles.error })
   if (result.lspConfig.status === 'error') {
     errors.push({ source: 'lspConfig', error: result.lspConfig.error })
   }

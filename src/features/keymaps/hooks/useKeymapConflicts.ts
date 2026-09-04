@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import type { KeymapMode } from '@/shared/types'
+import type { KeymapMode, ProjectProfile } from '@/shared/types'
+import { resolveKeymapActivation } from '../profile-inclusion'
 import type { KeymapConflict, KeymapEntry } from '../types'
 import { getEntryKeySequence, getEntryModes } from '../utils'
 
@@ -25,13 +26,6 @@ export function normalizeKeyForConflict(key: string): string {
  * Check if an entry should participate in conflict detection.
  * Disabled manual keymaps are excluded.
  */
-function isActiveEntry(entry: KeymapEntry): boolean {
-  if (entry.source === 'project' && !entry.keymap.enabled) {
-    return false
-  }
-  return true
-}
-
 /**
  * Register a single mode+key combination in the conflict map.
  */
@@ -53,11 +47,19 @@ function registerModeKey(
 /**
  * Build a conflict map from all active entries.
  */
-function buildConflictMap(entries: KeymapEntry[]): Map<string, KeymapEntry[]> {
+function buildConflictMap(
+  entries: readonly KeymapEntry[],
+  profiles: readonly ProjectProfile[],
+  activeProfileIds: ReadonlySet<string>,
+): Map<string, KeymapEntry[]> {
   const conflictMap = new Map<string, KeymapEntry[]>()
 
   for (const entry of entries) {
-    if (!isActiveEntry(entry)) continue
+    if (
+      entry.source === 'project' &&
+      !resolveKeymapActivation(entry.keymap, profiles, activeProfileIds).enabled
+    )
+      continue
 
     const normalizedKey = normalizeKeyForConflict(getEntryKeySequence(entry))
     if (normalizedKey.length === 0) continue
@@ -100,11 +102,27 @@ function extractConflicts(
  * Only enabled manual keymaps participate in conflict detection.
  * Graph-sourced keymaps always participate.
  */
-export function useKeymapConflicts(entries: KeymapEntry[]): KeymapConflict[] {
-  return useMemo(() => {
-    const conflictMap = buildConflictMap(entries)
-    return extractConflicts(conflictMap)
-  }, [entries])
+export function detectKeymapConflicts(
+  entries: readonly KeymapEntry[],
+  profiles: readonly ProjectProfile[],
+  activeProfileIds: ReadonlySet<string>,
+  profilesReady: boolean,
+): KeymapConflict[] {
+  if (!profilesReady) return []
+  return extractConflicts(buildConflictMap(entries, profiles, activeProfileIds))
+}
+
+export function useKeymapConflicts(
+  entries: readonly KeymapEntry[],
+  profiles: readonly ProjectProfile[],
+  activeProfileIds: ReadonlySet<string>,
+  profilesReady: boolean,
+): KeymapConflict[] {
+  return useMemo(
+    () =>
+      detectKeymapConflicts(entries, profiles, activeProfileIds, profilesReady),
+    [entries, profiles, activeProfileIds, profilesReady],
+  )
 }
 
 /**

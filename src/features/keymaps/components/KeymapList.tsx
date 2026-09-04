@@ -20,6 +20,11 @@ interface KeymapListProps {
   /** Called when user requests to delete a keymap (shows confirmation dialog) */
   onDeleteRequest: (keymap: ProjectKeymap) => void
   onToggle: (keymapId: string) => void
+  onEnabledOverrideChange: (
+    keymapId: string,
+    enabledOverride: boolean | undefined,
+  ) => void
+  profilesReady: boolean
   onNavigateToNode: (graphId: string, nodeId: string) => void
   onNavigateToGraph: (graphId: string) => void
   getRunCustomActionTargetStatus: (
@@ -78,6 +83,8 @@ export function KeymapList({
   onEdit,
   onDeleteRequest,
   onToggle,
+  onEnabledOverrideChange,
+  profilesReady,
   onNavigateToNode,
   onNavigateToGraph,
   getRunCustomActionTargetStatus,
@@ -85,7 +92,7 @@ export function KeymapList({
   return (
     <div className="space-y-1">
       {/* Header row */}
-      <div className="grid grid-cols-[60px_140px_1fr_120px_80px] gap-2 px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+      <div className="grid grid-cols-[60px_140px_1fr_120px_170px] gap-2 px-3 py-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
         <SortableHeader
           field="mode"
           label="Mode"
@@ -117,6 +124,8 @@ export function KeymapList({
           onEdit={onEdit}
           onDeleteRequest={onDeleteRequest}
           onToggle={onToggle}
+          onEnabledOverrideChange={onEnabledOverrideChange}
+          profilesReady={profilesReady}
           onNavigateToNode={onNavigateToNode}
           onNavigateToGraph={onNavigateToGraph}
           getRunCustomActionTargetStatus={getRunCustomActionTargetStatus}

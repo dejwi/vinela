@@ -3,6 +3,10 @@ import {
   _resetPluginStoreTestState,
   usePluginStore,
 } from '@/features/plugins/store'
+import {
+  _resetProjectProfilesStoreTestState,
+  useProjectProfilesStore,
+} from '@/features/profiles/store'
 import type {
   InstalledPlugin,
   PluginSchema,
@@ -93,6 +97,8 @@ describe('Keymap store init lifecycle', () => {
     _resetKeymapStoreTestState()
     usePluginStore.getState().resetForProjectClose()
     _resetPluginStoreTestState()
+    useProjectProfilesStore.getState().resetForProjectClose()
+    _resetProjectProfilesStoreTestState()
     vi.clearAllMocks()
   })
 
@@ -271,6 +277,10 @@ describe('Keymap store init lifecycle', () => {
       state.schemas = []
       state.initStatus = { status: 'loading', projectPath: '/project-a' }
     })
+    useProjectProfilesStore.setState({
+      initStatus: { status: 'ready', projectPath: '/project-a' },
+      projectPath: '/project-a',
+    })
 
     await useKeymapStore.getState().loadAllKeymaps('/project-a')
 
@@ -297,6 +307,10 @@ describe('Keymap store init lifecycle', () => {
       schemas: [createResolvedSchema()],
       initStatus: { status: 'ready', projectPath: '/project-a' },
     })
+    useProjectProfilesStore.setState({
+      initStatus: { status: 'ready', projectPath: '/project-a' },
+      projectPath: '/project-a',
+    })
 
     await useKeymapStore.getState().loadAllKeymaps('/project-a')
 
@@ -320,6 +334,10 @@ describe('Keymap store init lifecycle', () => {
       schemas: [createResolvedSchema()],
       initStatus: { status: 'ready', projectPath: '/project-a' },
     })
+    useProjectProfilesStore.setState({
+      initStatus: { status: 'ready', projectPath: '/project-a' },
+      projectPath: '/project-a',
+    })
 
     await useKeymapStore.getState().loadAllKeymaps('/project-a')
 
@@ -341,10 +359,68 @@ describe('Keymap store init lifecycle', () => {
       ],
       initStatus: { status: 'ready', projectPath: '/project-b' },
     })
+    useProjectProfilesStore.setState({
+      profiles: [
+        { id: 'a', name: 'A', color: '#000000', defaultActive: false },
+      ],
+      overrides: { a: true },
+    })
 
     expect(validateSpy).not.toHaveBeenCalled()
     expect(useKeymapStore.getState().initStatus.status).toBe('error')
 
     validateSpy.mockRestore()
+  })
+
+  it('defers profile-controlled validation until profiles are ready and follows active overrides', async () => {
+    const keymap = createManualPluginKeymap()
+    keymap.enabled = false
+    keymap.profileIds = ['a']
+    mockLoadKeymaps.mockResolvedValue([keymap])
+    mockScanGraphsForKeymaps.mockResolvedValue([])
+    useProjectProfilesStore.setState({
+      initStatus: { status: 'loading', projectPath: '/project-a' },
+      projectPath: '/project-a',
+    })
+
+    await useKeymapStore.getState().loadAllKeymaps('/project-a')
+    expect(useKeymapStore.getState().validationIssues).toEqual([])
+
+    useProjectProfilesStore.setState({
+      profiles: [
+        { id: 'a', name: 'A', color: '#000000', defaultActive: false },
+      ],
+      overrides: { a: true },
+      initStatus: { status: 'ready', projectPath: '/project-a' },
+    })
+    expect(useKeymapStore.getState().validationIssues[0]?.code).toBe(
+      'plugin-not-installed',
+    )
+
+    useProjectProfilesStore.setState({ overrides: { a: false } })
+    expect(useKeymapStore.getState().validationIssues).toEqual([])
+  })
+
+  it('clears validation issues when profile initialization errors', async () => {
+    const keymap = createManualPluginKeymap()
+    keymap.profileIds = ['a']
+    mockLoadKeymaps.mockResolvedValue([keymap])
+    mockScanGraphsForKeymaps.mockResolvedValue([])
+    useProjectProfilesStore.setState({
+      profiles: [{ id: 'a', name: 'A', color: '#000000', defaultActive: true }],
+      initStatus: { status: 'ready', projectPath: '/project-a' },
+      projectPath: '/project-a',
+    })
+
+    await useKeymapStore.getState().loadAllKeymaps('/project-a')
+    expect(useKeymapStore.getState().validationIssues).toHaveLength(1)
+    useProjectProfilesStore.setState({
+      initStatus: {
+        status: 'error',
+        projectPath: '/project-a',
+        error: 'profile load failed',
+      },
+    })
+    expect(useKeymapStore.getState().validationIssues).toEqual([])
   })
 })

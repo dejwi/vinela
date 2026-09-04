@@ -1,4 +1,8 @@
-import { Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Trash2, X } from 'lucide-react'
+import {
+  getActiveProfileIds,
+  useProjectProfilesStore,
+} from '@/features/profiles'
 import { Badge } from '@/shared/components/ui/badge'
 import { Button } from '@/shared/components/ui/button'
 import {
@@ -7,8 +11,10 @@ import {
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip'
 import { cn } from '@/shared/lib/utils'
+import type { ProjectProfile } from '@/shared/types'
 import type { RunCustomActionTargetStatus } from '../custom-action-target-status'
 import { getKeymapIssues } from '../lib/keymap-validation'
+import { resolveKeymapActivation } from '../profile-inclusion'
 import { useKeymapStore } from '../store'
 import type { KeymapConflict, KeymapEntry, ProjectKeymap } from '../types'
 import { getEntryKeySequence, getEntryModes } from '../utils'
@@ -24,6 +30,11 @@ interface KeymapRowProps {
   /** Called when user requests to delete a keymap (shows confirmation dialog) */
   onDeleteRequest: (keymap: ProjectKeymap) => void
   onToggle: (keymapId: string) => void
+  onEnabledOverrideChange: (
+    keymapId: string,
+    enabledOverride: boolean | undefined,
+  ) => void
+  profilesReady: boolean
   onNavigateToNode: (graphId: string, nodeId: string) => void
   onNavigateToGraph: (graphId: string) => void
   getRunCustomActionTargetStatus: (
@@ -37,11 +48,20 @@ export function KeymapRow({
   onEdit,
   onDeleteRequest,
   onToggle,
+  onEnabledOverrideChange,
+  profilesReady,
   onNavigateToNode,
   onNavigateToGraph,
   getRunCustomActionTargetStatus,
 }: KeymapRowProps): React.JSX.Element {
-  const isDisabled = entry.source === 'project' && !entry.keymap.enabled
+  const profiles = useProjectProfilesStore((state) => state.profiles)
+  const overrides = useProjectProfilesStore((state) => state.overrides)
+  const activeProfileIds = getActiveProfileIds(profiles, overrides)
+  const activation =
+    entry.source === 'project' && profilesReady
+      ? resolveKeymapActivation(entry.keymap, profiles, activeProfileIds)
+      : null
+  const isDisabled = activation?.enabled === false
   const validationIssues = useKeymapStore((state) => state.validationIssues)
 
   const issues =
@@ -59,7 +79,7 @@ export function KeymapRow({
     <div
       data-tutorial={tutorialDataAttr}
       className={cn(
-        'grid grid-cols-[60px_140px_1fr_120px_80px] gap-2 px-3 py-2 rounded-md',
+        'grid grid-cols-[60px_140px_1fr_120px_170px] gap-2 px-3 py-2 rounded-md',
         'hover:bg-muted/50 transition-colors',
         isDisabled && 'opacity-60 grayscale',
       )}
@@ -91,13 +111,32 @@ export function KeymapRow({
       </div>
 
       {/* Action summary */}
-      <div className="flex items-center min-w-0">
+      <div className="flex items-center gap-1.5 min-w-0">
         <ActionSummary
           entry={entry}
           issues={issues}
           onNavigateToGraph={onNavigateToGraph}
           getRunCustomActionTargetStatus={getRunCustomActionTargetStatus}
         />
+        {entry.source === 'project' &&
+          entry.keymap.profileIds
+            ?.map((id) => profiles.find((profile) => profile.id === id))
+            .filter(
+              (profile): profile is ProjectProfile => profile !== undefined,
+            )
+            .map((profile) => (
+              <Badge
+                key={profile.id}
+                variant="outline"
+                className="shrink-0 text-[10px]"
+              >
+                <span
+                  className="mr-1 h-2 w-2 rounded-full"
+                  style={{ backgroundColor: profile.color }}
+                />
+                {profile.name}
+              </Badge>
+            ))}
       </div>
 
       {/* Source badge */}
@@ -123,10 +162,54 @@ export function KeymapRow({
       <div className="flex items-center gap-1 justify-end">
         {entry.source === 'project' && (
           <>
-            <EnableToggle
-              enabled={entry.keymap.enabled}
-              onToggle={() => onToggle(entry.keymapId)}
-            />
+            {activation?.kind === 'local' && (
+              <EnableToggle
+                enabled={activation.enabled}
+                onToggle={() => onToggle(entry.keymapId)}
+              />
+            )}
+            {activation?.kind === 'profiles' && (
+              <>
+                <Badge variant="outline">
+                  {activation.enabled ? 'Profiles on' : 'Profiles off'}
+                </Badge>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    onEnabledOverrideChange(entry.keymapId, activation.enabled)
+                  }
+                  aria-label="Override attached profiles"
+                >
+                  Override
+                </Button>
+              </>
+            )}
+            {activation?.kind === 'override' && (
+              <>
+                <EnableToggle
+                  enabled={activation.enabled}
+                  onToggle={() =>
+                    onEnabledOverrideChange(entry.keymapId, !activation.enabled)
+                  }
+                />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() =>
+                        onEnabledOverrideChange(entry.keymapId, undefined)
+                      }
+                      aria-label="Remove local override"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Follow attached profiles</TooltipContent>
+                </Tooltip>
+              </>
+            )}
             <Button
               variant="ghost"
               size="icon"

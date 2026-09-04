@@ -61,6 +61,18 @@ export function useFilteredKeymaps(
       })
     }
 
+    // Profile filter (only manual keymaps carry profile assignments)
+    if (filters.profileFilter !== 'all') {
+      const profileFilter = filters.profileFilter
+      filtered = filtered.filter((entry) => {
+        if (entry.source !== 'project') return false
+        const assigned = entry.keymap.profileIds ?? []
+        return profileFilter === 'none'
+          ? assigned.length === 0
+          : assigned.includes(profileFilter)
+      })
+    }
+
     // Sort
     const sorted = [...filtered].sort((a, b) => {
       const multiplier = sort.direction === 'asc' ? 1 : -1

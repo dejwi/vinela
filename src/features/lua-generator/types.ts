@@ -11,6 +11,7 @@ import type {
   HighlightOverride,
   NeovimOptionStoredValue,
   PluginSchema,
+  ProjectProfile,
 } from '@/shared/types'
 
 // Re-export canonical keymap types so sections can import from one place
@@ -19,6 +20,7 @@ export type {
   ManualRunActionConfig,
   ProjectKeymap,
 } from '@/features/keymaps/types'
+export type { ProjectProfile } from '@/shared/types'
 
 // ============================================
 // LEGACY SECTION RESULTS (Domain 5)
@@ -314,6 +316,8 @@ export interface HighlightSectionInput {
 export interface ProjectKeymapsSectionInput {
   /** Manual keymaps from keymaps.json */
   keymaps: ProjectKeymap[]
+  profiles?: readonly ProjectProfile[]
+  profileOverrides?: Readonly<Record<string, boolean>>
   /** Resolved plugins — needed to check if callable graph targets exist */
   resolvedPlugins: ResolvedPluginForGeneration[]
   /** Callable registry key lookup by graph id */

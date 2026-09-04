@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type { KeymapMode } from '@/shared/types'
 import type { KeymapEntry, ManualKeymapEntry } from '../../types'
 import {
+  detectKeymapConflicts,
   findConflictForEntry,
   normalizeKeyForConflict,
 } from '../useKeymapConflicts'
@@ -35,47 +36,8 @@ function makeProjectEntry(
 
 // ── Replicate conflict detection without React hook ──────────────────
 
-function detectConflicts(
-  entries: KeymapEntry[],
-): { mode: KeymapMode; keySequence: string; entries: KeymapEntry[] }[] {
-  const conflictMap = new Map<string, KeymapEntry[]>()
-
-  for (const entry of entries) {
-    if (entry.source === 'project' && !entry.keymap.enabled) continue
-
-    const rawKey =
-      entry.source === 'graph' ? entry.keySequence : entry.keymap.keySequence
-    const normalizedKey = normalizeKeyForConflict(rawKey)
-    if (normalizedKey.length === 0) continue
-
-    const modes = entry.source === 'graph' ? entry.modes : entry.keymap.modes
-    for (const mode of modes) {
-      const mapKey = `${mode}:${normalizedKey}`
-      const existing = conflictMap.get(mapKey)
-      if (existing !== undefined) {
-        existing.push(entry)
-      } else {
-        conflictMap.set(mapKey, [entry])
-      }
-    }
-  }
-
-  const conflicts: {
-    mode: KeymapMode
-    keySequence: string
-    entries: KeymapEntry[]
-  }[] = []
-  for (const [key, conflictEntries] of conflictMap) {
-    if (conflictEntries.length > 1) {
-      const colonIndex = key.indexOf(':')
-      conflicts.push({
-        mode: key.substring(0, colonIndex) as KeymapMode,
-        keySequence: key.substring(colonIndex + 1),
-        entries: conflictEntries,
-      })
-    }
-  }
-  return conflicts
+function detectConflicts(entries: KeymapEntry[]) {
+  return detectKeymapConflicts(entries, [], new Set(), true)
 }
 
 // ── Tests ────────────────────────────────────────────────────────────
@@ -130,6 +92,61 @@ describe('conflict detection', () => {
       makeProjectEntry('n', ['n'], false),
     ])
     expect(conflicts).toHaveLength(0)
+  })
+
+  it('uses profile activation and overrides', () => {
+    const profiles = [
+      { id: 'a', name: 'A', color: '#000000', defaultActive: false },
+    ]
+    const active = new Set(['a'])
+    const activeProfiled = makeProjectEntry('n', ['n'], false)
+    activeProfiled.keymap.profileIds = ['a']
+    expect(
+      detectKeymapConflicts(
+        [makeProjectEntry('n'), activeProfiled],
+        profiles,
+        active,
+        true,
+      ),
+    ).toHaveLength(1)
+    activeProfiled.keymap.enabled = true
+    expect(
+      detectKeymapConflicts(
+        [makeProjectEntry('n'), activeProfiled],
+        profiles,
+        new Set(),
+        true,
+      ),
+    ).toEqual([])
+    activeProfiled.keymap.enabledOverride = true
+    expect(
+      detectKeymapConflicts(
+        [makeProjectEntry('n'), activeProfiled],
+        profiles,
+        new Set(),
+        true,
+      ),
+    ).toHaveLength(1)
+    activeProfiled.keymap.enabledOverride = false
+    expect(
+      detectKeymapConflicts(
+        [makeProjectEntry('n'), activeProfiled],
+        profiles,
+        active,
+        true,
+      ),
+    ).toEqual([])
+  })
+
+  it('returns no conflicts until profiles are ready', () => {
+    expect(
+      detectKeymapConflicts(
+        [makeProjectEntry('n'), makeProjectEntry('n')],
+        [],
+        new Set(),
+        false,
+      ),
+    ).toEqual([])
   })
 })
 

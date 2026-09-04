@@ -243,7 +243,7 @@ set_hl_merged("Comment", { italic = true })
 
 ### 7. Project Keymaps Section (`project-keymaps-section.ts`)
 
-**Input:** `{ keymaps: ProjectKeymap[], resolvedPlugins: ResolvedPluginForGeneration[] }`
+**Input:** `{ keymaps: ProjectKeymap[], profiles?: ProjectProfile[], profileOverrides?: Record<string, boolean>, resolvedPlugins: ResolvedPluginForGeneration[] }`
 
 **Generates:**
 ```lua
@@ -258,6 +258,7 @@ end, { silent = true, desc = "Go to definition" })
 - `run-custom-action` calls callable graphs via the global callable table using emitted callable keys: `_G._vinela_callables["<graph_name>_<shortid>"]({})`.
 - Formats modes as string (single) or array (multiple)
 - Builds options table with `desc`, `silent`, `expr`; emits `remap = true` only when `noremap` is false (since `vim.keymap.set` defaults to non-remap)
+- Emits only effectively active manual keymaps: unprofiled or unknown-only assignments use `enabled`; defined profile assignments use `enabledOverride` when present, otherwise active-profile OR state. Graph `set-keymap` nodes and plugin-schema keymaps are unaffected.
 
 **Command RHS normalization (`run-action` with `actionType='command'`):**
 

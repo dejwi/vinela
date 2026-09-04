@@ -1,8 +1,10 @@
 import type {
   InstalledPlugin,
   PluginSchema,
+  ProjectProfile,
   ResolvedSchema,
 } from '@/shared/types'
+import { resolveKeymapActivation } from '../profile-inclusion'
 import type { ProjectKeymap } from '../types'
 
 /**
@@ -52,6 +54,8 @@ export function validateKeymapReferences(
   keymaps: readonly ProjectKeymap[],
   installedPlugins: readonly InstalledPlugin[],
   schemas: readonly ResolvedSchema[],
+  profiles: readonly ProjectProfile[],
+  activeProfileIds: ReadonlySet<string>,
 ): KeymapValidationIssue[] {
   const issues: KeymapValidationIssue[] = []
 
@@ -60,7 +64,8 @@ export function validateKeymapReferences(
   const schemaMap = new Map(schemas.map((r) => [r.schema.id, r.schema]))
 
   for (const keymap of keymaps) {
-    if (!keymap.enabled) continue // Skip disabled keymaps
+    if (!resolveKeymapActivation(keymap, profiles, activeProfileIds).enabled)
+      continue
 
     const action = keymap.action
 

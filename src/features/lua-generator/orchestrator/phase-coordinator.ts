@@ -43,6 +43,7 @@ import {
   type DataLoadResult,
   extractData,
   hasFatalLoadFailure,
+  type LoadedProjectProfiles,
   loadProjectData,
 } from './data-loader'
 import { generateAllGraphs } from './graph-generation'
@@ -76,6 +77,7 @@ interface SimplifiedLoadResult {
   schemas: { data: PluginSchema[] }
   options: { data: ProjectNeovimOptionsFile | null }
   keymaps: { data: ProjectKeymap[] }
+  profiles: { data: LoadedProjectProfiles }
   lspConfig: { data: ProjectLspConfig }
   colorschemePrefs: {
     data: {
@@ -384,6 +386,8 @@ export async function generateInitLuaOrchestrator(
     })
     const keymapsResult = generateProjectKeymapsSection({
       keymaps: loadResult.keymaps.data,
+      profiles: loadResult.profiles.data.profiles,
+      profileOverrides: loadResult.profiles.data.overrides,
       resolvedPlugins,
       callableKeyByGraphId,
     })
@@ -586,6 +590,7 @@ function extractSimplifiedData(result: DataLoadResult): SimplifiedLoadResult {
     schemas: { data: extractData(result.schemas, []) },
     options: { data: extractData(result.options, null) },
     keymaps: { data: extractData(result.keymaps, []) },
+    profiles: { data: result.profiles.data },
     lspConfig: { data: extractData(result.lspConfig, { enabledServers: [] }) },
     colorschemePrefs: {
       data: extractData(result.colorschemePrefs, {

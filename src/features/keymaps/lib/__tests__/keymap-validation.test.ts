@@ -101,7 +101,7 @@ function createSchema(
 describe('validateKeymapReferences', () => {
   it('returns no issues for keymaps with core function references', () => {
     const keymaps = [createRunFunctionKeymap('k1', 'core', undefined, 'print')]
-    const issues = validateKeymapReferences(keymaps, [], [])
+    const issues = validateKeymapReferences(keymaps, [], [], [], new Set())
     expect(issues).toHaveLength(0)
   })
 
@@ -112,7 +112,13 @@ describe('validateKeymapReferences', () => {
     const plugins = [createPlugin('telescope')]
     const schemas = [createSchema('telescope', ['find_files'])]
 
-    const issues = validateKeymapReferences(keymaps, plugins, schemas)
+    const issues = validateKeymapReferences(
+      keymaps,
+      plugins,
+      schemas,
+      [],
+      new Set(),
+    )
     expect(issues).toHaveLength(0)
   })
 
@@ -122,7 +128,7 @@ describe('validateKeymapReferences', () => {
     ]
     // Plugin is not in installed list
 
-    const issues = validateKeymapReferences(keymaps, [], [])
+    const issues = validateKeymapReferences(keymaps, [], [], [], new Set())
     expect(issues).toHaveLength(1)
     expect(issues[0]?.keymapId).toBe('k1')
     expect(issues[0]?.level).toBe('error')
@@ -137,7 +143,13 @@ describe('validateKeymapReferences', () => {
     const plugins = [createPlugin('telescope', false)] // disabled
     const schemas = [createSchema('telescope', ['find_files'])]
 
-    const issues = validateKeymapReferences(keymaps, plugins, schemas)
+    const issues = validateKeymapReferences(
+      keymaps,
+      plugins,
+      schemas,
+      [],
+      new Set(),
+    )
     expect(issues).toHaveLength(1)
     expect(issues[0]?.level).toBe('warning')
     expect(issues[0]?.code).toBe('plugin-disabled')
@@ -151,7 +163,7 @@ describe('validateKeymapReferences', () => {
     const plugins = [createPlugin('telescope')] // installed
     // Schema is missing
 
-    const issues = validateKeymapReferences(keymaps, plugins, [])
+    const issues = validateKeymapReferences(keymaps, plugins, [], [], new Set())
     expect(issues).toHaveLength(1)
     expect(issues[0]?.level).toBe('warning')
     expect(issues[0]?.code).toBe('schema-missing')
@@ -165,24 +177,46 @@ describe('validateKeymapReferences', () => {
     const plugins = [createPlugin('telescope')]
     const schemas = [createSchema('telescope', ['other_function'])] // function missing
 
-    const issues = validateKeymapReferences(keymaps, plugins, schemas)
+    const issues = validateKeymapReferences(
+      keymaps,
+      plugins,
+      schemas,
+      [],
+      new Set(),
+    )
     expect(issues).toHaveLength(1)
     expect(issues[0]?.level).toBe('warning')
     expect(issues[0]?.code).toBe('function-missing')
     expect(issues[0]?.message).toContain('no longer exists')
   })
 
-  it('skips disabled keymaps', () => {
+  it('uses resolved profile activation', () => {
     const keymap = createRunFunctionKeymap(
       'k1',
       'plugin',
       'telescope',
       'find_files',
     )
-    keymap.enabled = false // Disabled
-
-    const issues = validateKeymapReferences([keymap], [], [])
-    expect(issues).toHaveLength(0) // Would normally error for missing plugin
+    keymap.enabled = false
+    keymap.profileIds = ['a']
+    const profiles = [
+      { id: 'a', name: 'A', color: '#000000', defaultActive: false },
+    ]
+    expect(
+      validateKeymapReferences([keymap], [], [], profiles, new Set(['a'])),
+    ).toHaveLength(1)
+    keymap.enabled = true
+    expect(
+      validateKeymapReferences([keymap], [], [], profiles, new Set()),
+    ).toEqual([])
+    keymap.enabledOverride = false
+    expect(
+      validateKeymapReferences([keymap], [], [], profiles, new Set(['a'])),
+    ).toEqual([])
+    keymap.enabledOverride = true
+    expect(
+      validateKeymapReferences([keymap], [], [], profiles, new Set()),
+    ).toHaveLength(1)
   })
 
   it('handles keymaps with non-plugin actions (no validation needed)', () => {
@@ -204,7 +238,7 @@ describe('validateKeymapReferences', () => {
       createKeymap('k3', 'code-block', { code: 'print("hello")' }),
     ]
 
-    const issues = validateKeymapReferences(keymaps, [], [])
+    const issues = validateKeymapReferences(keymaps, [], [], [], new Set())
     expect(issues).toHaveLength(0)
   })
 
@@ -217,7 +251,7 @@ describe('validateKeymapReferences', () => {
       '',
     )
 
-    const issues = validateKeymapReferences([keymap], [], [])
+    const issues = validateKeymapReferences([keymap], [], [], [], new Set())
     expect(issues).toHaveLength(1)
     expect(issues[0]?.code).toBe('empty-function-key')
   })
@@ -225,7 +259,7 @@ describe('validateKeymapReferences', () => {
   it('returns warning for empty graphId in run-custom-action', () => {
     const keymap = createCustomActionKeymap('k1', '  ')
 
-    const issues = validateKeymapReferences([keymap], [], [])
+    const issues = validateKeymapReferences([keymap], [], [], [], new Set())
     expect(issues).toHaveLength(1)
     expect(issues[0]?.code).toBe('empty-graph-id')
   })
@@ -241,7 +275,13 @@ describe('validateKeymapReferences', () => {
     const plugins = [createPlugin('mason', false)]
     const schemas = [createSchema('mason', ['setup'])]
 
-    const issues = validateKeymapReferences(keymaps, plugins, schemas)
+    const issues = validateKeymapReferences(
+      keymaps,
+      plugins,
+      schemas,
+      [],
+      new Set(),
+    )
     expect(issues).toHaveLength(3)
 
     const codes = issues.map((i) => i.code)

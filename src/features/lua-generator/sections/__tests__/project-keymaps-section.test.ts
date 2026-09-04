@@ -55,6 +55,84 @@ function createMockKeymap(
 }
 
 describe('generateProjectKeymapsSection', () => {
+  it.each([
+    {
+      name: 'unprofiled disabled',
+      profileIds: [],
+      enabled: false,
+      overrides: {},
+      expected: false,
+    },
+    {
+      name: 'active profile ignores dormant baseline',
+      profileIds: ['a'],
+      enabled: false,
+      overrides: { a: true },
+      expected: true,
+    },
+    {
+      name: 'inactive profile ignores baseline',
+      profileIds: ['a'],
+      enabled: true,
+      overrides: { a: false },
+      expected: false,
+    },
+    {
+      name: 'multiple profiles use OR activation',
+      profileIds: ['a', 'b'],
+      enabled: false,
+      overrides: { a: false, b: true },
+      expected: true,
+    },
+    {
+      name: 'false local override wins',
+      profileIds: ['a'],
+      enabled: true,
+      enabledOverride: false,
+      overrides: { a: true },
+      expected: false,
+    },
+    {
+      name: 'true local override wins',
+      profileIds: ['a'],
+      enabled: false,
+      enabledOverride: true,
+      overrides: { a: false },
+      expected: true,
+    },
+    {
+      name: 'tracked default active',
+      profileIds: ['a'],
+      enabled: false,
+      overrides: {},
+      expected: true,
+    },
+  ])('$name applies activation precedence', ({
+    profileIds,
+    enabled,
+    enabledOverride,
+    overrides,
+    expected,
+  }) => {
+    const profiles = [
+      { id: 'a', name: 'A', color: '#000000', defaultActive: true },
+      { id: 'b', name: 'B', color: '#000000', defaultActive: false },
+    ]
+    const result = generateProjectKeymapsSection({
+      keymaps: [
+        createMockKeymap({
+          profileIds: [...profileIds],
+          enabled,
+          enabledOverride,
+        }),
+      ],
+      profiles,
+      profileOverrides: overrides,
+      resolvedPlugins: [],
+    })
+    expect(result.code.length > 0).toBe(expected)
+  })
+
   it('returns empty result when no keymaps provided', () => {
     const input: ProjectKeymapsSectionInput = {
       keymaps: [],

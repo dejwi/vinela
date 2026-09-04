@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid'
+import { ensureProjectProfilesSetup } from '@/features/profiles/storage'
 import { PROJECT_PATHS } from '@/shared/lib/paths'
 import {
   ensureProjectDir,
@@ -18,6 +19,7 @@ import exampleKeymaps from '../../../example-vinela-project/keymaps.json'
 import exampleLspServers from '../../../example-vinela-project/lsp-servers.json'
 import exampleNeovimOptions from '../../../example-vinela-project/neovim-options.json'
 import examplePlugins from '../../../example-vinela-project/plugins.json'
+import exampleProfiles from '../../../example-vinela-project/profiles.json'
 import exampleTokyonightSchema from '../../../example-vinela-project/schemas/tokyonight.json'
 
 // ============================================
@@ -97,6 +99,7 @@ export async function openProject(
       folderPath,
       PROJECT_PATHS.PROJECT_JSON,
     )
+    await ensureProjectProfilesSetup(folderPath)
     return {
       success: true,
       project: {
@@ -171,6 +174,7 @@ export async function createProject(
     // Create project directory structure
     await ensureProjectDir(folderPath, PROJECT_PATHS.GRAPHS)
     await ensureProjectDir(folderPath, PROJECT_PATHS.SCHEMAS)
+    await ensureProjectProfilesSetup(folderPath)
 
     // Write project.json
     await writeProjectFile(folderPath, PROJECT_PATHS.PROJECT_JSON, project)
@@ -235,6 +239,7 @@ export async function createExampleProject(
     )
     await writeProjectFile(folderPath, 'keymaps.json', exampleKeymaps)
     await writeProjectFile(folderPath, 'lsp-servers.json', exampleLspServers)
+    await writeProjectFile(folderPath, PROJECT_PATHS.PROFILES, exampleProfiles)
     await writeProjectFile(
       folderPath,
       'neovim-options.json',

@@ -114,8 +114,15 @@ export interface ProjectKeymap {
   noremap: boolean
   /** Whether the RHS is an expression */
   expr: boolean
-  /** Whether this keymap is active (false = soft-disabled, excluded from Lua) */
+  /** Baseline state used when no currently defined profile is attached. */
   enabled: boolean
+  /**
+   * Explicit local state for a shortcut with a defined attached profile.
+   * Missing/undefined means attached profiles control activation.
+   */
+  enabledOverride?: boolean | undefined
+  /** Missing and [] both mean no assigned project profiles. */
+  profileIds?: string[]
 }
 
 // ============================================
@@ -200,6 +207,8 @@ export interface KeymapFilters {
   modeFilter: KeymapMode | 'all'
   sourceFilter: 'all' | 'graph' | 'project'
   actionTypeFilter: ManualKeymapActionType | 'all'
+  /** 'all', 'none' (unassigned shortcuts), or a profile id */
+  profileFilter: string
 }
 
 /** Sort options for the keymaps list */

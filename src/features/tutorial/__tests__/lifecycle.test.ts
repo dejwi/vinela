@@ -5,6 +5,8 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
+const mockEnsureProjectProfilesSetup = vi.fn()
+
 // ── Top-level mocks ───────────────────────────────────────────────────────────
 
 // Mock the storage backend so lifecycle functions can be tested in isolation
@@ -24,6 +26,11 @@ vi.mock('@/features/projects/store', () => ({
 vi.mock('@/shared/lib/settings', () => ({
   loadAppSettings: vi.fn(),
   updateAppSettings: vi.fn(),
+}))
+
+vi.mock('@/features/profiles/storage', () => ({
+  ensureProjectProfilesSetup: (...args: unknown[]) =>
+    mockEnsureProjectProfilesSetup(...args),
 }))
 
 // ── Imports (after mocks) ─────────────────────────────────────────────────────
@@ -790,6 +797,7 @@ describe('Tutorial version migration', () => {
 describe('createTutorialProject', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockEnsureProjectProfilesSetup.mockResolvedValue(undefined)
   })
 
   afterEach(() => {
@@ -824,6 +832,9 @@ describe('createTutorialProject', () => {
     expect(sentinelIndex).toBeGreaterThanOrEqual(0)
     expect(projectJsonIndex).toBeGreaterThanOrEqual(0)
     expect(sentinelIndex).toBeLessThan(projectJsonIndex)
+    expect(mockEnsureProjectProfilesSetup).toHaveBeenCalledWith(
+      expect.stringContaining('tutorial-'),
+    )
   })
 
   it('returns a path containing tutorial identifier (memory mode)', async () => {

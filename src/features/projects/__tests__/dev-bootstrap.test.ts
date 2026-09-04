@@ -23,6 +23,9 @@ const settingsMocks = vi.hoisted(() => ({
 
 vi.mock('@/shared/lib/storage-api', () => storageApiMocks)
 vi.mock('@/shared/lib/settings', () => settingsMocks)
+vi.mock('@/features/profiles/storage', () => ({
+  ensureProjectProfilesSetup: vi.fn(),
+}))
 
 const DEV_PATH = '/repo/dev-data/default-project'
 
