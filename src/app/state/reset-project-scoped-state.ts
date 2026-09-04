@@ -1,3 +1,4 @@
+import { useGitSyncStore } from '@/features/git-sync'
 import { useGraphEditorStore } from '@/features/graph-editor/store'
 import { useKeymapStore } from '@/features/keymaps/store'
 import { useLspStore } from '@/features/lsp/store'
@@ -35,4 +36,5 @@ export function resetProjectScopedState(): void {
   usePluginStore.getState().resetForProjectClose()
   useLspStore.getState().resetForProjectClose()
   useGenerationStore.getState().resetForProjectClose()
+  useGitSyncStore.getState().resetForProjectClose()
 }

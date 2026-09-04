@@ -16,6 +16,22 @@ import type { DirEntry } from './storage-backend'
 // Re-export type for consumers
 export type { DirEntry }
 
+export const PROJECT_FILES_CHANGED_EVENT = 'vinela:project-files-changed'
+
+export interface ProjectFilesChangedDetail {
+  projectPath: string
+}
+
+function notifyProjectFilesChanged(projectPath: string): void {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent<ProjectFilesChangedDetail>(PROJECT_FILES_CHANGED_EVENT, {
+        detail: { projectPath },
+      }),
+    )
+  }
+}
+
 // ============================================
 // App Settings Operations
 // ============================================
@@ -84,7 +100,8 @@ export async function writeProjectFile<T>(
   data: T,
 ): Promise<void> {
   const backend = await getProjectStorageBackend(projectPath)
-  return backend.writeProjectFile(projectPath, relativePath, data)
+  await backend.writeProjectFile(projectPath, relativePath, data)
+  notifyProjectFilesChanged(projectPath)
 }
 
 export async function ensureProjectDir(
@@ -108,7 +125,8 @@ export async function removeProjectFile(
   relativePath: string,
 ): Promise<void> {
   const backend = await getProjectStorageBackend(projectPath)
-  return backend.removeProjectFile(projectPath, relativePath)
+  await backend.removeProjectFile(projectPath, relativePath)
+  notifyProjectFilesChanged(projectPath)
 }
 
 export async function projectFileExists(
@@ -148,7 +166,8 @@ export async function writeProjectTextFile(
   content: string,
 ): Promise<void> {
   const backend = await getProjectStorageBackend(projectPath)
-  return backend.writeProjectTextFile(projectPath, relativePath, content)
+  await backend.writeProjectTextFile(projectPath, relativePath, content)
+  notifyProjectFilesChanged(projectPath)
 }
 
 // ============================================

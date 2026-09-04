@@ -181,6 +181,7 @@ vinela/
 │   ├── features/             # Feature-based organization
 │   │   ├── plugins/          # Plugin management
 │   │   ├── graph-editor/     # Node-based visual editor
+│   │   ├── git-sync/         # Desktop Git status and safe sync
 │   │   ├── settings/         # Settings UI
 │   │   ├── keymaps/          # Keymap management
 │   │   ├── projects/         # Multi-project management
@@ -223,6 +224,7 @@ All planned features are implemented:
 - **Neovim detection & backup** — Auto-detect Neovim, backup existing config before deploy
 - **Lua code generation** — 9-phase pipeline, pre-generation diagnostics, deploy to Neovim config, export standalone
 - **In-memory storage** — Browser-compatible mode for development/testing
+- **Git sync** — Exact-root desktop Git status, commit-all, and safe fetch/fast-forward sync
 
 ---
 
@@ -324,10 +326,3 @@ All planned features are implemented:
 - `tauri_plugin_updater` registers only when the merged config declares `plugins.updater`. The native **Check for Updates…** menu item follows that gate on macOS/Linux; Windows intentionally has no native menu bar.
 - Runbook and remaining pre-release gaps: `docs/release-updates.md`.
 
-**Last Updated**: Sep 4, 2026. Profile-assigned manual keymaps follow active profiles by default; local overrides can replace then reset to profile control.
-
-Previous: Sep 3, 2026. Project profiles use tracked definitions/defaults and gitignored checkout-local overrides; manual keymaps use active-profile OR inclusion for conflicts and generation.
-
-Previous: Aug 31, 2026. README leads with desktop downloads and browser-demo caveats; browser-mode UI points at the releases page instead of a dead Deploy button; shiki now uses the JS regex engine so previews highlight under the packaged CSP.
-
-Previous: Aug 15, 2026. Public release pipeline and updater config landed (draft-release workflow, CI updater overlay, signing-key secrets); pre-public cleanup removed temporary private updater tooling; bundled Neovim docs/examples remain replaced by installed runtime docs; first-party licensing remains AGPL-3.0-only.

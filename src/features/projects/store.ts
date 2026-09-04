@@ -2,6 +2,7 @@ import {
   initializeProjectScopedState,
   resetProjectScopedState,
 } from '@/app/state/reset-project-scoped-state'
+import { useGitSyncStore } from '@/features/git-sync'
 import {
   addRecentProject,
   loadAppSettings,
@@ -14,6 +15,27 @@ import * as projectStorage from './storage'
 
 const DEV_BOOTSTRAP_LOG_TAG = '[dev-bootstrap]'
 const ACTIVE_PROJECT_PATH_STORAGE_KEY = 'vinela.activeProjectPath'
+let projectActivationGeneration = 0
+
+function isCurrentProjectActivation(
+  generation: number,
+  projectPath: string,
+): boolean {
+  return (
+    generation === projectActivationGeneration &&
+    useProjectStore.getState().currentProject?.absolutePath === projectPath
+  )
+}
+
+function beginBackgroundGitSync(generation: number, projectPath: string): void {
+  void useGitSyncStore
+    .getState()
+    .synchronizeOnOpen()
+    .then((result) => {
+      if (isCurrentProjectActivation(generation, projectPath) && result.didPull)
+        window.location.reload()
+    })
+}
 
 function getSafeLocalStorage(): Storage | null {
   if (typeof window === 'undefined') {
@@ -115,6 +137,7 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
   },
 
   openProject: async (folderPath) => {
+    const generation = ++projectActivationGeneration
     set((state) => {
       state.isLoading = true
       state.error = null
@@ -123,21 +146,31 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
     const result = await projectStorage.openProject(folderPath)
 
     if (result.success) {
-      await addRecentProject(result.project.absolutePath, result.project.name)
-      persistActiveProjectPath(result.project.absolutePath)
+      if (generation !== projectActivationGeneration) return result
 
       set((state) => {
         state.currentProject = result.project
-        state.isLoading = false
         state.isTutorialProject = false
       })
-
-      // Eagerly initialize project-scoped stores so plugin/keymap data is
-      // available before any page renders (fixes plugin availability bug).
+      await useGitSyncStore
+        .getState()
+        .initializeProject(result.project.absolutePath)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      await addRecentProject(result.project.absolutePath, result.project.name)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      persistActiveProjectPath(result.project.absolutePath)
       initializeProjectScopedState(result.project.absolutePath)
-
-      get().loadRecentProjects()
+      await get().loadRecentProjects()
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      set((state) => {
+        state.isLoading = false
+      })
+      beginBackgroundGitSync(generation, result.project.absolutePath)
     } else {
+      if (generation !== projectActivationGeneration) return result
       set((state) => {
         state.error = result.message
         state.isLoading = false
@@ -148,6 +181,7 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
   },
 
   createProject: async (folderPath, name, description, force) => {
+    const generation = ++projectActivationGeneration
     set((state) => {
       state.isLoading = true
       state.error = null
@@ -161,21 +195,31 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
     )
 
     if (result.success) {
-      await addRecentProject(result.project.absolutePath, result.project.name)
-      persistActiveProjectPath(result.project.absolutePath)
+      if (generation !== projectActivationGeneration) return result
 
       set((state) => {
         state.currentProject = result.project
-        state.isLoading = false
         state.isTutorialProject = false
       })
-
-      // Eagerly initialize project-scoped stores so plugin/keymap data is
-      // available before any page renders (fixes plugin availability bug).
+      await useGitSyncStore
+        .getState()
+        .initializeProject(result.project.absolutePath)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      await addRecentProject(result.project.absolutePath, result.project.name)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      persistActiveProjectPath(result.project.absolutePath)
       initializeProjectScopedState(result.project.absolutePath)
-
-      get().loadRecentProjects()
+      await get().loadRecentProjects()
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      set((state) => {
+        state.isLoading = false
+      })
+      beginBackgroundGitSync(generation, result.project.absolutePath)
     } else {
+      if (generation !== projectActivationGeneration) return result
       set((state) => {
         state.error = result.message
         state.isLoading = false
@@ -186,6 +230,7 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
   },
 
   createExampleProject: async (folderPath, name, description) => {
+    const generation = ++projectActivationGeneration
     set((state) => {
       state.isLoading = true
       state.error = null
@@ -198,18 +243,31 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
     )
 
     if (result.success) {
-      await addRecentProject(result.project.absolutePath, result.project.name)
-      persistActiveProjectPath(result.project.absolutePath)
+      if (generation !== projectActivationGeneration) return result
 
       set((state) => {
         state.currentProject = result.project
-        state.isLoading = false
         state.isTutorialProject = false
       })
-
+      await useGitSyncStore
+        .getState()
+        .initializeProject(result.project.absolutePath)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      await addRecentProject(result.project.absolutePath, result.project.name)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      persistActiveProjectPath(result.project.absolutePath)
       initializeProjectScopedState(result.project.absolutePath)
-      get().loadRecentProjects()
+      await get().loadRecentProjects()
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
+      set((state) => {
+        state.isLoading = false
+      })
+      beginBackgroundGitSync(generation, result.project.absolutePath)
     } else {
+      if (generation !== projectActivationGeneration) return result
       set((state) => {
         state.error = result.message
         state.isLoading = false
@@ -220,6 +278,7 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
   },
 
   openProjectForTutorial: async (folderPath) => {
+    const generation = ++projectActivationGeneration
     set((state) => {
       state.isLoading = true
       state.error = null
@@ -228,16 +287,24 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
     const result = await projectStorage.openProject(folderPath)
 
     if (result.success) {
+      if (generation !== projectActivationGeneration) return result
       // NOTE: No addRecentProject() call here (Fix #2)
       set((state) => {
         state.currentProject = result.project
-        state.isLoading = false
         state.isTutorialProject = true
       })
-
-      // Eagerly initialize project-scoped stores
+      await useGitSyncStore
+        .getState()
+        .initializeProject(result.project.absolutePath)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return result
       initializeProjectScopedState(result.project.absolutePath)
+      set((state) => {
+        state.isLoading = false
+      })
+      beginBackgroundGitSync(generation, result.project.absolutePath)
     } else {
+      if (generation !== projectActivationGeneration) return result
       set((state) => {
         state.error = result.message
         state.isLoading = false
@@ -248,6 +315,7 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
   },
 
   closeProject: () => {
+    projectActivationGeneration += 1
     // Reset all project-scoped stores first
     resetProjectScopedState()
     clearPersistedActiveProjectPath()
@@ -256,6 +324,7 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
       state.currentProject = null
       state.error = null
       state.isTutorialProject = false
+      state.isLoading = false
     })
   },
 
@@ -292,23 +361,40 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
     }),
 
   initDevMode: async () => {
+    const generation = ++projectActivationGeneration
+    set((state) => {
+      state.isLoading = true
+      state.error = null
+    })
     const result = await projectStorage.getOrCreateDevProject()
     if (result.success) {
-      persistActiveProjectPath(result.project.absolutePath)
+      if (generation !== projectActivationGeneration) return false
       set((state) => {
         state.currentProject = result.project
         state.error = null
         state.isTutorialProject = false
       })
+      await useGitSyncStore
+        .getState()
+        .initializeProject(result.project.absolutePath)
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return false
       await addRecentProject(result.project.absolutePath, result.project.name)
-
-      // Eagerly initialize project-scoped stores so plugin/keymap data is
-      // available before any page renders (fixes plugin availability bug).
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return false
+      persistActiveProjectPath(result.project.absolutePath)
       initializeProjectScopedState(result.project.absolutePath)
-
-      get().loadRecentProjects()
+      await get().loadRecentProjects()
+      if (!isCurrentProjectActivation(generation, result.project.absolutePath))
+        return false
+      set((state) => {
+        state.isLoading = false
+      })
+      beginBackgroundGitSync(generation, result.project.absolutePath)
       return true
     }
+
+    if (generation !== projectActivationGeneration) return false
 
     const errorMessage = `Dev mode bootstrap failed at ${result.stage} for ${result.path}: ${result.message}`
 
@@ -319,6 +405,7 @@ export const useProjectStore = createStore<ProjectState>((set, get) => ({
     set((state) => {
       state.currentProject = null
       state.error = errorMessage
+      state.isLoading = false
     })
 
     return false

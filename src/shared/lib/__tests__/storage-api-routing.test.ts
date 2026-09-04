@@ -15,7 +15,13 @@ vi.mock('../storage', async (importOriginal) => {
 })
 
 import * as storageModule from '../storage'
-import { readProjectFile } from '../storage-api'
+import {
+  PROJECT_FILES_CHANGED_EVENT,
+  readProjectFile,
+  removeProjectFile,
+  writeProjectFile,
+  writeProjectTextFile,
+} from '../storage-api'
 
 const mockGetProjectStorageBackend = vi.mocked(
   storageModule.getProjectStorageBackend,
@@ -47,5 +53,28 @@ describe('Storage API Routing', () => {
       'file.json',
     )
     expect(result).toBe('file-content')
+  })
+
+  it('notifies after successful project mutations only', async () => {
+    const backend: Partial<StorageBackend> = {
+      removeProjectFile: vi.fn().mockResolvedValue(undefined),
+      writeProjectFile: vi.fn().mockResolvedValue(undefined),
+      writeProjectTextFile: vi.fn().mockResolvedValue(undefined),
+    }
+    mockGetProjectStorageBackend.mockResolvedValue(backend as StorageBackend)
+    const details: unknown[] = []
+    const listener = (event: Event): void => {
+      details.push((event as CustomEvent).detail)
+    }
+    window.addEventListener(PROJECT_FILES_CHANGED_EVENT, listener)
+    await writeProjectFile('/project', 'project.json', { name: 'Test' })
+    await writeProjectTextFile('/project', 'notes.txt', 'text')
+    await removeProjectFile('/project', 'notes.txt')
+    window.removeEventListener(PROJECT_FILES_CHANGED_EVENT, listener)
+    expect(details).toEqual([
+      { projectPath: '/project' },
+      { projectPath: '/project' },
+      { projectPath: '/project' },
+    ])
   })
 })

@@ -10,6 +10,7 @@ import {
   Sliders,
 } from 'lucide-react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { GitStatusButton } from '@/features/git-sync'
 import { GenerateButton } from '@/features/lua-generator/components/GenerateButton'
 import { GenerateDialog } from '@/features/lua-generator/components/GenerateDialog'
 import { useProjectStore } from '@/features/projects/store'
@@ -105,6 +106,7 @@ export function Sidebar() {
       {/* Generate Button - pinned to bottom */}
       {currentProject && (
         <>
+          <GitStatusButton />
           <div className="w-8 h-px bg-border my-1" />
           <GenerateButton />
         </>

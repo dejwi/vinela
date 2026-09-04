@@ -49,10 +49,10 @@ const SUCCESSFUL_OPEN_RESULT = {
 import type { ProjectState } from '@/features/projects/store'
 import type { TutorialStoreState } from '@/features/tutorial/store'
 
-function setupProjectStore(currentProject: object | null) {
+function setupProjectStore(currentProject: object | null, isLoading = false) {
   vi.mocked(useProjectStore).mockImplementation(
     (selector: (state: ProjectState) => unknown) =>
-      selector({ currentProject } as ProjectState),
+      selector({ currentProject, isLoading } as ProjectState),
   )
   // Also expose getState for the recovery effect
   Reflect.set(
@@ -138,6 +138,32 @@ describe('RequireProject — tutorial routing', () => {
 
     expect(screen.getByTestId('editor')).toBeInTheDocument()
     expect(screen.queryByTestId('home')).not.toBeInTheDocument()
+  })
+
+  it('holds the outlet while a loaded project completes local Git inspection', () => {
+    setupProjectStore(
+      { name: 'My Project', path: '/projects/my-project' },
+      true,
+    )
+    setupTutorialStore('idle', null)
+
+    const { container, rerender } = renderWithRouter(<RequireProject />)
+
+    expect(container.firstChild).toBeNull()
+    setupProjectStore({ name: 'My Project', path: '/projects/my-project' })
+    rerender(
+      <MemoryRouter initialEntries={['/editor']}>
+        <Routes>
+          <Route element={<RequireProject />}>
+            <Route
+              path="/editor"
+              element={<div data-testid="editor">Editor</div>}
+            />
+          </Route>
+        </Routes>
+      </MemoryRouter>,
+    )
+    expect(screen.getByTestId('editor')).toBeInTheDocument()
   })
 
   it('redirects to home when project is null and tutorial is idle', () => {

@@ -39,7 +39,7 @@ Neovim configs rot. They start as a copied dotfile, grow into 20 Lua modules nob
 
 - **Everything in one place.** Installed plugins and their options, every keymap with its conflicts, every Neovim option you've touched.
 - **The output is yours.** Plain `vim.pack`-based Lua with no runtime dependency on vinela. Delete the app and the config still works.
-- **Nothing happens behind your back.** You read the generated Lua before it's written, and the old config is backed up first.
+- **Nothing happens behind your back.** You read generated Lua before deployment, and the old config is backed up first. Git-root projects explicitly auto-fetch and may safely fast-forward on open.
 - **Plugins are data.** Plugin support comes from JSON schemas, not hardcoded branches, so anyone can add one.
 
 This is config management, not a config framework. Nothing from vinela runs inside your editor.
@@ -54,6 +54,8 @@ project (folder)  ->  Lua generator  ->  init.lua  ->  ~/.config/nvim
 ```
 
 A project is a self-contained folder you can commit to git. Generation happens in memory; deploying is a separate step you trigger, and it backs up whatever config is already there.
+
+Desktop projects that are Git roots get safe background auto-fetch/fast-forward, status, commit-all, and push controls. Vinela uses your system Git configuration and credentials; conflicts and divergence stay manual.
 
 ## Features
 

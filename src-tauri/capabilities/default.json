@@ -89,7 +89,14 @@
       "allow": [
         { "name": "nvim", "cmd": "nvim", "args": ["--version"] },
         { "name": "which", "cmd": "which", "args": ["nvim"] },
-        { "name": "where", "cmd": "where", "args": ["nvim"] }
+        { "name": "where", "cmd": "where", "args": ["nvim"] },
+        { "name": "git-project-root", "cmd": "git", "args": ["rev-parse", "--show-prefix"] },
+        { "name": "git-status", "cmd": "git", "args": ["--no-optional-locks", "status", "--porcelain=v2", "--branch", "--untracked-files=all"] },
+        { "name": "git-fetch", "cmd": "git", "args": ["fetch", "--quiet"] },
+        { "name": "git-pull-ff-only", "cmd": "git", "args": ["pull", "--quiet", "--ff-only"] },
+        { "name": "git-add-all", "cmd": "git", "args": ["add", "--all"] },
+        { "name": "git-commit", "cmd": "git", "args": ["commit", "--message", { "validator": "^.{1,200}$" }] },
+        { "name": "git-push", "cmd": "git", "args": ["push", "--quiet"] }
       ]
     },
 

@@ -21,6 +21,7 @@ import { useTutorialStore } from '@/features/tutorial/store'
  */
 export function RequireProject() {
   const currentProject = useProjectStore((state) => state.currentProject)
+  const isLoading = useProjectStore((state) => state.isLoading)
   const runtimeState = useTutorialStore((state) => state.runtimeState)
   const tutorialProjectPath = useTutorialStore(
     (state) => state.tutorialProjectPath,
@@ -128,6 +129,8 @@ export function RequireProject() {
   if (!currentProject) {
     return <Navigate to="/" replace />
   }
+
+  if (isLoading) return null
 
   return <Outlet />
 }
